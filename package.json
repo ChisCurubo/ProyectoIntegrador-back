@@ -1,0 +1,36 @@
+{
+  "name": "integrador_1_back",
+  "version": "1.0.0",
+  "description": "Proyecto Integrador 1 | 2024-2",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon",
+    "start": "tsc && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/express-validator": "^3.0.0",
+    "@types/morgan": "^1.9.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.1.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.4"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.7",
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tslint": "^5.12.1",
+    "typescript": "^5.5.4"
+  }
+}
