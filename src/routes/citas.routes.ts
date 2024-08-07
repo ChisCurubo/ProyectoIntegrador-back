@@ -1,10 +1,11 @@
+import { EviarDatosHistorialClinico } from "../controllers/citas.controller";
 import { Express } from "express";
 import express from 'express';
 //import { } from "";
 
 const router = express.Router();
 
-router.post('/getHistoryClient', ),
+router.post('/getHistoryClient',EviarDatosHistorialClinico ),
 router.post('/addDescriptionMedicHistory', )
 router.post('/readCVSInsert', )
 

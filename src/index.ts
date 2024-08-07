@@ -3,6 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
 import * as dotenv from 'dotenv';
+import citas from './routes/citas.routes'
 dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 
 const app = express();
@@ -24,6 +25,9 @@ app.use(express.json());
 
 
 // ROUTES
+app.use('/HistoriaClinicaMedico', citas)
+
+
 
 app.listen(port, () => {
   console.log(`Server is listening on ${port}`);
