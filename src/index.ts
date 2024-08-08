@@ -1,38 +1,48 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
 import * as dotenv from 'dotenv';
-import citas from './routes/citas.routes'
+import citas from './routes/citas.routes';
+import helmet from 'helmet';
+import historialClinicoRoutes from './routes/HistorialMedicoRouters'
 dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3002;
 
-// SETTINGS 
-/**
- * origin : define el origen de donde esta permitido recibir peticiones (FRONT)
- * credentials : permite tener credenciales en las cookies
- */
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true,
 }));
 
-// MIDDLEWARES
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(helmet());
 
+// Middleware para registrar el cuerpo de la solicitud y respuesta
+app.use((req: Request, res: Response, next: NextFunction) => {
+  // Registrar el cuerpo de la solicitud
+  console.log('Request Body:', req.body);
 
-// ROUTES
-app.use('/HistoriaClinicaMedico', citas)
+  // Interceptar la respuesta para registrar el cuerpo antes de enviarla
+  const originalSend = res.send.bind(res);
+  res.send = (body: any) => {
+    console.log('Response Body:', body);
+    return originalSend(body);
+  };
 
+  next();
+});
 
+//Rutas
+app.use('/api/historialClinico', historialClinicoRoutes);
+app.use('/HistoriaClinicaMedico', citas);
 
 app.listen(port, () => {
-  console.log(`Server is listening on ${port}`);
+  console.log(`Servidor escuchando en el puerto ${port}`);
 });
 
 app.on('error', (err: any) => {
-  console.error('Error starting server:', err);
+  console.error('Error al iniciar el servidor:', err);
 });
