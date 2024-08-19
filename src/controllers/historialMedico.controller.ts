@@ -1,7 +1,7 @@
 // controllers/HistorialClinicoController.ts
 
 import { Request, Response } from 'express';
-import HistorialClinicoService from '../services/ServicioHistorialClinico';
+import HistorialClinicoService from '../services/historialMedico.service';
 
 class HistorialClinicoController {
     private historialClinicoService: HistorialClinicoService;

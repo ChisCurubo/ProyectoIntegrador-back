@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import CitaService from '../services/Servicio.citas'; // Ajusta la ruta de acuerdo a tu estructura
+import CitaService from '../services/citas.service'; // Ajusta la ruta de acuerdo a tu estructura
 
-class CitasController {
+export class CitasController {
     private citaService: CitaService;
 
     constructor() {

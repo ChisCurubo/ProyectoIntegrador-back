@@ -5,7 +5,7 @@ import path from 'path';
 import * as dotenv from 'dotenv';
 import citas from './routes/citas.routes';
 import helmet from 'helmet';
-import historialClinicoRoutes from './routes/HistorialMedicoRouters'
+import historialClinicoRoutes from './routes/historialMedico.routes'
 dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 
 const app = express();

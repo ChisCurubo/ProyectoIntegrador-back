@@ -1,5 +1,5 @@
 import express from 'express';
-import HistorialClinicoController from '../controllers/ControladorHistorialClinico';
+import HistorialClinicoController from '../controllers/historialMedico.controller';
 
 const router = express.Router();
 const historialClinicoController = new HistorialClinicoController();
