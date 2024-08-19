@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import path from 'path';
 import * as dotenv from 'dotenv';
 import citas from './routes/citas.routes';
-import helmet from 'helmet';
+//import helmet from 'helmet';
 import historialClinicoRoutes from './routes/historialMedico.routes'
 dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 
@@ -18,7 +18,7 @@ app.use(cors({
 
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(helmet());
+//app.use(helmet());
 
 // Middleware para registrar el cuerpo de la solicitud y respuesta
 app.use((req: Request, res: Response, next: NextFunction) => {
