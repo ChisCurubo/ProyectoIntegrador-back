@@ -3,13 +3,17 @@ import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
 import * as dotenv from 'dotenv';
-import citas from './routes/citas.routes';
-import helmet from 'helmet';
-import historialClinicoRoutes from './routes/HistorialMedicoRouters'
 dotenv.config({ path: path.join(__dirname, '../environment/.env') });
+import helmet from 'helmet';
+import historialClinicoRoutes from './routes/historialMedico.routes';
+import usuarioRoutes from './routes/usuario.routes'; 
+
+
+
+
 
 const app = express();
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 303;
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
@@ -35,9 +39,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-//Rutas
+// Rutas
 app.use('/api/historialClinico', historialClinicoRoutes);
-app.use('/HistoriaClinicaMedico', citas);
+app.use('/api/usuarios', usuarioRoutes); 
+
+
+
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
