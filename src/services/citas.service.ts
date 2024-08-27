@@ -1,4 +1,5 @@
 
+import connection from '../providers/database';
 import Cita from '../models/Modelo.Citas';
 
 
@@ -18,6 +19,16 @@ class CitaService {
     public getAllCitas(): Cita[] {
         return this.citas;
     }
+
+    public testConnection = async ():  Promise<void> => {
+        try {
+            const [rows]:any[] = await connection.query('SELECT 1 + 1 AS result');
+            console.log('Connection successful:', rows[0].result);
+            console.log('Connection successful:', rows[0].result === 2);
+        } catch (error: any) {
+            console.error('Connection failed:', error.message);
+        } 
+    };
 
     // Método público que crea una nueva cita.
     // Recibe como parámetro citaData, que es un objeto parcial de tipo Cita.

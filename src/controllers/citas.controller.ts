@@ -18,6 +18,16 @@ export class CitasController {
             res.status(500).json({ message: 'Error en el servidor' });
         }
     }
+    public testBD = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const citas = await this.citaService.testConnection();
+            console.log('post /HistoriaClinicaMedico/test - Response:', citas);
+            res.status(200).json(citas);
+        } catch (error) {
+            console.error('Error en post /HistoriaClinicaMedico/citas:', error);
+            res.status(500).json({ message: 'Error en el servidor' });
+        }
+    }
 
     public createCita = async (req: Request, res: Response): Promise<void> => {
         try {

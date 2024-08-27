@@ -3,10 +3,11 @@ import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
 import * as dotenv from 'dotenv';
+dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 import citas from './routes/citas.routes';
 //import helmet from 'helmet';
 import historialClinicoRoutes from './routes/historialMedico.routes'
-dotenv.config({ path: path.join(__dirname, '../environment/.env') });
+
 
 const app = express();
 const port = process.env.PORT || 3002;

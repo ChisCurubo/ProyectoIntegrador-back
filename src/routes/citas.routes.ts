@@ -6,6 +6,7 @@ const citasController = new CitasController();
 
 // Ruta POST para crear una nueva cita médica
 router.post('/crearCita', citasController.createCita);
+router.post('/test', citasController.testBD);
 
 // Ruta GET para obtener todas las citas médicas
 router.get('/citas', citasController.getCitas);
