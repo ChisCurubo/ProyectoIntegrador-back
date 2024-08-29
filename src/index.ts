@@ -4,9 +4,12 @@ import morgan from 'morgan';
 import path from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: path.join(__dirname, '../environment/.env') });
-import citas from './routes/citas.routes';
-//import helmet from 'helmet';
-import historialClinicoRoutes from './routes/historialMedico.routes'
+import helmet from 'helmet';
+import historialClinicoRoutes from './routes/historialMedico.routes';
+import usuarioRoutes from './routes/usuario.routes'; 
+
+
+
 
 
 const app = express();
@@ -36,9 +39,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-//Rutas
+// Rutas
 app.use('/api/historialClinico', historialClinicoRoutes);
-app.use('/HistoriaClinicaMedico', citas);
+app.use('/api/usuarios', usuarioRoutes); 
+
+
+
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
