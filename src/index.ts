@@ -5,6 +5,7 @@ import path from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 import citas from './routes/citas.routes';
+import facturacion from './routes/facturacion.routes';
 //import helmet from 'helmet';
 import historialClinicoRoutes from './routes/historialMedico.routes'
 
@@ -39,6 +40,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 //Rutas
 app.use('/api/historialClinico', historialClinicoRoutes);
 app.use('/HistoriaClinicaMedico', citas);
+app.use('/api/facturacion', facturacion);
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);

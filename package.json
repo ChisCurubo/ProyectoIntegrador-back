@@ -15,6 +15,7 @@
     "@types/dotenv": "^8.2.0",
     "@types/express-validator": "^3.0.0",
     "@types/morgan": "^1.9.9",
+    "@types/pdfkit": "^0.13.4",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
@@ -24,6 +25,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.9.2",
     "nodemon": "^3.1.4",
+    "pdfkit-table": "^0.1.99",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
