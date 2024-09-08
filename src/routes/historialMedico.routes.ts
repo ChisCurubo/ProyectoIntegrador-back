@@ -7,8 +7,6 @@ const historialClinicoController = new HistorialClinicoController();
 // Ruta para crear un nuevo historial clínico
 router.post('/crearHistorial', historialClinicoController.createHistorialClinico);
 
-router.post('/leerPDFHC', historialClinicoController.createHistorialClinico);
-
 // Ruta para obtener un historial clínico por ID
 router.get('/historial/:id', historialClinicoController.getHistorialClinico);
 
