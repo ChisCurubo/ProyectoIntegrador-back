@@ -1,4 +1,4 @@
-// import mysql from 'mysql';
+
 import mysql from 'mysql2/promise';
 
 const connection = mysql.createPool({
@@ -19,5 +19,3 @@ console.log({
 
 
 export default connection;
-
-
