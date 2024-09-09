@@ -7,6 +7,7 @@ dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 import helmet from 'helmet';
 import historialClinicoRoutes from './routes/historialMedico.routes';
 import usuarioRoutes from './routes/usuario.routes'; 
+import authRoutes from './routes/auth.routes'; // Asegúrate de que la ruta sea correcta
 
 
 
@@ -41,9 +42,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // Rutas
 app.use('/api/historialClinico', historialClinicoRoutes);
-app.use('/api/usuarios', usuarioRoutes); 
-
-
+app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/auth', authRoutes);
 
 
 app.listen(port, () => {
