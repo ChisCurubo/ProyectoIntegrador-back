@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formato Único Hoja de Vida del Paciente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        h1, h2 {
+            text-align: center;
+            color: teal;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .section-title {
+            background-color: teal;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-size: 1.2em;
+        }
+        input[type="text"], input[type="date"], input[type="email"], input[type="tel"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        input[readonly] {
+            background-color: #f9f9f9;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="../img/LogoVitamed-06.png" alt="Logo VitaMed" style="width:240px; height:auto;">
+    <h1>VITAMED MEDICINA GENERAL S.A</h1>
+    <h2>FORMATO ÚNICO HOJA DE VIDA DEL PACIENTE</h2>
+
+    <div class="section-title">Datos Personales</div>
+    <table>
+        <tr>
+            <td>Primer Apellido</td>
+            <td><input type="text" name="primer_apellido" readonly></td>
+            <td>Segundo Apellido</td>
+            <td><input type="text" name="segundo_apellido" readonly></td>
+        </tr>
+        <tr>
+            <td>Nombres</td>
+            <td colspan="3"><input type="text" name="nombres" readonly></td>
+        </tr>
+        <tr>
+            <td>Número de Documento</td>
+            <td><input type="text" name="numero_documento" readonly></td>
+            <td>Tipo Documento</td>
+            <td>
+                <select name="tipo_documento" disabled>
+                    <option value="cc">CC</option>
+                    <option value="ti">TI</option>
+                    <option value="rc">RC</option>
+                    <option value="ce">CE</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Sexo</td>
+            <td colspan="3">
+                <input type="radio" name="sexo" value="m" disabled> M
+                <input type="radio" name="sexo" value="f" disabled> F
+            </td>
+        </tr>
+        <tr>
+            <td>Fecha de Nacimiento</td>
+            <td colspan="3"><input type="date" name="fecha_nacimiento" readonly></td>
+        </tr>
+        <tr>
+            <td>Nacionalidad</td>
+            <td><input type="text" name="nacionalidad" value="Colombiano" readonly></td>
+            <td>País</td>
+            <td><input type="text" name="pais" value="Colombia" readonly></td>
+        </tr>
+        <tr>
+            <td>Estado del Paciente</td>
+            <td colspan="3"><input type="text" name="estado_paciente" readonly></td>
+        </tr>
+    </table>
+
+    <div class="section-title">Información de Contacto</div>
+    <table>
+        <tr>
+            <td>Teléfono</td>
+            <td><input type="tel" name="telefono" readonly></td>
+        </tr>
+        <tr>
+            <td>Correo Electrónico</td>
+            <td><input type="email" name="correo_electronico" readonly></td>
+        </tr>
+    </table>
+
+    <div class="section-title">Dirección de Residencia</div>
+    <table>
+        <tr>
+            <td>Departamento</td>
+            <td><input type="text" name="departamento" readonly></td>
+            <td>Ciudad</td>
+            <td><input type="text" name="ciudad" readonly></td>
+        </tr>
+        <tr>
+            <td>Barrio</td>
+            <td><input type="text" name="barrio" readonly></td>
+            <td>Teléfono</td>
+            <td><input type="tel" name="telefono_residencia" readonly></td>
+        </tr>
+    </table>
+
+    <div class="section-title">Datos de Contacto de Emergencia</div>
+    <table>
+        <tr>
+            <td>Primer Apellido</td>
+            <td><input type="text" name="emergencia_apellido1" readonly></td>
+            <td>Segundo Apellido</td>
+            <td><input type="text" name="emergencia_apellido2" readonly></td>
+        </tr>
+        <tr>
+            <td>Nombres</td>
+            <td colspan="3"><input type="text" name="emergencia_nombres" readonly></td>
+        </tr>
+        <tr>
+            <td>Parentesco</td>
+            <td><input type="text" name="emergencia_parentesco" readonly></td>
+        </tr>
+        <tr>
+            <td>Teléfono</td>
+            <td><input type="tel" name="emergencia_telefono" readonly></td>
+        </tr>
+        <tr>
+            <td>Correo Electrónico</td>
+            <td><input type="email" name="emergencia_email" readonly></td>
+        </tr>
+    </table>
+
+    <div class="section-title">Datos de Ocupación</div>
+    <table>
+        <tr>
+            <td>Ocupación o Profesión</td>
+            <td colspan="3"><input type="text" name="ocupacion" readonly></td>
+        </tr>
+        <tr>
+            <td>Lugar de Trabajo</td>
+            <td colspan="3"><input type="text" name="lugar_trabajo" readonly></td>
+        </tr>
+        <tr>
+            <td>Tipo de Actividad</td>
+            <td colspan="3"><input type="text" name="tipo_actividad" readonly></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

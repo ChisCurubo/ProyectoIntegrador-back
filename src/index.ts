@@ -1,49 +1,68 @@
-import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import * as dotenv from 'dotenv';
+import express, { NextFunction, Request, Response } from 'express';
+import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
-import * as dotenv from 'dotenv';
 dotenv.config({ path: path.join(__dirname, '../environment/.env') });
-import citas from './routes/citas.routes';
-//import helmet from 'helmet';
-import historialClinicoRoutes from './routes/historialMedico.routes'
 
+import citas from './routes/citas.routes';
+import historialClinicoRoutes from './routes/historialMedico.routes';
+import hojaVida from './routes/hojaVida.routes';
 
 const app = express();
 const port = process.env.PORT || 3002;
 
-app.use(cors({
+// Configuración de CORS
+const corsOptions = {
   origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true,
-}));
+};
 
+if (process.env.NODE_ENV === 'production') {
+  corsOptions.origin = process.env.PRODUCTION_ORIGIN || 'https://mi-sitio-produccion.com';
+}
+
+app.use(cors(corsOptions));
+app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
-//app.use(helmet());
 
-// Middleware para registrar el cuerpo de la solicitud y respuesta
-app.use((req: Request, res: Response, next: NextFunction) => {
-  // Registrar el cuerpo de la solicitud
-  console.log('Request Body:', req.body);
+if (process.env.NODE_ENV === 'development') {
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    console.log('Request Body:', req.body);
 
-  // Interceptar la respuesta para registrar el cuerpo antes de enviarla
-  const originalSend = res.send.bind(res);
-  res.send = (body: any) => {
-    console.log('Response Body:', body);
-    return originalSend(body);
-  };
+    const originalSend = res.send.bind(res);
+    res.send = (body: any) => {
+      console.log('Response Body:', body);
+      return originalSend(body);
+    };
 
-  next();
+    next();
+  });
+}
+
+// Define una ruta de prueba para verificar que el servidor está funcionando
+app.get('/test', (req, res) => {
+    res.send('Servidor funcionando');
 });
 
-//Rutas
+// Definir las rutas de la aplicación
 app.use('/api/historialClinico', historialClinicoRoutes);
-app.use('/HistoriaClinicaMedico', citas);
+app.use('/api/citas', citas);
+app.use('/api/pdfhojadevida', hojaVida);
 
+// Iniciar el servidor
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
 });
 
+// Manejo de errores en el servidor
 app.on('error', (err: any) => {
   console.error('Error al iniciar el servidor:', err);
+});
+
+// Ruta POST de prueba
+app.post('/test-post', (req, res) => {
+  res.json({ message: 'Solicitud POST recibida', body: req.body });
 });
