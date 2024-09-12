@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { generarFacturaelectronica } from '../services/facturacion.service';
+import {generarFacturaelectronica} from '../services/facturacion.service';
 
 export const generarFactura = async (req: Request, res: Response) => {
     try {
@@ -16,3 +16,4 @@ export const generarFactura = async (req: Request, res: Response) => {
         res.status(500).json({ success: false, message: 'Error generando la factura' });
     }
 };
+
