@@ -4,10 +4,17 @@ import morgan from 'morgan';
 import path from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: path.join(__dirname, '../environment/.env') });
+import helmet from 'helmet';
 import citas from './routes/citas.routes';
 import facturacion from './routes/facturacion.routes';
 //import helmet from 'helmet';
 import historialClinicoRoutes from './routes/historialMedico.routes'
+import usuarioRoutes from './routes/usuario.routes'; 
+import hojaVida from './routes/hojaVida.routes';
+
+
+
+
 
 
 const app = express();
@@ -37,10 +44,18 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-//Rutas
+
 app.use('/api/historialClinico', historialClinicoRoutes);
 app.use('/HistoriaClinicaMedico', citas);
 app.use('/api/facturacion', facturacion);
+app.use('/api/citas', citas);
+app.use('/api/pdfhojadevida', hojaVida);
+// Rutas
+app.use('/api/historialClinico', historialClinicoRoutes);
+app.use('/api/usuarios', usuarioRoutes); 
+
+
+
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
