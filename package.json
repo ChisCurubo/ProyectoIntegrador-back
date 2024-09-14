@@ -16,7 +16,6 @@
     "@types/express-validator": "^3.0.0",
     "@types/morgan": "^1.9.9",
     "bcrypt": "^5.1.1",
-    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
@@ -40,8 +39,6 @@
       "ts-node-dev": "^2.0.0",
       "tslint": "^5.12.1",
       "typescript": "^5.5.4"
-    },
-  "scripts": {
-    "start": "nodemon ./src/index.ts"
-  }
+    }
+
 }

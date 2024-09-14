@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import connection from 'providers/database';
+import connection from '../providers/database';
 
 export class CitasController {
 
