@@ -1,25 +1,32 @@
+import connection from '../providers/database'; 
 
-import connection from '../providers/database';
-//import Cita from '../models/Modelo.Citas';
+export class CitaService {
+    // Obtener todas las citas
+    public async getAllCitas() {
+        const query = 'SELECT * FROM CITAS';
+        const [rows] = await connection.execute(query);
+        return rows;
+    }
 
+    // Insertar una nueva cita
+    public async createCita(data: any) {
+        const { fecha, hora, medico, idUsuario, historialMedico } = data;
+        let query = `INSERT INTO CITAS (fecha, hora, medico, idUsuario${historialMedico ? ', historialMedico' : ''})
+                     VALUES (?, ?, ?, ?${historialMedico ? ', ?' : ''})`;
+        const [result] = await connection.execute(query, [fecha, hora, medico, idUsuario, historialMedico].filter(Boolean));
+        return result;
+    }
 
-
-class CitaService {
-
-    public testConnection = async ():  Promise<void> => {
+    public async testConnection() {
         try {
-            const [rows]:any[] = await connection.query('SELECT 1 + 1 AS result');
-            console.log('Connection successful:', rows[0].result);
-            console.log('Connection successful:', rows[0].result === 2);
-        } catch (error: any) {
-            console.error('Connection failed:', error.message);
-        } 
-    };
-
-    // Método público que crea una nueva cita.
-    // Recibe como parámetro citaData, que es un objeto parcial de tipo Cita.
-
+            const [rows] = await connection.query('SELECT 1');
+            return rows;
+        } catch (error) {
+            console.error('Error de conexión:', error);
+            throw error;
+        }
+    }
+    
 }
 
-// Exporta la clase CitaService para que pueda ser utilizada en otros archivos.
 export default CitaService;
