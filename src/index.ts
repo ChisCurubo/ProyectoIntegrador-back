@@ -7,15 +7,13 @@ dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 import helmet from 'helmet';
 import historialClinicoRoutes from './routes/historialMedico.routes';
 import usuarioRoutes from './routes/usuario.routes'; 
-import authRoutes from './routes/auth.routes'; // Asegúrate de que la ruta sea correcta
-
-
-
-
+import authRoutes from './routes/auth.routes';
+import medicalRoutes from './routes/medical.routes';
 
 const app = express();
 const port = process.env.PORT || 3002;
 
+// Configurar CORS
 app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true,
@@ -25,18 +23,17 @@ app.use(morgan('dev'));
 app.use(express.json());
 //app.use(helmet());
 
+// Servir archivos estáticos desde la carpeta 'public'
+app.use(express.static(path.join(__dirname, '../public')));
+
 // Middleware para registrar el cuerpo de la solicitud y respuesta
 app.use((req: Request, res: Response, next: NextFunction) => {
-  // Registrar el cuerpo de la solicitud
   console.log('Request Body:', req.body);
-
-  // Interceptar la respuesta para registrar el cuerpo antes de enviarla
   const originalSend = res.send.bind(res);
   res.send = (body: any) => {
     console.log('Response Body:', body);
     return originalSend(body);
   };
-
   next();
 });
 
@@ -44,12 +41,14 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use('/api/historialClinico', historialClinicoRoutes);
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/medical', medicalRoutes);
 
-
+// Iniciar el servidor
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
 });
 
+// Manejo de errores
 app.on('error', (err: any) => {
   console.error('Error al iniciar el servidor:', err);
 });

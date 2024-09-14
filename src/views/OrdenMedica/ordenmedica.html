@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orden Médica</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,7 +35,7 @@
             background-color: #019BE2;
             color: white;
             padding: 5px;
-            margin-top: 20px; /* Añadir espacio entre la sección anterior */
+            margin-top: 20px;
         }
         .data-table, .med-table {
             width: 100%;
@@ -73,12 +74,12 @@
         }
     </style>
 </head>
-<body>
-    <div class="page">
+<body onload="generatePDF()">
+    <div class="page" id="content">
         <!-- Encabezado -->
         <div class="header">
-            <img src="logo.jpeg" alt="Logo de la IPS">
-            <h3>ORDEN MEDICA</h3>
+            <img src="/public/images/logo.jpeg" alt="Logo de la IPS" />
+            <h3>ORDEN MÉDICA</h3>
         </div>
 
         <!-- Datos generales -->
@@ -151,5 +152,14 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function generatePDF() {
+            const element = document.getElementById('content');
+            html2pdf()
+                .from(element)
+                .save('orden-medica.pdf');
+        }
+    </script>
 </body>
 </html>

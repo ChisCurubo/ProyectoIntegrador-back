@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial Clínico</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -91,7 +92,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="generatePDF()">
     <div class="page" id="content">
         <h1>Historia Clínica</h1>
 
@@ -256,35 +257,13 @@
         </table>
     </div>
 
-    <!-- Incluir jsPDF y html2canvas -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
     <script>
-        window.onload = function() {
-            const { jsPDF } = window.jspdf;
-            html2canvas(document.getElementById('content')).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = 210;
-                const pageHeight = 295;
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                let heightLeft = imgHeight;
-                let position = 0;
-
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                }
-
-                pdf.save('historial-clinico.pdf');
-            });
-        };
-    </script
->
+        function generatePDF() {
+            const element = document.getElementById('content');
+            html2pdf()
+                .from(element)
+                .save('historial-clinico.pdf');
+        }
+    </script>
 </body>
 </html>
