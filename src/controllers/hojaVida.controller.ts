@@ -1,6 +1,6 @@
 // controllers/HistorialClinicoController.ts
 import { Request, Response } from 'express';
-import { testConnection } from '../services/hojaVida.services';
+import { testConnection } from '../services/hojaVida.service';
 
 export const hojaDeVida = async(req : Request, res : Response) =>{
     try {
