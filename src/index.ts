@@ -5,9 +5,9 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
 dotenv.config({ path: path.join(__dirname, '../environment/.env') });
-
-import citas from './routes/citas.routes';
 import historialClinicoRoutes from './routes/historialMedico.routes';
+import usuarioRoutes from './routes/usuario.routes'; 
+import citas from './routes/citas.routes';
 import hojaVida from './routes/hojaVida.routes';
 
 const app = express();
@@ -51,6 +51,12 @@ app.get('/test', (req, res) => {
 app.use('/api/historialClinico', historialClinicoRoutes);
 app.use('/api/citas', citas);
 app.use('/api/pdfhojadevida', hojaVida);
+// Rutas
+app.use('/api/historialClinico', historialClinicoRoutes);
+app.use('/api/usuarios', usuarioRoutes); 
+
+
+
 
 // Iniciar el servidor
 app.listen(port, () => {
