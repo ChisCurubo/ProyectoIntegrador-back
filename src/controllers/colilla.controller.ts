@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { generarColillaElectronica } from '../services/colilla.services';
+import { generarColillaElectronica } from '../services/colilla.service';
 
 export const generarColilla = async (req: Request, res: Response) => {
     try {

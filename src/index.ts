@@ -13,7 +13,7 @@ import usuarioRoutes from './routes/usuario.routes';
 import authRoutes from './routes/auth.routes';
 import medicalRoutes from './routes/medical.routes';
 import hojaVida from './routes/hojaVida.routes';
-
+//import medicalRoutes from './routes/medical.routes';
 
 
 

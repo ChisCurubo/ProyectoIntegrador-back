@@ -1,4 +1,4 @@
-import { buildPDF } from '../libs/colilla';
+import { buildPDF } from '../libs/Facturacion/colilla';
 
 export async function generarColillaElectronica(
     empleadoData: any, // Cambié `pacienteData` a `empleadoData`

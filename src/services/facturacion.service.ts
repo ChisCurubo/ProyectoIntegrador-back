@@ -1,6 +1,6 @@
 // services/FacturacionService.ts
 
-import { generarFacturaelectronica as generarPDF } from '../libs/factura';
+import { generarFacturaelectronica as generarPDF } from '../libs/Facturacion/factura';
 
 export async function generarFacturaelectronica(
     pacienteData: any, // Cambié String a tipo `any` o tipos específicos si es necesario
