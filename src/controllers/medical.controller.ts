@@ -13,7 +13,7 @@ class MedicalController {
     public renderOrdenMedicaPage(req: Request, res: Response) {
         const htmlPath = join(__dirname, '../views/OrdenMedica/ordenMedica.html');
         res.sendFile(htmlPath);
-    }
+    } 
 }
 
 export default new MedicalController();

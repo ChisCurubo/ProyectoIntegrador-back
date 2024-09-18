@@ -22,6 +22,6 @@ router.delete('/eliminarusuario/:CC', UsuarioController.eliminarUsuarioPorCedula
 
 
 // iniciar sesion por email y contraseña
-router.post('/iniciarSesion', UsuarioController.iniciarSesion);
+//router.post('/iniciarSesion', UsuarioController.iniciarSesion);
 
 export default router;

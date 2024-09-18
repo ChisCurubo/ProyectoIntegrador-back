@@ -67,21 +67,6 @@ class UsuarioController {
     }
   }
 
-  // Iniciar sesión
-  public async iniciarSesion(req: Request, res: Response): Promise<void> {
-    const { emailUsuario, pwdUsuario } = req.body;
-    try {
-      const usuario = await UsuarioService.iniciarSesion(emailUsuario, pwdUsuario);
-      if (usuario) {
-        res.status(200).json({ mensaje: 'Inicio de sesión exitoso', usuario });
-      } else {
-        res.status(401).json({ mensaje: 'Email o contraseña incorrectos' });
-      }
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      res.status(500).json({ mensaje: 'Error al iniciar sesión', error });
-    }
-  }
 }
 
 export default new UsuarioController();

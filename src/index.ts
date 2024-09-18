@@ -46,14 +46,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-
+// Rutas
 app.use('/api/historialClinico', historialClinicoRoutes);
-app.use('/HistoriaClinicaMedico', citas);
 app.use('/api/facturacion', facturacion);
 app.use('/api/citas', citas);
 app.use('/api/pdfhojadevida', hojaVida);
-// Rutas
-app.use('/api/historialClinico', historialClinicoRoutes);
+
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/medical', medicalRoutes);
