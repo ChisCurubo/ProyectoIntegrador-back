@@ -9,6 +9,7 @@ import historialClinicoRoutes from './routes/historialMedico.routes';
 import usuarioRoutes from './routes/usuario.routes'; 
 import authRoutes from './routes/auth.routes';
 import medicalRoutes from './routes/medical.routes';
+import ordenMedicaRoutes from './routes/ordenMedica.routes';
 
 const app = express();
 const port = process.env.PORT || 3002;
@@ -42,6 +43,7 @@ app.use('/api/historialClinico', historialClinicoRoutes);
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/medical', medicalRoutes);
+app.use('/api/ordenes-medicas', ordenMedicaRoutes);
 
 // Iniciar el servidor
 app.listen(port, () => {

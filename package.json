@@ -24,7 +24,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
-    "mysql2": "^3.9.2",
+    "mysql2": "^3.11.3",
     "nodemon": "^3.1.4",
     "puppeteer": "^23.3.0",
     "uuid": "^10.0.0"
