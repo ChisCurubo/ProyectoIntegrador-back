@@ -15,7 +15,7 @@ class HistorialClinicoService {
         return this.historiales.find(historial => historial.id === id);
     }
 
-  
+ 
 }
 
 export default HistorialClinicoService;

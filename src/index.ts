@@ -5,11 +5,16 @@ import path from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 import helmet from 'helmet';
-import historialClinicoRoutes from './routes/historialMedico.routes';
+import citas from './routes/citas.routes';
+import facturacion from './routes/facturacion.routes';
+//import helmet from 'helmet';
+import historialClinicoRoutes from './routes/historialMedico.routes'
 import usuarioRoutes from './routes/usuario.routes'; 
 import authRoutes from './routes/auth.routes';
 import medicalRoutes from './routes/medical.routes';
+import hojaVida from './routes/hojaVida.routes';
 import ordenMedicaRoutes from './routes/ordenMedica.routes';
+
 
 const app = express();
 const port = process.env.PORT || 3002;
@@ -38,6 +43,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+
+app.use('/api/historialClinico', historialClinicoRoutes);
+app.use('/HistoriaClinicaMedico', citas);
+app.use('/api/facturacion', facturacion);
+app.use('/api/citas', citas);
+app.use('/api/pdfhojadevida', hojaVida);
 // Rutas
 app.use('/api/historialClinico', historialClinicoRoutes);
 app.use('/api/usuarios', usuarioRoutes);
