@@ -62,6 +62,22 @@ class UsuarioService {
   }
 
 
+<<<<<<< Updated upstream
+=======
+    if (rows.length > 0) {
+      const usuario = rows[0] as Usuario;
+      
+      // Compara la contraseña ingresada con la contraseña encriptada
+      const isMatch = await bcrypt.compare(contraseña, usuario.pwdUsuario);
+
+      if (isMatch) {
+        return usuario; // Contraseña correcta
+      }
+    }
+
+    return null; // Usuario no encontrado o contraseña incorrecta
+  }
+>>>>>>> Stashed changes
 }
 
 export default new UsuarioService();
