@@ -4,9 +4,9 @@ import { hojaDeVida, hojaDeVidaPDF } from '../controllers/hojaVida.controller';
 const router = express.Router();
 
 // Ruta 
-router.post('/crearHistorial', hojaDeVida);
+router.post('/createHojaVida', hojaDeVida);
 
 // Ruta 
-router.get('/historial/:id', hojaDeVidaPDF);
+router.get('/hojaVida/:id', hojaDeVidaPDF);
 
 export default router;

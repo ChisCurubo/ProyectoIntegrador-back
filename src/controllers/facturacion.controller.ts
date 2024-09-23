@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import {generarFacturaelectronica} from '../services/facturacion.service';
+import {generarteElectronicBill} from '../services/facturacion.service';
 
-export const generarFactura = async (req: Request, res: Response) => {
+export const generateBill = async (req: Request, res: Response) => {
     try {
         const { paciente, cc, telefono, ciudad, direccion, services, quantities } = req.body;
 
         const pacienteData = { paciente, cc, telefono, ciudad, direccion };
-        const pdfBuffer = await generarFacturaelectronica(pacienteData, services, quantities);
+        const pdfBuffer = await generarteElectronicBill(pacienteData, services, quantities);
 
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename=factura.pdf');

@@ -5,21 +5,21 @@ import connection from '../providers/database';
 class UsuarioService {
 
   // Obtener todos los usuarios
-  public async obtenerUsuarios(): Promise<Usuario[]> {
+  public async getUsers(): Promise<Usuario[]> {
     const query = 'SELECT * FROM USUARIOS';
     const [rows]: any[] = await connection.query(query); // Cambiamos a 'rows'
     return rows as Usuario[]; // Retornamos 'rows' con el tipo Usuario[]
   }
 
   // Obtener un usuario por cédula (CC)
-  public async obtenerUsuarioPorCedula(CC: string): Promise<Usuario | null> {
+  public async getUsersbyCC(CC: string): Promise<Usuario | null> {
     const query = 'SELECT * FROM USUARIOS WHERE CC = ?';
     const [rows]: any[] = await connection.query(query, [CC]);
     return rows.length > 0 ? rows[0] as Usuario : null;
   }
 
   // Crear un nuevo usuario
-  public async crearUsuario(usuario: Usuario): Promise<void> {
+  public async createUserCompleate(usuario: Usuario): Promise<void> {
     // Genera el hash de la contraseña
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(usuario.pwdUsuario, saltRounds); // Encripta la contraseña
@@ -57,7 +57,7 @@ public async createUserSimple(usuario: Usuario): Promise<void> {
 
 
   // Actualizar un usuario existente por cédula (CC)
-  public async actualizarUsuarioPorCedula(CC: string, usuario: Usuario): Promise<void> {
+  public async updateUserbyCC(CC: string, usuario: Usuario): Promise<void> {
     // Si hay una nueva contraseña, la encriptamos
     const saltRounds = 10;
     const hashedPassword = usuario.pwdUsuario ? await bcrypt.hash(usuario.pwdUsuario, saltRounds) : usuario.pwdUsuario;
@@ -81,7 +81,7 @@ public async createUserSimple(usuario: Usuario): Promise<void> {
   }
 
   // Eliminar un usuario por cédula (CC)
-  public async eliminarUsuarioPorCedula(CC: string): Promise<void> {
+  public async deleteByCC(CC: string): Promise<void> {
     const query = 'DELETE FROM USUARIOS WHERE CC = ?';
     await connection.query(query, [CC]);
   }

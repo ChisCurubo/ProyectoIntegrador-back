@@ -4,9 +4,9 @@ import { Usuario } from '../Interfaces/Usuario';
 
 class UsuarioController {
   // Obtener todos los usuarios
-  public async obtenerUsuarios(req: Request, res: Response): Promise<void> {
+  public async getUsersController(req: Request, res: Response): Promise<void> {
     try {
-      const usuarios = await UsuarioService.obtenerUsuarios();
+      const usuarios = await UsuarioService.getUsers();
       res.status(200).json(usuarios);
     } catch (error) {
       console.error('Error al obtener los usuarios:', error);
@@ -15,10 +15,10 @@ class UsuarioController {
   }
 
   // Obtener un usuario por cédula (CC)
-  public async obtenerUsuarioPorCedula(req: Request, res: Response): Promise<void> {
+  public async getUsersByCCcontroler  (req: Request, res: Response): Promise<void> {
     const { CC } = req.params;
     try {
-      const usuario = await UsuarioService.obtenerUsuarioPorCedula(CC);
+      const usuario = await UsuarioService.getUsersbyCC(CC);
       if (usuario) {
         res.status(200).json(usuario);
       } else {
@@ -31,10 +31,10 @@ class UsuarioController {
   }
 
   // Crear un nuevo usuario
-  public async crearUsuario(req: Request, res: Response): Promise<void> {
+  public async createUserController(req: Request, res: Response): Promise<void> {
     try {
       const usuario: Usuario = req.body;
-      await UsuarioService.crearUsuario(usuario);
+      await UsuarioService.createUserCompleate(usuario);
       res.status(201).json({ mensaje: 'Usuario creado exitosamente' });
     } catch (error) {
       console.error('Error al crear el usuario:', error);
@@ -43,11 +43,11 @@ class UsuarioController {
   }
 
   // Actualizar un usuario existente por cédula (CC)
-  public async actualizarUsuarioPorCedula(req: Request, res: Response): Promise<void> {
+  public async updateUserCCcontroler(req: Request, res: Response): Promise<void> {
     const { CC } = req.params;
     try {
       const usuario: Usuario = req.body;
-      await UsuarioService.actualizarUsuarioPorCedula(CC, usuario);
+      await UsuarioService.updateUserbyCC(CC, usuario);
       res.status(200).json({ mensaje: 'Usuario actualizado exitosamente' });
     } catch (error) {
       console.error(`Error al actualizar el usuario con CC ${CC}:`, error);
@@ -56,10 +56,10 @@ class UsuarioController {
   }
 
   // Eliminar un usuario por cédula (CC)
-  public async eliminarUsuarioPorCedula(req: Request, res: Response): Promise<void> {
+  public async deleteUserCCcontroller(req: Request, res: Response): Promise<void> {
     const { CC } = req.params;
     try {
-      await UsuarioService.eliminarUsuarioPorCedula(CC);
+      await UsuarioService.deleteByCC(CC);
       res.status(200).json({ mensaje: 'Usuario eliminado exitosamente' });
     } catch (error) {
       console.error(`Error al eliminar el usuario con CC ${CC}:`, error);

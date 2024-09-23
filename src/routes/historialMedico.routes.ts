@@ -5,11 +5,11 @@ const router = express.Router();
 const historialClinicoController = new HistorialClinicoController();
 
 // Ruta para crear un nuevo historial clínico
-router.post('/crearHistorial', historialClinicoController.createHistorialClinico);
+router.post('/crrateHistorial', historialClinicoController.createHistorialClinico);
 
-router.post('/leerPDFHC', historialClinicoController.createHistorialClinico);
+router.post('/getPDFHC');
 
 // Ruta para obtener un historial clínico por ID
-router.get('/historial/:id', historialClinicoController.getHistorialClinico);
+router.get('/historialMedico/:id', historialClinicoController.getHistorialClinico);
 
 export default router;

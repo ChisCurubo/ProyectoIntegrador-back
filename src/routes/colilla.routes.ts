@@ -1,8 +1,8 @@
 import express from 'express';
-import { generarColilla } from '../controllers/colilla.controller';
+import { generatePayStub } from '../controllers/colilla.controller';
 
 const router = express.Router();
 
-router.post('/generarColilla', generarColilla);
+router.post('/generatePayStub', generatePayStub);
 
 export default router;

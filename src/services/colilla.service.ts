@@ -1,6 +1,6 @@
 import { buildPDF } from '../libs/Facturacion/colilla';
 
-export async function generarColillaElectronica(
+export async function generateElectronicPayStub(
     empleadoData: any, // Cambié `pacienteData` a `empleadoData`
     services: string[],
     quantities: number[]
