@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { generarToken, singUpSedes, iniciarSesion, validateSedes } from '../services/auth.service'; // Ajusta la ruta según donde esté el servicio
+import { Usuario } from '../Interfaces/Usuario';
+import  UsuarioService  from '../services/usuario.service'; 
 
 class AuthController {
     // Método para iniciar sesión y generar el token
@@ -47,6 +49,22 @@ class AuthController {
         }
         res.cookie('token', aws);
         return res.status(200).header('auth-token',aws).json({ aws});
+    }
+    /**
+     * Sing up user  
+     * @param req 
+     * @param res 
+     * @returns 
+     */
+    async SingUp(req: Request, res: Response){
+        try {
+            const usuario: Usuario = req.body;
+            await UsuarioService.createUserSimple(usuario);
+            res.status(200).json({ mensaje: 'Usuario creado exitosamente' });
+          } catch (error) {
+            console.error('Error al crear el usuario:', error);
+            res.status(500).json({ mensaje: 'Error al crear el usuario', error });
+          }
     }
 
     /**

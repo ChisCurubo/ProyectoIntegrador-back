@@ -30,6 +30,31 @@ class UsuarioService {
     
     await connection.query(query, params);
   }
+    // Crear un nuevo usuario
+// Crear un nuevo usuario
+public async createUserSimple(usuario: Usuario): Promise<void> {
+  try {
+    if (!usuario.CC || !usuario.nombreUsuario || !usuario.apellidoUsuario || !usuario.emailUsuario || !usuario.pwdUsuario) {
+      throw new Error("Todos los campos son obligatorios.");
+    }
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(usuario.pwdUsuario, saltRounds); 
+
+    const query = `INSERT INTO USUARIOS (CC, nombreUsuario, apellidoUsuario, emailUsuario, pwdUsuario, idRol) 
+                   VALUES (?, ?, ?, ?, ?, ?)`;
+    const params = [usuario.CC, usuario.nombreUsuario, usuario.apellidoUsuario, usuario.emailUsuario, hashedPassword, 4];
+    
+    const result = await connection.query(query, params);
+    
+    if (result.length < 0) {
+      throw new Error("No se pudo crear el usuario.");
+    }
+  } catch (error) {
+    console.error("Error al crear el usuario:", error);
+    throw error; // Rethrow the error after logging
+  }
+}
+
 
   // Actualizar un usuario existente por cédula (CC)
   public async actualizarUsuarioPorCedula(CC: string, usuario: Usuario): Promise<void> {
