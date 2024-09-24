@@ -18,6 +18,7 @@ import historiaClinicaRoutes from './routes/historialClinico.routes';
 import DoctorRoutes from './routes/doctor.routes';
 import pacientesRoutes from './routes/pacientes.routes'; 
 import colillaPagoRoutes from './routes/colilladePago.routes';
+import mercadopagoRoutes from '../src/routes/mercadopago.routes';
 
 const app = express();
 const port = process.env.PORT || 3002;
@@ -60,6 +61,7 @@ app.use('/api', DoctorRoutes);
 app.use('/api', pacientesRoutes);
 
 app.use('/api/colilla/PAGO', colillaPagoRoutes); 
+app.use('/api/mercadopago', mercadopagoRoutes);
 
 // Iniciar el servidor
 app.listen(port, () => {
