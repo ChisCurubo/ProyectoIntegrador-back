@@ -3,22 +3,20 @@ import UsuarioController from '../controllers/usuario.controller';
 
 const router = Router();
 
-
-
 // Obtener todos los usuarios
-router.get('/obtenerusuarios', UsuarioController.obtenerUsuarios);
+router.get('/obtenerusuarios', UsuarioController.getUsersController);
 
 // Obtener un usuario por cédula (CC)
-router.get('/obtenerporcedula/:CC', UsuarioController.obtenerUsuarioPorCedula);
+router.get('/obtenerporcedula/:CC', UsuarioController.getUsersByCCcontroler);
 
 // Crear un nuevo usuario
-router.post('/crearusuario', UsuarioController.crearUsuario);
+router.post('/crearusuario', UsuarioController.createUserController);
 
 // Actualizar un usuario existente por cédula (CC)
-router.put('/actualizarusuario/:CC', UsuarioController.actualizarUsuarioPorCedula);
+router.put('/actualizarusuario/:CC', UsuarioController.updateUserCCcontroler);
 
 // Eliminar un usuario por cédula (CC)
-router.delete('/eliminarusuario/:CC', UsuarioController.eliminarUsuarioPorCedula);
+router.delete('/eliminarusuario/:CC', UsuarioController.deleteUserCCcontroller);
 
 
 // iniciar sesion por email y contraseña
