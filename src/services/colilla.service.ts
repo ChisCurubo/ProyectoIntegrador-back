@@ -1,25 +1,27 @@
 import { buildPDF } from '../libs/Facturacion/colilla';
+import { InternalServerError, BadRequestError } from '../middlewares/customErrors';
 
 export async function generateElectronicPayStub(
-    empleadoData: any, // Cambié `pacienteData` a `empleadoData`
+    empleadoData: any,
     services: string[],
     quantities: number[]
 ): Promise<Buffer> {
     try {
+        if (!empleadoData || services.length === 0 || quantities.length === 0) {
+            throw new BadRequestError('Datos insuficientes para generar la colilla');
+        }
+
         return new Promise<Buffer>((resolve, reject) => {
             const chunks: Buffer[] = [];
 
-            // Llamamos a `buildPDF` y manejamos el flujo de datos dentro de él
             buildPDF(
-                (chunk) => chunks.push(chunk), // Se almacenan los datos del PDF en `chunks`
-                () => resolve(Buffer.concat(chunks)), // Al finalizar, concatenamos y resolvemos la promesa
+                (chunk) => chunks.push(chunk),
+                () => resolve(Buffer.concat(chunks)),
                 empleadoData, services, quantities
             );
-
-            // No necesitas el `.on('error')` ya que no hay un stream devuelto directamente.
         });
     } catch (error) {
         console.error('Error generando la colilla:', error);
-        throw new Error('Error generando la colilla de pago');
+        throw new InternalServerError('Error interno generando la colilla de pago');
     }
 }

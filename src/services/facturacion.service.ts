@@ -1,17 +1,23 @@
 // services/FacturacionService.ts
-
+import { InternalServerError, BadRequestError } from '../middlewares/customErrors';
 import { generarFacturaelectronica as generarPDF } from '../libs/Facturacion/factura';
 
 export async function generarteElectronicBill(
-    pacienteData: any, // Cambié String a tipo `any` o tipos específicos si es necesario
-    services: string[], // Cambié String a tipo `string[]` si es un array de servicios
-    quantities: number[] // Cambié Number a tipo `number[]` si es un array de cantidades
+    pacienteData: any,
+    services: string[],
+    quantities: number[]
 ) {
     try {
+        // Validación de los parámetros de entrada
+        if (!pacienteData || services.length === 0 || quantities.length === 0) {
+            throw new BadRequestError('Datos insuficientes para generar la factura electrónica');
+        }
+
+        // Intentar generar el PDF
         const pdfBuffer = await generarPDF(pacienteData, services, quantities);
         return pdfBuffer;
     } catch (error) {
         console.error('Error generando la factura:', error);
-        throw new Error('Error generando la factura');
+        throw new InternalServerError('Error interno generando la factura electrónica');
     }
 }

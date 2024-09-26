@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'; // Importa bcrypt
 import connection from '../providers/database';
 import {Sede, SedeLogIn} from '../Interfaces/Sedes';
 import { Usuario } from '../Interfaces/Usuario';
+import { InternalServerError, UnauthorizedError } from '../middlewares/customErrors';
 const tokenKey= 'vitamed'
 
 export function generarToken(userId: string) {
@@ -61,14 +62,15 @@ export async function singUpSedes(user: string, pwd: string, ip: string): Promis
             const tokken = await generarTokenSede(obj, ip)
             return tokken
         }else {
-            throw new Error('Contraseña incorrecta');
+            throw new UnauthorizedError('Contraseña incorrecta');
         }
     } else {
-        throw new Error('Sede no encontrada');
+        throw new UnauthorizedError('Sede no encontrada');
     }
     } catch (error) {
+        
         console.error('Error en la consulta:', error);
-        return null;
+        throw new InternalServerError('Error interno en la base de datos');
     }
 
 
@@ -88,7 +90,7 @@ export async function validateSedes(tokken: string): Promise<SedeLogIn | Usuario
         return decoded;
       } catch (err) {
         console.error('Error al decodificar el token:', err);
-        return null;
+        throw new UnauthorizedError('Token inválido o expirado');
       }
     }
 
@@ -113,16 +115,13 @@ export async function validateSedes(tokken: string): Promise<SedeLogIn | Usuario
                 const token = await generarTokenUsuario(usuario, ip)
                 return token
             }else {
-                console.error('Contraseña incorrecta');
+                throw new UnauthorizedError('Contraseña incorrecta');
             }
             } else {
-            console.error('Usuario no encontrado');
+                throw new UnauthorizedError('Usuario no encontrado');
             }
     } catch (error) {
-    // Manejo de errores
-    console.error('Error al iniciar sesión:', error);
+        console.error('Error al iniciar sesión:', error);
+        throw new InternalServerError('Error interno al iniciar sesión');
     }
-    
-        // Devuelve null en caso de error o si el usuario no fue encontrado
-        return null;
-    }
+}

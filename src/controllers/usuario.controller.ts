@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import UsuarioService from '../services/usuario.service';
 import { Usuario } from '../Interfaces/Usuario';
+import { InternalServerError } from '../middlewares/customErrors';
 
 class UsuarioController {
   // Obtener todos los usuarios
@@ -10,12 +11,12 @@ class UsuarioController {
       res.status(200).json(usuarios);
     } catch (error) {
       console.error('Error al obtener los usuarios:', error);
-      res.status(500).json({ mensaje: 'Error al obtener los usuarios' });
+      throw new InternalServerError('Error al obtener los usuarios');
     }
   }
 
   // Obtener un usuario por cédula (CC)
-  public async getUsersByCCcontroler  (req: Request, res: Response): Promise<void> {
+  public async getUsersByCCcontroler(req: Request, res: Response): Promise<void> {
     const { CC } = req.params;
     try {
       const usuario = await UsuarioService.getUsersbyCC(CC);
@@ -26,7 +27,7 @@ class UsuarioController {
       }
     } catch (error) {
       console.error(`Error al obtener el usuario con CC ${CC}:`, error);
-      res.status(500).json({ mensaje: 'Error al obtener el usuario' });
+      throw new InternalServerError('Error al obtener el usuario');
     }
   }
 
@@ -38,7 +39,7 @@ class UsuarioController {
       res.status(201).json({ mensaje: 'Usuario creado exitosamente' });
     } catch (error) {
       console.error('Error al crear el usuario:', error);
-      res.status(500).json({ mensaje: 'Error al crear el usuario', error });
+      throw new InternalServerError('Error al crear el usuario');
     }
   }
 
@@ -51,7 +52,7 @@ class UsuarioController {
       res.status(200).json({ mensaje: 'Usuario actualizado exitosamente' });
     } catch (error) {
       console.error(`Error al actualizar el usuario con CC ${CC}:`, error);
-      res.status(500).json({ mensaje: 'Error al actualizar el usuario', error });
+      throw new InternalServerError('Error al actualizar el usuario');
     }
   }
 
@@ -63,10 +64,9 @@ class UsuarioController {
       res.status(200).json({ mensaje: 'Usuario eliminado exitosamente' });
     } catch (error) {
       console.error(`Error al eliminar el usuario con CC ${CC}:`, error);
-      res.status(500).json({ mensaje: 'Error al eliminar el usuario', error });
+      throw new InternalServerError('Error al eliminar el usuario');
     }
   }
-
 }
 
 export default new UsuarioController();

@@ -13,6 +13,9 @@ import usuarioRoutes from './routes/usuario.routes';
 import authRoutes from './routes/auth.routes';
 import medicalRoutes from './routes/medical.routes';
 import hojaVida from './routes/hojaVida.routes';
+
+// import middelware
+import {errorHandler} from './middlewares/errorHandler';
 //import medicalRoutes from './routes/medical.routes';
 
 
@@ -55,6 +58,9 @@ app.use('/api/pdfhojadevida', hojaVida);
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/medical', medicalRoutes);
+
+//Middelware para errores
+app.use(errorHandler);
 
 // Iniciar el servidor
 app.listen(port, () => {
