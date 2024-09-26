@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import ColillaPagoService from '../services/colillaPago.service'; // Importamos el servicio
+import {BadRequestError, NotFoundError, InternalServerError,DatabaseError} from '../middlewares/customErrors';
 
 export class ColillaPagoController {
   
@@ -7,10 +8,18 @@ export class ColillaPagoController {
   public async crearColillaPago(req: Request, res: Response): Promise<void> {
     try {
       const data = req.body;  // Obtenemos los datos del cuerpo de la solicitud
+      if (!data) {
+        throw new BadRequestError('Los datos de la colilla son obligatorios.');
+      }
       const id = await ColillaPagoService.crearColillaPago(data);  // Llamamos al servicio para crear una colilla
       res.status(201).json({ message: 'Colilla creada exitosamente', id });  // Respondemos con el ID generado
     } catch (error) {
-      res.status(500).json({ message: 'Error al crear la colilla', error });
+      if (error instanceof DatabaseError) {
+        throw new DatabaseError('Error al crear la colilla en la base de datos');
+      } else {
+        console.error('Error al crear la colilla:', error);
+        throw new InternalServerError('Error al crear la colilla');
+      }
     }
   }
 
@@ -22,10 +31,15 @@ export class ColillaPagoController {
       if (colilla) {
         res.status(200).json(colilla);  // Si se encuentra la colilla, la devolvemos
       } else {
-        res.status(404).json({ message: 'Colilla no encontrada' });
+        throw new NotFoundError('Colilla no encontrada');
       }
     } catch (error) {
-      res.status(500).json({ message: 'Error al obtener la colilla', error });
+      if (error instanceof DatabaseError) {
+        throw new DatabaseError('Error al obtener la colilla desde la base de datos');
+      } else {
+        console.error(`Error al obtener la colilla con ID ${req.params.id}:`, error);
+        throw new InternalServerError('Error al obtener la colilla');
+      }
     }
   }
 
@@ -35,7 +49,12 @@ export class ColillaPagoController {
       const colillas = await ColillaPagoService.obtenerTodasLasColillas();  // Llamamos al servicio para obtener todas las colillas
       res.status(200).json(colillas);  // Devolvemos todas las colillas
     } catch (error) {
-      res.status(500).json({ message: 'Error al obtener las colillas', error });
+      if (error instanceof DatabaseError) {
+        throw new DatabaseError('Error al obtener las colillas desde la base de datos');
+      } else {
+        console.error('Error al obtener las colillas:', error);
+        throw new InternalServerError('Error al obtener las colillas');
+      }
     }
   }
 
@@ -46,7 +65,12 @@ export class ColillaPagoController {
       await ColillaPagoService.eliminarColilla(id);  // Llamamos al servicio para eliminar la colilla
       res.status(200).json({ message: 'Colilla eliminada exitosamente' });
     } catch (error) {
-      res.status(500).json({ message: 'Error al eliminar la colilla', error });
+      if (error instanceof DatabaseError) {
+        throw new DatabaseError('Error al eliminar la colilla desde la base de datos');
+      } else {
+        console.error(`Error al eliminar la colilla con ID ${req.params.id}:`, error);
+        throw new InternalServerError('Error al eliminar la colilla');
+      }
     }
   }
 
@@ -55,10 +79,18 @@ export class ColillaPagoController {
     try {
       const id = parseInt(req.params.id);  // Obtenemos el ID de los parámetros de la ruta
       const data = req.body;  // Obtenemos los datos actualizados del cuerpo de la solicitud
+      if (!data) {
+        throw new BadRequestError('Los datos actualizados son obligatorios.');
+      }
       await ColillaPagoService.actualizarColillaPago(id, data);  // Llamamos al servicio para actualizar la colilla
       res.status(200).json({ message: 'Colilla actualizada exitosamente' });
     } catch (error) {
-      res.status(500).json({ message: 'Error al actualizar la colilla', error });
+      if (error instanceof DatabaseError) {
+        throw new DatabaseError('Error al actualizar la colilla en la base de datos');
+      } else {
+        console.error(`Error al actualizar la colilla con ID ${req.params.id}:`, error);
+        throw new InternalServerError('Error al actualizar la colilla');
+      }
     }
   }
 }

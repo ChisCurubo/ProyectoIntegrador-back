@@ -11,10 +11,7 @@ class CitasService {
       return result;
     } catch (error: any) {
       console.error('Error creating cita:', error);
-      if (error.code === 'ER_DUP_ENTRY') {
-        // Manejar error de duplicado (por ejemplo, si ya existe una cita en la misma fecha/hora)
-        throw new DatabaseError('Ya existe una cita en esa fecha y hora');
-      }
+      return null
       throw error;
     }
   }
@@ -27,10 +24,7 @@ class CitasService {
       return result;
     } catch (error: any) {
       console.error('Error creating cita with historial:', error);
-      if (error.code === 'ER_NO_REFERENCED_ROW_2') {
-        // Manejar error de referencia (por ejemplo, si el ID de usuario o médico no existe)
-        throw new DatabaseError('El usuario o historial médico no existe');
-      }
+      return null;
       throw error;
     }
   }

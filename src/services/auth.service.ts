@@ -62,13 +62,12 @@ export async function singUpSedes(user: string, pwd: string, ip: string): Promis
             const tokken = await generarTokenSede(obj, ip)
             return tokken
         }else {
-            throw new UnauthorizedError('Contraseña incorrecta');
+            return null
         }
     } else {
         throw new UnauthorizedError('Sede no encontrada');
     }
     } catch (error) {
-        
         console.error('Error en la consulta:', error);
         throw new InternalServerError('Error interno en la base de datos');
     }
