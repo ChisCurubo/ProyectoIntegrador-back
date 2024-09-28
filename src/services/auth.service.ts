@@ -57,8 +57,8 @@ export async function singUpSedes(user: string, pwd: string, ip: string): Promis
     try {
         const [rows]: any = await connection.query(query, user);
         if (rows.length > 0) {
-            const isMatch = await bcrypt.compare(pwd, rows[0].pwdSede);
-            if (isMatch) {
+            //const isMatch = await bcrypt.compare(pwd, rows[0].pwdSede);
+            if (pwd === rows[0].pwd) {
                 const obj: SedeLogIn = rows[0] as SedeLogIn;
                 const token = await generarTokenSede(obj, ip);
                 return token;
