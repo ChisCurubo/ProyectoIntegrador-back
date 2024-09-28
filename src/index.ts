@@ -14,6 +14,7 @@ import authRoutes from './routes/auth.routes';
 import medicalRoutes from './routes/medical.routes';
 import hojaVida from './routes/hojaVida.routes';
 import ordenMedicaRoutes from './routes/ordenMedica.routes';
+import emergenciaRoutes from './routes/emergencia.routes'; 
 
 
 const app = express();
@@ -55,6 +56,8 @@ app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/medical', medicalRoutes);
 app.use('/api/ordenes-medicas', ordenMedicaRoutes);
+app.use('/api', emergenciaRoutes);
+
 
 // Iniciar el servidor
 app.listen(port, () => {
