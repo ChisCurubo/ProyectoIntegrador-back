@@ -2,7 +2,7 @@ import { Router } from 'express';
 import ColillaPagoController from '../controllers/colillaPago.controller';  // Importamos el controlador
 
 const router = Router();
-
+router.post('/generatePayStub', ColillaPagoController.generatePayStub);
 // Ruta para crear una nueva colilla de pago
 router.post('/colillas', ColillaPagoController.crearColillaPago);
 

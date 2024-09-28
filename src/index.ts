@@ -8,11 +8,17 @@ import helmet from 'helmet';
 import citas from './routes/citas.routes';
 import facturacion from './routes/facturacion.routes';
 
-import historialClinicoRoutes from './routes/historialMedico.routes'
 import usuarioRoutes from './routes/usuario.routes'; 
 import authRoutes from './routes/auth.routes';
-import medicalRoutes from './routes/medical.routes';
 import hojaVida from './routes/hojaVida.routes';
+import apiSedes from './routes/api.sedes.routes';
+
+// import middelware
+import {errorHandler} from './middlewares/errorHandler';
+//import medicalRoutes from './routes/medical.routes';
+
+
+
 
 import historiaClinicaRoutes from './routes/historialClinico.routes';
 import DoctorRoutes from './routes/doctor.routes';
@@ -48,20 +54,25 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // Rutas
-app.use('/api/historialClinico', historialClinicoRoutes);
 app.use('/api/facturacion', facturacion);
 app.use('/api/citas', citas);
 app.use('/api/pdfhojadevida', hojaVida);
 
 app.use('/api/usuarios', usuarioRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/medical', medicalRoutes);
 app.use('/api/historia-clinica', historiaClinicaRoutes);
 app.use('/api', DoctorRoutes);
 app.use('/api', pacientesRoutes);
 
 app.use('/api/colilla/PAGO', colillaPagoRoutes); 
 app.use('/api/mercadopago', mercadopagoRoutes);
+
+
+app.use('/api/auth', authRoutes);
+app.use('/apiSedes', apiSedes);
+
+
+//Middelware para errores
+app.use(errorHandler);
 
 // Iniciar el servidor
 app.listen(port, () => {

@@ -16,6 +16,5 @@ console.log({
     port: 15720
 });
 
-console.log(process.env.MYSQL_ADDON_HOST);
 
 export default connection;

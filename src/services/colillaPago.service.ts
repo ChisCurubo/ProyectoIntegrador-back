@@ -1,6 +1,8 @@
 import { Pool } from 'mysql2/promise';
 import pool from '../providers/database';  
 import { ColillaPago } from '../Interfaces/ColillaPago';  
+import { buildPDF } from '../libs/Facturacion/colilla';
+import { InternalServerError, BadRequestError } from '../middlewares/customErrors';
 export class ColillaPagoService {
   private db: Pool;
 
@@ -72,7 +74,34 @@ export class ColillaPagoService {
     // Ejecutamos la consulta de actualización
     await this.db.execute(query, values);
   }
+
+
+  public async generateElectronicPayStub(
+    empleadoData: any,
+    services: string[],
+    quantities: number[]
+): Promise<Buffer> {
+    try {
+        if (!empleadoData || services.length === 0 || quantities.length === 0) {
+            throw new BadRequestError('Datos insuficientes para generar la colilla');
+        }
+
+        return new Promise<Buffer>((resolve, reject) => {
+            const chunks: Buffer[] = [];
+
+            buildPDF(
+                (chunk) => chunks.push(chunk),
+                () => resolve(Buffer.concat(chunks)),
+                empleadoData, services, quantities
+            );
+        });
+    } catch (error) {
+        console.error('Error generando la colilla:', error);
+        throw new InternalServerError('Error interno generando la colilla de pago');
+    }
 }
+}
+
 
 // Exportamos el servicio para que pueda ser utilizado en otras partes de la aplicación
 export default new ColillaPagoService();

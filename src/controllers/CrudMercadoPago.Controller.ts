@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import MercadoPagoService from '../libs/MERCADOPAGO/Mercadopago.service';
 import colillaPagoService from '../services/colillaPago.service'; // Asegúrate de importar la instancia
+import { InternalServerError, NotFoundError } from '../middlewares/customErrors';
 
 class CrudMercadoPagoController {
     private mercadoPagoService: MercadoPagoService;
@@ -17,16 +18,14 @@ class CrudMercadoPagoController {
             // Verificar si la colilla existe
             const colilla = await colillaPagoService.obtenerColillaPorId(colillaId);
             if (!colilla) {
-                res.status(404).json({ error: "Colilla no encontrada" });
-                return;
+                throw new NotFoundError("Colilla no encontrada");
             }
 
             // Crear la orden de pago utilizando el ID de la colilla
             const urlRedireccion = await this.mercadoPagoService.crearPagoConColilla(colillaId);
             res.status(200).json({ url: urlRedireccion }); // Retorna la URL de redirección
         } catch (error) {
-            console.error("Error al crear el pago:", error);
-            res.status(500).json({ error: "Error al crear el pago" });
+            throw new InternalServerError("Error al crear el pago");
         }
     }
 
