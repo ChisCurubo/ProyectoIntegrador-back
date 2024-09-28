@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import CitasService from '../services/citas.service';
-import HistorialClinicoService from '../services/historialMedico.service';
+import HistorialClinicoService from '../services/HistoriaClinica.service';
 import { BadRequestError, NotFoundError, InternalServerError } from '../middlewares/customErrors';
 
 export class CitasController {
@@ -102,9 +102,9 @@ export class CitasController {
   }
 
   public async getCitasDoc(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { idUsuario } = req.body;
+    const { idDoc } = req.body;
     try {
-      const citas = await CitasService.getCitasByDoctor(idUsuario);
+      const citas = await CitasService.getCitasByDoctor(idDoc);
       if (citas.length > 0) {
         res.status(200).json(citas);
       } else {

@@ -1,86 +1,99 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import HistoriaClinicaService from '../services/HistoriaClinica.service';
 import { BadRequestError, NotFoundError, InternalServerError, DatabaseError } from '../middlewares/customErrors';
 
 class HistoriaClinicaController {
-
-  public async obtenerHistoriasClinicas(req: Request, res: Response) {
+  public async getHistoriasClinicas(req: Request, res: Response, next: NextFunction) {
     try {
-      const historias = await HistoriaClinicaService.obtenerHistoriasClinicas();
+      const historias = await HistoriaClinicaService.getHistoriasClinicas();
       res.status(200).json(historias);
     } catch (error) {
-      console.error('Error al obtener historias clínicas:', error);
-      throw new InternalServerError('Error al obtener historias clínicas');
+      next(new InternalServerError('Error al obtener historias clínicas'));
     }
   }
 
-  public async obtenerHistoriaClinicaPorId(req: Request, res: Response) {
-    const { id } = req.params;
+  public async getHistoriaClinicaById(req: Request, res: Response, next: NextFunction) {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      return next(new BadRequestError('ID inválido'));
+    }
+
     try {
-      const historia = await HistoriaClinicaService.obtenerHistoriaClinicaPorId(Number(id));
-      if (historia) {
-        res.status(200).json(historia);
-      } else {
-        throw new NotFoundError('Historia clínica no encontrada');
+      const historia = await HistoriaClinicaService.getHistoriaClinicaById(id);
+      if (!historia) {
+        return next(new NotFoundError('Historia clínica no encontrada'));
       }
+      res.status(200).json(historia);
     } catch (error) {
       if (error instanceof DatabaseError) {
-        throw new DatabaseError('Error al obtener la historia clínica desde la base de datos');
+        next(new DatabaseError('Error al obtener la historia clínica desde la base de datos'));
       } else {
-        console.error('Error al obtener la historia clínica:', error);
-        throw new InternalServerError('Error al obtener la historia clínica');
+        next(new InternalServerError('Error al obtener la historia clínica'));
       }
     }
   }
 
-  public async crearHistoriaClinica(req: Request, res: Response) {
+  public async createHistoriaClinica(req: Request, res: Response, next: NextFunction) {
     const historiaClinica = req.body;
+    if (!historiaClinica || Object.keys(historiaClinica).length === 0) {
+      return next(new BadRequestError('Los datos de la historia clínica son obligatorios'));
+    }
+
     try {
-      if (!historiaClinica) {
-        throw new BadRequestError('Los datos de la historia clínica son obligatorios.');
-      }
-      await HistoriaClinicaService.crearHistoriaClinica(historiaClinica);
-      res.status(201).json({ mensaje: 'Historia clínica creada exitosamente' });
+      const nuevaHistoria = await HistoriaClinicaService.createHistorialClinico(historiaClinica);
+      res.status(201).json({ mensaje: 'Historia clínica creada exitosamente', historia: nuevaHistoria });
     } catch (error) {
       if (error instanceof DatabaseError) {
-        throw new DatabaseError('Error al crear la historia clínica en la base de datos');
+        next(new DatabaseError('Error al crear la historia clínica en la base de datos'));
       } else {
-        console.error('Error al crear la historia clínica:', error);
-        throw new InternalServerError('Error al crear la historia clínica');
+        next(new InternalServerError('Error al crear la historia clínica'));
       }
     }
   }
 
-  public async actualizarHistoriaClinicaPorId(req: Request, res: Response) {
-    const { id } = req.params;
+  public async updateHistoriaClinicaById(req: Request, res: Response, next: NextFunction) {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      return next(new BadRequestError('ID inválido'));
+    }
+
     const historiaClinica = req.body;
+    if (!historiaClinica || Object.keys(historiaClinica).length === 0) {
+      return next(new BadRequestError('Los datos de la historia clínica son obligatorios'));
+    }
+
     try {
-      if (!historiaClinica) {
-        throw new BadRequestError('Los datos de la historia clínica son obligatorios.');
+      const historiaActualizada = await HistoriaClinicaService.updateHistoriaClinicaById(id, historiaClinica);
+      if (historiaActualizada) {
+        return next(new NotFoundError('Historia clínica no encontrada'));
       }
-      await HistoriaClinicaService.actualizarHistoriaClinicaPorId(Number(id), historiaClinica);
-      res.status(200).json({ mensaje: 'Historia clínica actualizada exitosamente' });
+      res.status(200).json({ mensaje: 'Historia clínica actualizada exitosamente', historia: historiaActualizada });
     } catch (error) {
       if (error instanceof DatabaseError) {
-        throw new DatabaseError('Error al actualizar la historia clínica en la base de datos');
+        next(new DatabaseError('Error al actualizar la historia clínica en la base de datos'));
       } else {
-        console.error('Error al actualizar la historia clínica:', error);
-        throw new InternalServerError('Error al actualizar la historia clínica');
+        next(new InternalServerError('Error al actualizar la historia clínica'));
       }
     }
   }
 
-  public async eliminarHistoriaClinicaPorId(req: Request, res: Response) {
-    const { id } = req.params;
+  public async deleteHistoriaClinicaById(req: Request, res: Response, next: NextFunction) {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      return next(new BadRequestError('ID inválido'));
+    }
+
     try {
-      await HistoriaClinicaService.eliminarHistoriaClinicaPorId(Number(id));
+      const eliminado = await HistoriaClinicaService.deleteHistoriaClinicaById(id);
+      if (!eliminado) {
+        return next(new NotFoundError('Historia clínica no encontrada'));
+      }
       res.status(200).json({ mensaje: 'Historia clínica eliminada exitosamente' });
     } catch (error) {
       if (error instanceof DatabaseError) {
-        throw new DatabaseError('Error al eliminar la historia clínica desde la base de datos');
+        next(new DatabaseError('Error al eliminar la historia clínica desde la base de datos'));
       } else {
-        console.error('Error al eliminar la historia clínica:', error);
-        throw new InternalServerError('Error al eliminar la historia clínica');
+        next(new InternalServerError('Error al eliminar la historia clínica'));
       }
     }
   }

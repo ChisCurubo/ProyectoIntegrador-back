@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import UsuarioService from '../services/usuario.service';
 import { Usuario } from '../Interfaces/Usuario';
-import { InternalServerError } from '../middlewares/customErrors';
+import { InternalServerError, NotFoundError } from '../middlewares/customErrors';
 
 class UsuarioController {
   // Obtener todos los usuarios
@@ -23,7 +23,7 @@ class UsuarioController {
       if (usuario) {
         res.status(200).json(usuario);
       } else {
-        res.status(404).json({ mensaje: 'Usuario no encontrado' });
+        throw new NotFoundError('Usuario no encontrado' );
       }
     } catch (error) {
       console.error(`Error al obtener el usuario con CC ${CC}:`, error);
