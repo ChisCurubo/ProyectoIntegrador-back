@@ -32,9 +32,11 @@ export class CitasController {
   }
 
   public async updateDateCita(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { fecha, hora, idCita } = req.body;
+    const { fecha, hora } = req.body;
+    const idCita = req.params;
+    const id = Number(idCita) 
     try {
-      const success = await CitasService.updateDateCita(fecha, hora, idCita);
+      const success = await CitasService.updateDateCita(fecha, hora, id);
       if (success) {
         res.status(200).json({ message: 'Cita actualizada correctamente' });
       } else {
@@ -46,9 +48,11 @@ export class CitasController {
   }
 
   public async updateStatusCita(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { estado, idCita } = req.body;
+    const { estado } = req.body;
+    const idCita = req.params;
+    const id = Number(idCita) 
     try {
-      const success = await CitasService.updateStatusCita(estado, idCita);
+      const success = await CitasService.updateStatusCita(estado, id);
       if (success) {
         res.status(200).json({ message: 'Estado de la cita actualizado' });
       } else {
@@ -60,9 +64,11 @@ export class CitasController {
   }
 
   public async updateCitasAll(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { fecha, hora, medico, estado, idCita, idUsuario } = req.body;
+    const { fecha, hora, medico, estado, idUsuario } = req.body;
+    const idCita = req.params;
+    const id = Number(idCita) 
     try {
-      const success = await CitasService.updateCitasAll(fecha, hora, medico, estado, idCita, idUsuario);
+      const success = await CitasService.updateCitasAll(fecha, hora, medico, estado, id, idUsuario);
       if (success) {
         res.status(200).json({ message: 'Cita actualizada correctamente' });
       } else {
@@ -74,9 +80,9 @@ export class CitasController {
   }
 
   public async deleteCitas(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { idCita, idUsuario } = req.body;
+    const { idCita, idUsuario } = req.params;
     try {
-      const success = await CitasService.deleteCitas(idCita, idUsuario);
+      const success = await CitasService.deleteCitas(Number(idCita), Number(idUsuario));
       if (success) {
         res.status(200).json({ message: 'Cita eliminada correctamente' });
       } else {
@@ -88,9 +94,10 @@ export class CitasController {
   }
 
   public async getCitasUser(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { idUsuario } = req.body;
+    const idUsuario = req.params;
+    const id = Number(idUsuario) 
     try {
-      const citas = await CitasService.getCitasByUser(idUsuario);
+      const citas = await CitasService.getCitasByUser(id);
       if (citas.length > 0) {
         res.status(200).json(citas);
       } else {
@@ -102,9 +109,10 @@ export class CitasController {
   }
 
   public async getCitasDoc(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { idDoc } = req.body;
+    const idDoc = req.params;
+    const id = Number(idDoc)
     try {
-      const citas = await CitasService.getCitasByDoctor(idDoc);
+      const citas = await CitasService.getCitasByDoctor(id);
       if (citas.length > 0) {
         res.status(200).json(citas);
       } else {
@@ -116,9 +124,10 @@ export class CitasController {
   }
 
   public async getCitasId(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { idCita } = req.body;
+    const idCita = req.params;
+    const id = Number(idCita) 
     try {
-      const citas = await CitasService.getCitaById(idCita);
+      const citas = await CitasService.getCitaById(id);
       if (citas.length > 0) {
         res.status(200).json(citas);
       } else {

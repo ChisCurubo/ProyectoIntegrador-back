@@ -123,11 +123,11 @@ class ApiSedes {
                 throw new UnauthorizedError('Acceso denegado. Token no encontrado');
             }
             validateSedes(token)
-            const { idUsuario } = req.body;
+            const { idUsuario } = req.params;
             if (!idUsuario) {
                 throw new BadRequestError('User CC is required');
             }
-            const citas = await CitaService.getCitasByUser(idUsuario);
+            const citas = await CitaService.getCitasByUser(Number(idUsuario));
             if (citas && citas.length > 0) {
                 res.status(200).json(citas);
             } else {
@@ -159,11 +159,11 @@ class ApiSedes {
                 throw new UnauthorizedError('Acceso denegado. Token no encontrado');
             }
             validateSedes(token)
-            const { idDoc } = req.body;
+            const { idDoc } = req.params;
             if (!idDoc) {
                 throw new BadRequestError('Doctor CC is required');
             }
-            const citas = await CitaService.getCitasByDoctor(idDoc);
+            const citas = await CitaService.getCitasByDoctor(Number(idDoc));
             if (citas && citas.length > 0) {
                 res.status(200).json(citas);
             } else {
@@ -263,8 +263,8 @@ class ApiSedes {
                 throw new UnauthorizedError('Acceso denegado. Token no encontrado');
             }
             validateSedes(token)
-            const { id } = req.params;
-            if (!id) {
+            const { idHoja } = req.params;
+            if (!idHoja) {
                 throw new BadRequestError('User ID is required');
             }
             //const hojaVida = await HojaVidaService.getHojaVidaByUserId(id);
@@ -330,11 +330,11 @@ class ApiSedes {
                 throw new UnauthorizedError('Acceso denegado. Token no encontrado');
             }
             validateSedes(token)
-            const { id } = req.params;
-            if (id!= null) {
+            const { idHistoria } = req.params;
+            if (idHistoria!= null) {
                 throw new BadRequestError('Patient ID is required');
             }
-            const historiaMedica = await HistoriaClinicaService.getHistoriaClinicaById(id);
+            const historiaMedica = await HistoriaClinicaService.getHistoriaClinicaById(idHistoria);
             if (historiaMedica) {
                 res.status(200).json(historiaMedica);
             } else {
@@ -397,8 +397,8 @@ class ApiSedes {
                 throw new UnauthorizedError('Acceso denegado. Token no encontrado');
             }
             validateSedes(token)
-            const { id } = req.params;
-            if (!id) {
+            const { idOrden } = req.params;
+            if (!idOrden) {
                 throw new BadRequestError('Orden médica ID is required');
             }
             //const ordenMedica = await OrdenMedicaService.getOrdenMedicaById(id);
@@ -464,8 +464,8 @@ class ApiSedes {
                 throw new UnauthorizedError('Acceso denegado. Token no encontrado');
             }
             validateSedes(token)
-            const { id } = req.params;
-            if (!id) {
+            const { idAutorizacion } = req.params;
+            if (!idAutorizacion) {
                 throw new BadRequestError('Autorización médica ID is required');
             }
             //const autorizacionMedica = await AutorizacionMedicaService.getAutorizacionMedicaById(id);
