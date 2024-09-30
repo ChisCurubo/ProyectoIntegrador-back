@@ -7,7 +7,7 @@ dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 import helmet from 'helmet';
 import citas from './routes/citas.routes';
 import facturacion from './routes/facturacion.routes';
-
+import adminRouter from '../src/routes/crudAdministrador.routes'; // 
 import usuarioRoutes from './routes/usuario.routes'; 
 import authRoutes from './routes/auth.routes';
 import hojaVida from './routes/hojaVida.routes';
@@ -19,6 +19,7 @@ import {errorHandler} from './middlewares/errorHandler';
 
 
 
+import usuarioRoutesEs from './routes/usuarioEs.routes'; 
 
 import historiaClinicaRoutes from './routes/historialClinico.routes';
 import DoctorRoutes from './routes/doctor.routes';
@@ -59,6 +60,7 @@ app.use('/api/citas', citas);
 app.use('/api/pdfhojadevida', hojaVida);
 
 app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/usuarios', usuarioRoutesEs);
 app.use('/api/historia-clinica', historiaClinicaRoutes);
 app.use('/api', DoctorRoutes);
 app.use('/api', pacientesRoutes);
@@ -66,7 +68,7 @@ app.use('/api', pacientesRoutes);
 app.use('/api/colilla/PAGO', colillaPagoRoutes); 
 app.use('/api/mercadopago', mercadopagoRoutes);
 
-
+app.use('/api/admin', adminRouter); 
 app.use('/api/auth', authRoutes);
 app.use('/apiSedes', apiSedes);
 

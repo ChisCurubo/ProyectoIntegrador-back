@@ -1,5 +1,6 @@
 
 export interface Cita {
+    length: number;
     idCita: number; // Identificador único de la cita
     dia: string; // Fecha de creación de la cita (en formato 'YYYY-MM-DD')
     hora: string; // Hora establecida para la cita (formato HH:MM)
