@@ -9,7 +9,7 @@ const citasController = new CitasController();
 router.post('/insertCita', citasController.createCita);
 
 // Editar fecha y día de una cita por id de cita (con POST)
-router.put('/updateCita-date', citasController.updateDateCita);
+router.put('/updateCita-date/:idCita', citasController.updateDateCita);
 
 // Editar estado de la cita (con POST)
 router.put('/updateCita-status/:idCita', citasController.updateStatusCita);
@@ -24,8 +24,8 @@ router.delete('/deleteCita/:idCita/:idUsuario', citasController.deleteCitas);
 router.get('/getCitaUser', citasController.getCitasUser);
 
 // Seleccionar citas solo por médico (con POST)
-router.get('/getCitaDoc', citasController.getCitasDoc);
+router.get('/getCitaDoc/:idDoc', citasController.getCitasDoc);
 
-router.get('/getCItaId', citasController.getCitasId);
+router.get('/getCItaId/:idCita', citasController.getCitasId);
 
 export default router;

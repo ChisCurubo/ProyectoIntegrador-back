@@ -33,7 +33,7 @@ export class CitasController {
 
   public async updateDateCita(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { fecha, hora } = req.body;
-    const idCita = req.params;
+    const idCita = req.params.idCita;
     const id = Number(idCita) 
     try {
       const success = await CitasService.updateDateCita(fecha, hora, id);
@@ -65,7 +65,7 @@ export class CitasController {
 
   public async updateCitasAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { fecha, hora, medico, estado, idUsuario } = req.body;
-    const idCita = req.params;
+    const idCita = req.params.idCita;
     const id = Number(idCita) 
     try {
       const success = await CitasService.updateCitasAll(fecha, hora, medico, estado, id, idUsuario);
@@ -94,7 +94,7 @@ export class CitasController {
   }
 
   public async getCitasUser(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const idUsuario = req.params;
+    const idUsuario = req.params.idUsuario;
     const id = Number(idUsuario) 
     try {
       const citas = await CitasService.getCitasByUser(id);
@@ -109,7 +109,7 @@ export class CitasController {
   }
 
   public async getCitasDoc(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const idDoc = req.params;
+    const idDoc = req.params.idDocCC;
     const id = Number(idDoc)
     try {
       const citas = await CitasService.getCitasByDoctor(id);
@@ -124,11 +124,11 @@ export class CitasController {
   }
 
   public async getCitasId(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const idCita = req.params;
+    const idCita = req.params.idCita;
     const id = Number(idCita) 
     try {
       const citas = await CitasService.getCitaById(id);
-      if (citas.length > 0) {
+      if (citas != null) {
         res.status(200).json(citas);
       } else {
         throw new NotFoundError('Cita no encontrada');
