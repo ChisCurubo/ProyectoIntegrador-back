@@ -48,4 +48,4 @@ class EmergenciaService {
     }
 }
 
-export default EmergenciaService;
+export default new  EmergenciaService;

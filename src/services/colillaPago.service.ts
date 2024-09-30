@@ -1,14 +1,9 @@
-import { Pool } from 'mysql2/promise';
-import pool from '../providers/database';  
+
+import connection from '../providers/database';  
 import { ColillaPago } from '../Interfaces/ColillaPago';  
 import { buildPDF } from '../libs/Facturacion/colilla';
 import { InternalServerError, BadRequestError } from '../middlewares/customErrors';
 export class ColillaPagoService {
-  private db: Pool;
-
-  constructor() {
-    this.db = pool;  
-  }
 
   // Método para crear una nueva colilla de pago
   public async crearColillaPago(data: ColillaPago): Promise<number> {
@@ -26,7 +21,7 @@ export class ColillaPagoService {
     ];
 
     // Ejecutamos la consulta
-    const [result]: any = await this.db.execute(query, values);
+    const [result]: any = await connection.query(query, values);
     return result.insertId;  // Retornamos el ID generado de la colilla insertada
   }
 
@@ -34,7 +29,7 @@ export class ColillaPagoService {
   public async obtenerColillaPorId(id: number): Promise<ColillaPago | null> {
     const query = `SELECT * FROM COLILLA_PAGO WHERE idColilla_Pago = ?;`;
 
-    const [rows]: any = await this.db.execute(query, [id]);
+    const [rows]: any = await connection.query(query, [id]);
     if (rows.length > 0) {
       return rows[0] as ColillaPago;  // Si existe, retornamos la colilla encontrada
     }
@@ -45,7 +40,7 @@ export class ColillaPagoService {
   public async obtenerTodasLasColillas(): Promise<ColillaPago[]> {
     const query = `SELECT * FROM COLILLA_PAGO;`;
 
-    const [rows]: any = await this.db.execute(query);
+    const [rows]: any = await connection.query(query);
     return rows as ColillaPago[];  // Retornamos todas las colillas
   }
 
@@ -53,7 +48,7 @@ export class ColillaPagoService {
   public async eliminarColilla(id: number): Promise<void> {
     const query = `DELETE FROM COLILLA_PAGO WHERE idColilla_Pago = ?;`;
 
-    await this.db.execute(query, [id]);  // Ejecutamos la eliminación
+    await connection.query(query, [id]);  // Ejecutamos la eliminación
   }
 
   // Método para actualizar una colilla de pago
@@ -72,7 +67,7 @@ export class ColillaPagoService {
     ];
 
     // Ejecutamos la consulta de actualización
-    await this.db.execute(query, values);
+    await connection.query(query, values);
   }
 
 

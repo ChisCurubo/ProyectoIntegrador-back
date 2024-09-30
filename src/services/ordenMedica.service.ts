@@ -25,4 +25,4 @@ class OrdenMedicaService {
     }
 }
 
-export default OrdenMedicaService;
+export default  new OrdenMedicaService;
