@@ -2,15 +2,15 @@
 
 // Interfaz que define la estructura de un Usuario
 export interface Usuario {
-    CC: string;                // Número de identificación
+    CC: string ;                // Número de identificación
     nombreUsuario: string;     // Nombre del usuario
     apellidoUsuario: string;   // Apellido del usuario
     emailUsuario: string;      // Correo electrónico del usuario
     pwdUsuario: string;        // Contraseña del usuario
-    idSede: number;            // ID de la sede a la que pertenece
+    idSede: number | null;            // ID de la sede a la que pertenece
     idRol: number;             // ID del rol del usuario
     estadoUsuario: boolean;    // Estado activo/inactivo del usuario
-    idEspecialidad: number;    // ID de la especialidad del usuario
+    idEspecialidad: number |null;    // ID de la especialidad del usuario
     idHoja_Vida: number;       // ID de la hoja de vida del usuario
-    idTipoPaciente: number;    // ID del tipo de paciente
+    idTipoPaciente: number | null;    // ID del tipo de paciente
 }

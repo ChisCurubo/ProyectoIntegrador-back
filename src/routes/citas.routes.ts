@@ -6,24 +6,26 @@ const router = Router();
 const citasController = new CitasController();
 
 // Insertar una cita
-router.post('/insertar', citasController.insertarCita);
+router.post('/insertCita', citasController.createCita);
 
 // Editar fecha y día de una cita por id de cita (con POST)
-router.post('/editar-fecha', citasController.editarFechaHoraCita);
+router.put('/updateCita-date/:idCita', citasController.updateDateCita);
 
 // Editar estado de la cita (con POST)
-router.post('/editar-estado', citasController.editarEstadoCita);
+router.put('/updateCita-status/:idCita', citasController.updateStatusCita);
 
 // Editar todos los campos de una cita por id de usuario o id de cita (con POST)
-router.post('/editar-todos', citasController.editarCitaCompleta);
+router.put('/updateCita-all', citasController.updateCitasAll);
 
 // Borrar una cita por id del usuario y id de cita (con POST)
-router.post('/borrar', citasController.borrarCita);
+router.delete('/deleteCita/:idCita/:idUsuario', citasController.deleteCitas);
 
 // Seleccionar citas por idUsuario (con POST)
-router.post('/consultar', citasController.obtenerCitasPorUsuario);
+router.get('/getCitaUser', citasController.getCitasUser);
 
 // Seleccionar citas solo por médico (con POST)
-router.post('/consultar-medico', citasController.obtenerCitasPorMedico);
+router.get('/getCitaDoc/:idDoc', citasController.getCitasDoc);
+
+router.get('/getCItaId/:idCita', citasController.getCitasId);
 
 export default router;
