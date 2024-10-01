@@ -10,26 +10,21 @@ dotenv.config();
 import citas from './routes/citas.routes';
 import facturacion from './routes/facturacion.routes';
 
-import historialClinicoRoutes from './routes/historialClinico.routes'; // Primer historial clínico
 import usuarioRoutes from './routes/usuario.routes'; 
 import authRoutes from './routes/auth.routes';
-import citasRoutes from './routes/citas.routes';
-import facturacionRoutes from './routes/facturacion.routes';
-
-// Aquí está el problema de duplicación
-// Ya tienes una importación para `historialClinicoRoutes` desde './routes/historialClinico.routes'
-// Así que elimina o renombra esta importación de `./routes/historialMedico.routes`// Cambia el nombre para evitar conflicto
-
-import hojaVidaPacientesRoutes from './routes/hojaVidaEmpleados.routes';
-import medicalRoutes from './routes/medical.routes';
-import hojaVidaEmpleadosRoutes from './routes/hojaVidaEmpleados.routes';
-import hojaVida from './routes/hojaVidaEmpleados.routes';
 
 import historiaClinicaRoutes from './routes/historialClinico.routes'; // Podrías eliminar esta línea ya que es una duplicación de arriba
 import DoctorRoutes from './routes/doctor.routes';
 import pacientesRoutes from './routes/pacientes.routes'; 
 import colillaPagoRoutes from './routes/colilladePago.routes';
-
+import ordenMedicaRoutes from './routes/ordenMedica.routes';
+import emergenciaRoutes from './routes/emergencia.routes'; 
+// import middelware
+import {errorHandler} from './middlewares/errorHandler';
+import mercadopagoRoutes from '../src/routes/mercadopago.routes';
+import apiSedes from './routes/api.sedes.routes';
+import hojaVidaPacientesRoutes from './routes/hojaVidaEmpleados.routes';
+import hojaVidaEmpleadosRoutes from './routes/hojaVidaEmpleados.routes';
 
 const app = express();
 const port = process.env.PORT || 3002;  // Cambié a 3002
@@ -60,23 +55,32 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // Rutas
-app.use('/api/historialClinico', historialClinicoRoutes);
 app.use('/api/facturacion', facturacion);
 app.use('/api/citas', citas);
-app.use('/api/pdfhojadevida', hojaVida);
 
-app.use('/api/citas', citasRoutes);
-app.use('/api/facturacion', facturacionRoutes);
+app.use('/api/citas', citas);
+app.use('/api/facturacion', facturacion);
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/medical', medicalRoutes);
-app.use('/api/hoja-vida-pacientes', hojaVidaPacientesRoutes);
-app.use('/api/hoja-vida-empleados', hojaVidaEmpleadosRoutes);
 app.use('/api/historia-clinica', historiaClinicaRoutes);
 app.use('/api', DoctorRoutes);
 app.use('/api', pacientesRoutes);
 
 app.use('/api/colilla/PAGO', colillaPagoRoutes); 
+app.use('/api/mercadopago', mercadopagoRoutes);
+
+
+app.use('/api/auth', authRoutes);
+app.use('/api/ordenes-medicas', ordenMedicaRoutes);
+app.use('/api', emergenciaRoutes);
+app.use('/api/hoja-vida-pacientes', hojaVidaPacientesRoutes);
+app.use('/api/hoja-vida-empleados', hojaVidaEmpleadosRoutes);
+
+app.use('/apiSedes', apiSedes);
+
+
+//Middelware para errores
+app.use(errorHandler);
 
 // Iniciar el servidor
 app.listen(port, () => {
