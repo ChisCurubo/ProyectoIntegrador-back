@@ -4,7 +4,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 
 // Importar rutas
 import citas from './routes/citas.routes';
