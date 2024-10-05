@@ -1,15 +1,15 @@
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt'; // Importa bcrypt
-import connection from '../providers/database';
-import { Sede, SedeLogIn } from '../Interfaces/Sedes';
-import { Usuario } from '../Interfaces/Usuario';
-import { InternalServerError, UnauthorizedError } from '../middlewares/customErrors';
-const tokenKey = 'vitamed'
+import bcrypt from "bcrypt"; // Importa bcrypt
+import jwt from "jsonwebtoken";
+import { Sede, SedeLogIn } from "../Interfaces/Sedes";
+import { Usuario } from "../Interfaces/Usuario";
+import { InternalServerError, UnauthorizedError } from "../middlewares/customErrors";
+import connection from "../providers/database";
+const tokenKey = "vitamed";
 
 export function generarToken(userId: string) {
     const payload = { userId };
     const secret = process.env.TOKEN_SECRET || tokenKey; // Asegúrate de tener esto en tu archivo .env
-    const options = { expiresIn: '1h' }; // El token expira en una hora
+    const options = { expiresIn: "1h" }; // El token expira en una hora
 
     return jwt.sign(payload, secret, options);
 }
@@ -24,7 +24,7 @@ export function generarTokenSede(sede: SedeLogIn, ip: string): string {
         ip,
     };
     const secret = process.env.TOKEN_SECRET || tokenKey; // Usa una clave segura
-    const options = { expiresIn: '1h' }; // El token expira en 1 hora
+    const options = { expiresIn: "1h" }; // El token expira en 1 hora
 
     return jwt.sign(payload, secret, options);
 }
@@ -34,30 +34,30 @@ export function generarTokenUsuario(user: Usuario, ip: string): string {
     const payload = {
         CC: user.CC,              // Número de identificación
         idSede: user.idSede,          // ID de la sede a la que pertenece
-        idRol: user.idRol,            // ID del rol del usuario     
+        idRol: user.idRol,            // ID del rol del usuario
         idHoja_Vida: user.idHoja_Vida,     // ID de la hoja de vida del usuario
         idTipoPaciente: user.idTipoPaciente,  // ID del tipo de paciente
-        ipUsario: ip               // ip´de onde se conecta
+        ipUsario: ip,               // ip´de onde se conecta
     };
     const secret = process.env.TOKEN_SECRET || tokenKey; // Usa una clave segura
-    const options = { expiresIn: '1h' }; // El token expira en 1 hora
+    const options = { expiresIn: "1h" }; // El token expira en 1 hora
 
     return jwt.sign(payload, secret, options);
 }
 
 /**
- * 
- * @param user 
+ *
+ * @param user
  * @param pwd Debe ser encriptada con bycript
- * @param ip 
- * @returns 
+ * @param ip
+ * @returns
  */
 export async function singUpSedes(user: string, pwd: string, ip: string): Promise<string | null> {
-    const query = 'SELECT idSede, nombreSede, usuarioSede, pwdSede FROM SEDES WHERE usuarioSede=?';
+    const query = "SELECT idSede, nombreSede, usuarioSede, pwdSede FROM SEDES WHERE usuarioSede=?";
     try {
         const [rows]: any = await connection.query(query, user);
         if (rows.length > 0) {
-            //const isMatch = await bcrypt.compare(pwd, rows[0].pwdSede);
+            // const isMatch = await bcrypt.compare(pwd, rows[0].pwdSede);
             if (pwd === rows[0].pwd) {
                 const obj: SedeLogIn = rows[0] as SedeLogIn;
                 const token = await generarTokenSede(obj, ip);
@@ -69,36 +69,36 @@ export async function singUpSedes(user: string, pwd: string, ip: string): Promis
             return null;  // Usuario no encontrado
         }
     } catch (error) {
-        console.error('Error en la consulta:', error);
-        throw new InternalServerError('Error interno en la base de datos');
+        console.error("Error en la consulta:", error);
+        throw new InternalServerError("Error interno en la base de datos");
     }
 }
 
 /**
  * Metodo que valida el token de las sedes
- * @param user 
- * @returns 
+ * @param user
+ * @returns
  */
 export async function validateSedes(token: string): Promise<SedeLogIn | Usuario | null> {
     try {
         const decoded = jwt.verify(token, process.env.TOKEN_SECRET || tokenKey) as SedeLogIn | Usuario;
-        console.log('Token decodificado:', decoded);
+        console.log("Token decodificado:", decoded);
         return decoded;
     } catch (err) {
-        console.error('Error al decodificar el token:', err);
+        console.error("Error al decodificar el token:", err);
         return null;  // Token inválido o expirado
     }
 }
 
     /**
      * Iniciar sesion como usuario de la sede
-     * @param email 
-     * @param contraseña 
-     * @param ip 
-     * @returns 
+     * @param email
+     * @param contraseña
+     * @param ip
+     * @returns
      */
-    export async function iniciarSesion(email: string, contra: string, ip: string): Promise<string | null> {
-        const query = 'SELECT * FROM USUARIOS WHERE emailUsuario = ?';
+export async function iniciarSesion(email: string, contra: string, ip: string): Promise<string | null> {
+        const query = "SELECT * FROM USUARIOS WHERE emailUsuario = ?";
         try {
             const [rows]: any[] = await connection.query(query, [email]);
             if (rows.length > 0) {
@@ -114,7 +114,7 @@ export async function validateSedes(token: string): Promise<SedeLogIn | Usuario 
                 return null;  // Usuario no encontrado
             }
         } catch (error) {
-            console.error('Error al iniciar sesión:', error);
-            throw new InternalServerError('Error interno al iniciar sesión');
+            console.error("Error al iniciar sesión:", error);
+            throw new InternalServerError("Error interno al iniciar sesión");
         }
     }
