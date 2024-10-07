@@ -1,6 +1,6 @@
 
 import connection from '../providers/database';  
-import { ColillaPago } from '../Interfaces/ColillaPago';  
+import { ColillaPago } from '../interfaces/colillaPago';  
 import { buildPDF } from '../libs/Facturacion/colilla';
 import { InternalServerError, BadRequestError } from '../middlewares/customErrors';
 export class ColillaPagoService {

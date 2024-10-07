@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import CitasService from '../services/citas.service';
-import HistorialClinicoService from '../services/HistoriaClinica.service';
+import HistorialClinicoService from '../services/historiaClinica.service';
 import { BadRequestError, NotFoundError, InternalServerError } from '../middlewares/customErrors';
 
 export class CitasController {

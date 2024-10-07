@@ -1,6 +1,6 @@
 import connection from '../providers/database';
 import { NotFoundError, BadRequestError, DatabaseError } from '../middlewares/customErrors'; // Incluye DatabaseError
-import { Cita } from '../Interfaces/Citas';
+import { Cita } from '../interfaces/citas';
 
 import { format } from 'date-fns';
 

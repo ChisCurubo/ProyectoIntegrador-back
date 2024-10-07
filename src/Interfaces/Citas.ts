@@ -9,4 +9,9 @@ export interface Cita {
     idUsuarioCC: string; // Identificador único del usuario (tipo string porque es VARCHAR(12))
     idDocCC: string; // Identificador único del doctor (tipo string porque es VARCHAR(12))
   }
+  // Interfaz que define la estructura de un Usuario
+export interface Cita1 {
+  CC: string;                // Número de identificación
+ 
+}
   

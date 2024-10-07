@@ -20,8 +20,8 @@ import colillaPagoRoutes from "./routes/colilladePago.routes";
 import DoctorRoutes from "./routes/doctor.routes";
 import emergenciaRoutes from "./routes/emergencia.routes";
 import historiaClinicaRoutes from "./routes/historialClinico.routes";
-import hojaVidaPacientesRoutes from "./routes/hojaVidaEmpleados.routes";
-import hojaVidaEmpleadosRoutes from "./routes/hojaVidaEmpleados.routes";
+import hojaVidaRoutes from "./routes/hojaVida.routes";
+
 import ordenMedicaRoutes from "./routes/ordenMedica.routes";
 import pacientesRoutes from "./routes/pacientes.routes";
 
@@ -60,17 +60,17 @@ app.use("/api/facturacion", facturacion);
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/historia-clinica", historiaClinicaRoutes);
-app.use("/api", DoctorRoutes);
-app.use("/api", pacientesRoutes);
+app.use("/api/doctor", DoctorRoutes);
+app.use("/api/paciente", pacientesRoutes);
 
-app.use("/api/colilla/PAGO", colillaPagoRoutes);
+app.use("/api/colilla/pago", colillaPagoRoutes);
 app.use("/api/mercadopago", mercadopagoRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/ordenes-medicas", ordenMedicaRoutes);
-app.use("/api", emergenciaRoutes);
-app.use("/api/hoja-vida-pacientes", hojaVidaPacientesRoutes);
-app.use("/api/hoja-vida-empleados", hojaVidaEmpleadosRoutes);
+app.use("/api/emergencias", emergenciaRoutes);
+app.use("/api/hojaVida", hojaVidaRoutes);
+
 
 app.use("/apiSedes", apiSedes);
 

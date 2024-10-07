@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import CrudMercadoPagoController from '../controllers/CrudMercadoPago.Controller';
+import CrudMercadoPagoController from '../controllers/mercadoPago.Controller';
 
 const router = Router();
 

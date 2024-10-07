@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import EmergenciaService from '../services/emergencia.service';
 import { BadRequestError, NotFoundError, InternalServerError } from '../middlewares/customErrors';
-import { EmergenciaCita } from '../Interfaces/EmergenciaCita';
+import { EmergenciaCita } from '../interfaces/emergenciaCita';
 
 class EmergenciaController {
     // Crear una nueva emergencia

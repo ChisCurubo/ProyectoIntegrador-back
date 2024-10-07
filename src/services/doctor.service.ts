@@ -1,7 +1,7 @@
 
 import { Pool, RowDataPacket } from 'mysql2/promise';
 import connection from '../providers/database';
-import { ordenMedica } from '../Interfaces/ordenMedica';
+import { ordenMedica } from '../interfaces/ordenMedica';
 import { DatabaseError, NotFoundError } from '../middlewares/customErrors';
 
 class DoctorService {

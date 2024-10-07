@@ -1,10 +1,10 @@
-import { HojaVida } from 'Interfaces/HojaVida';
+import { HojaVida } from 'interfaces/hojaVida';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import connection from '../providers/database';
 
-export class HojaVidaEmpleadosService {
+export class HojaVidaService {
     // Obtener todas las hojas de vida
-    async getAll(): Promise<HojaVida[]> {
+    public async getAllEmployer(): Promise<HojaVida[]> {
       try {
         const [rows] = await connection.query<RowDataPacket[]>(
           'SELECT * FROM HOJAS_VIDA'
@@ -17,7 +17,7 @@ export class HojaVidaEmpleadosService {
     }
   
     // Obtener una hoja de vida por ID
-    async getById(id: number): Promise<HojaVida | null> {
+    public async getByIdEmployer(id: number): Promise<HojaVida | null> {
       try {
         const [rows] = await connection.query<RowDataPacket[]>(
           'SELECT * FROM HOJAS_VIDA WHERE idHoja_Vida = ?',
@@ -31,7 +31,7 @@ export class HojaVidaEmpleadosService {
     }
   
     // Crear una nueva hoja de vida
-    async create(data: HojaVida): Promise<ResultSetHeader> {
+    public async createEmployer(data: HojaVida): Promise<ResultSetHeader> {
       try {
         const [result] = await connection.query<ResultSetHeader>(
           `INSERT INTO HOJAS_VIDA 
@@ -60,7 +60,7 @@ export class HojaVidaEmpleadosService {
     }
   
     // Actualizar una hoja de vida
-    async update(id: number, data: HojaVida): Promise<ResultSetHeader> {
+    public async updateEmployer(id: number, data: HojaVida): Promise<ResultSetHeader> {
       try {
         const [result] = await connection.query<ResultSetHeader>(
           `UPDATE HOJAS_VIDA SET direccion = ?, estadoUsuario = ?, telefonoUsuario = ?, idEps = ?, 
@@ -89,7 +89,97 @@ export class HojaVidaEmpleadosService {
     }
   
     // Eliminar una hoja de vida por ID
-    async delete(id: number): Promise<ResultSetHeader> {
+    public async deleteEmployer(id: number): Promise<ResultSetHeader> {
+      try {
+        const [result] = await connection.query<ResultSetHeader>(
+          'DELETE FROM HOJAS_VIDA WHERE idHoja_Vida = ?',
+          [id]
+        );
+        return result;
+      } catch (error) {
+        console.error('Error en delete:', error);
+        throw new Error('Error deleting Hoja de Vida Paciente');
+      }
+    }
+
+    /**
+     * Hacer vistaaaaaaaaaaaaa
+     * @returns 
+     */
+    public async getAllPatient(): Promise<HojaVida[]> {
+      try {
+        const [rows] = await connection.query<RowDataPacket[]>(
+          'SELECT * FROM HOJAS_VIDA'
+        );
+        return rows as HojaVida[];
+      } catch (error) {
+        console.error('Error en getAll:', error, 'Query:', 'SELECT * FROM HOJAS_VIDA');
+        throw new Error('Error retrieving Hoja de Vida Pacientes');
+      }
+    }
+  
+    // Obtener una hoja de vida por ID
+    public async getByIdPatient (id: number): Promise<HojaVida | null> {
+      try {
+        const [rows] = await connection.query<RowDataPacket[]>(
+          'SELECT * FROM HOJAS_VIDA WHERE idHoja_Vida = ?',
+          [id]
+        );
+        return rows.length ? (rows[0] as HojaVida) : null;
+      } catch (error) {
+        console.error('Error en getById:', error);
+        throw new Error('Error retrieving Hoja de Vida Paciente by ID');
+      }
+    }
+  
+    // Crear una nueva hoja de vida
+    public async createPatient(data: HojaVida): Promise<ResultSetHeader> {
+      try {
+        const [result] = await connection.query<ResultSetHeader>(
+          `INSERT INTO HOJAS_VIDA 
+          (direccion, estadoUsuario, telefonoUsuario, idEps, tipo_documento, sexo, nacionalidad, pais, 
+          fecha_nacimiento, lugar_nacimiento, alergias, discapacidad, contacto_emergencia_nombre, 
+          contacto_emergencia_parentesco, contacto_emergencia_telefono, contacto_emergencia_correo) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            data.direccion, data.estadoUsuario, data.telefonoUsuario, data.idEps, data.tipo_documento,
+            data.sexo, data.nacionalidad, data.pais, data.fecha_nacimiento, data.lugar_nacimiento,
+            data.alergias, data.discapacidad, data.contacto_emergencia_nombre, data.contacto_emergencia_parentesco,
+            data.contacto_emergencia_telefono, data.contacto_emergencia_correo
+          ]
+        );
+        return result;
+      } catch (error) {
+        console.error('Error en create:', error);
+        throw new Error('Error creating Hoja de Vida Paciente');
+      }
+    }
+  
+    // Actualizar una hoja de vida
+    public async updatePatient (id: number, data: HojaVida): Promise<ResultSetHeader> {
+      try {
+        const [result] = await connection.query<ResultSetHeader>(
+          `UPDATE HOJAS_VIDA SET direccion = ?, estadoUsuario = ?, telefonoUsuario = ?, idEps = ?, 
+          tipo_documento = ?, sexo = ?, nacionalidad = ?, pais = ?, fecha_nacimiento = ?, lugar_nacimiento = ?, 
+          alergias = ?, discapacidad = ?, contacto_emergencia_nombre = ?, contacto_emergencia_parentesco = ?, 
+          contacto_emergencia_telefono = ?, contacto_emergencia_correo = ? WHERE idHoja_Vida = ?`,
+          [
+            data.direccion, data.estadoUsuario, data.telefonoUsuario, data.idEps, data.tipo_documento,
+            data.sexo, data.nacionalidad, data.pais, data.fecha_nacimiento, data.lugar_nacimiento, 
+            data.alergias, data.discapacidad, data.contacto_emergencia_nombre, data.contacto_emergencia_parentesco,
+            data.contacto_emergencia_telefono, data.contacto_emergencia_correo,
+            id
+          ]
+        );
+        return result;
+      } catch (error) {
+        console.error('Error en update:', error);
+        throw new Error('Error updating Hoja de Vida Paciente');
+      }
+    }
+  
+    // Eliminar una hoja de vida por ID
+    public async deletePatient (id: number): Promise<ResultSetHeader> {
       try {
         const [result] = await connection.query<ResultSetHeader>(
           'DELETE FROM HOJAS_VIDA WHERE idHoja_Vida = ?',
@@ -102,4 +192,5 @@ export class HojaVidaEmpleadosService {
       }
     }
   }
+  export default new HojaVidaService();
   

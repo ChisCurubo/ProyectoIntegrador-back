@@ -1,7 +1,7 @@
 // routes/emergencia.routes.ts
 
 import { Router } from 'express';
-import EmergenciaController from '../controllers/EmergenciaController';
+import EmergenciaController from '../controllers/emergenciaController';
 
 const router = Router();
 // Crear una nueva emergencia
