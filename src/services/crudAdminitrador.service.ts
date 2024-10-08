@@ -3,6 +3,9 @@ import bcrypt from 'bcrypt';
 import { Usuario } from '../Interfaces/Usuario';
 import { Cita } from '../Interfaces/citas1';
 import { Emergencia } from '../Interfaces/Emergencias1';
+
+import { HojaVidafront } from '../Interfaces/HojaVidafront';
+import { EmergenciaDetalle} from '../Interfaces/EmergenciaDetalle';
 import { CitaEmergencia } from '../Interfaces/EmergenciaCita1';
 import { 
   AudColillaPago, 
@@ -336,7 +339,43 @@ public async getAllAutorizacionesMedicas(): Promise<AutorizacionesMedicas[]> {
   }
 }
 
+// Método para obtener emergencias con detalles
+public async getEmergenciasConDetalles(): Promise<EmergenciaDetalle[]> {
+  try {
+    const query = `
+      SELECT 
+        U.nombreUsuario AS Nombre,
+        U.CC AS CC,
+        E.horaLlegada AS 'Hora de Llegada',
+        E.idTipo_Emergencia AS 'Nivel de Emergencia',
+        CASE 
+          WHEN E.estadoEmergencia = 1 THEN 'Activa'
+          WHEN E.estadoEmergencia = 0 THEN 'Inactiva'
+          ELSE 'Desconocido'
+        END AS Estado,
+        D.nombreUsuario AS 'Doctor Asignado'
+      FROM 
+        EMERGENCIAS E
+      JOIN 
+        EMERGENCIAS_CITAS EC ON E.idEmergencia = EC.idEmergencia
+      JOIN 
+        CITAS C ON EC.idCita = C.idCita
+      JOIN 
+        USUARIOS U ON C.idUsuarioCC = U.CC
+      LEFT JOIN 
+        USUARIOS D ON C.idDocCC = D.CC
+    `;
+    
+    const [rows]: [EmergenciaDetalle[], any] = await connection.query(query) as [EmergenciaDetalle[], any];
+    return rows;
+  } catch (error) {
+    console.error('Error al obtener emergencias con detalles:', error);
+    throw new Error('Error al obtener emergencias con detalles');
+  }
+}
 
 }
 
+
 export default new AdminService();
+

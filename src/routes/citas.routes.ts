@@ -28,4 +28,15 @@ router.get('/getCitaDoc', citasController.getCitasDoc);
 
 router.get('/getCItaId', citasController.getCitasId);
 
+router.get('/getCitasWithPatientsAndDoctors', citasController.getCitasWithPatientsAndDoctors);
+
+router.get('/metodoDetalladoParaAgendarCitas', citasController.metodoDetalladoParaAgendarCitas);
+
+// Ruta para obtener citas con pacientes y doctores
+router.get('pacientesdoctores/:cedula', CitasController.getCitasWithPatientsAndDoctorsByCC);
+router.get('/pacientes-y-doctores/:cedula', CitasController.getCitasWithPatientsAndDoctorsByCC);
+// Ruta para obtener citas detalladas para agendar por cédula
+router.get('/Reagendar/:cedula', CitasController.getCitasDetalladasParaAgendarByCC);
+router.delete('/citas/:idCita', CitasController.deleteCitaById); 
+router.get('/obtenercitas/:idUsuarioCC', CitasController.obtenerCitasDetalladasPorId);
 export default router;

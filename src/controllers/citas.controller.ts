@@ -2,7 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import CitasService from '../services/citas.service';
 import HistorialClinicoService from '../services/HistoriaClinica.service';
 import { BadRequestError, NotFoundError, InternalServerError } from '../middlewares/customErrors';
-
+import { CitaDetalladaParaAgendar } from '../Interfaces/CitasDetalladasparaagendar';
+import { CitaConPacientesYDoctores } from '../Interfaces/CitaConPacientesYDoctores'; 
+import { ReagendarCitadetallada } from '../Interfaces/ReagendarCitadetallada'; // A
 export class CitasController {
 
   public async createCita(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -137,6 +139,106 @@ export class CitasController {
       next(error);
     }
   }
+
+
+
+  public async getCitasWithPatientsAndDoctors(req: Request, res: Response): Promise<void> {
+    try {
+        const citas = await CitasService.getCitasWithPatientsAndDoctors();
+        res.status(200).json(citas); // Responder con el estado 200 y las citas
+    } catch (error: any) {
+        console.error('Error in getCitasWithPatientsAndDoctors:', error);
+        if (error instanceof NotFoundError) {
+            res.status(404).json({ message: error.message }); // Responder con 404 si no se encuentran citas
+        } else {
+            res.status(500).json({ message: 'Error interno del servidor' }); // Responder con 500 en caso de error inesperado
+        }
+    }
+  }
+
+
+    public async metodoDetalladoParaAgendarCitas(req: Request, res: Response, next: NextFunction): Promise<void> {
+      try {
+          const citas = await CitasService.metodoDetalladoParaAgendarCitas();
+          res.status(200).json(citas); // Responder con el estado 200 y las citas
+      } catch (error: any) {
+          console.error('Error en metodoDetalladoParaAgendarCitas:', error);
+          if (error instanceof NotFoundError) {
+              res.status(404).json({ message: error.message }); // Responder con 404 si no se encuentran citas
+          } else {
+              res.status(500).json({ message: 'Error interno del servidor' }); // Responder con 500 en caso de error inesperado
+          }
+      }
+  }
+  
+
+  public static async getCitasWithPatientsAndDoctorsByCC(req: Request, res: Response): Promise<Response> {
+    const { cedula } = req.params; // Asumiendo que la cédula se pasa como parámetro en la ruta
+
+    try {
+      const citas: CitaConPacientesYDoctores[] = await CitasService.getCitasWithPatientsAndDoctorsByCC(cedula);
+      return res.status(200).json(citas);
+    } catch (error) {
+      console.error('Error en getCitasWithPatientsAndDoctorsByCC:', error);
+      if (error instanceof NotFoundError) {
+        return res.status(404).json({ message: error.message });
+      }
+      return res.status(500).json({ message: 'Error al obtener citas con pacientes y doctores.' });
+    }
+  }
+
+  public static async getCitasDetalladasParaAgendarByCC(req: Request, res: Response): Promise<Response> {
+    const { cedula } = req.params; // Asumiendo que la cédula se pasa como parámetro en la ruta
+
+    try {
+      const citas: CitaDetalladaParaAgendar[] = await CitasService.getCitasDetalladasParaAgendarByCC(cedula);
+      return res.status(200).json(citas);
+    } catch (error) {
+      console.error('Error en getCitasDetalladasParaAgendarByCC:', error);
+      if (error instanceof NotFoundError) {
+        return res.status(404).json({ message: error.message });
+      }
+      return res.status(500).json({ message: 'Error al obtener citas detalladas para agendar.' });
+    }
+  }
+
+  public static async obtenerCitasDetalladasPorId(req: Request, res: Response): Promise<Response> {
+    const idUsuarioCC = req.params.idUsuarioCC; // Obtener el ID del usuario desde los parámetros de la solicitud
+
+    try {
+      const citas: ReagendarCitadetallada[] = await CitasService.getCitasDetalladasPorId(idUsuarioCC);
+      return res.status(200).json(citas); // Enviar la respuesta con las citas en formato JSON
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(404).json({ message: error.message }); // Manejar error de no encontrado
+      }
+      console.error('Error al obtener citas:', error);
+      return res.status(500).json({ message: 'Error interno del servidor' }); // Manejar otros errores
+    }
+  }
+
+
+
+
+
+  public static async deleteCitaById(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { idCita } = req.params;
+    try {
+      await CitasService.deleteCitaById(Number(idCita));
+      res.status(200).json({ message: 'Cita eliminada correctamente' });
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        res.status(404).json({ message: error.message });
+    
+      } else {
+        next(error);
+      }
+    }
+  }
+
+
+  
+  
 }
 
 export default new CitasController();

@@ -6,7 +6,7 @@ import HistorialClinicoService from '../services/HistoriaClinica.service';
 import { CitaEmergencia } from '../Interfaces/EmergenciaCita1';
 import { Usuario } from '../Interfaces/Usuario';
 import { BadRequestError, NotFoundError, InternalServerError } from '../middlewares/customErrors';
-
+import { HojaVidafront } from '../Interfaces/HojaVidafront';
 class AdminController {
   // Emergencia endpoints
   public async getAllEmergencias(req: Request, res: Response): Promise<void> {
@@ -301,6 +301,8 @@ class AdminController {
       next(error);
     }
   }
+
+
 }
 
 export default new AdminController();

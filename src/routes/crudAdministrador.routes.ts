@@ -9,6 +9,11 @@ router.get('/emergencias/:id', AdminController.getEmergenciaById);
 router.post('/emergencias', AdminController.createEmergencia);
 router.delete('/emergencias/:id', AdminController.deleteEmergenciaById);
 
+
+
+
+
+
 // Citas routes
 router.post('/citas', AdminController.createCita);
 router.post('/citas/historial', AdminController.createCitaHistorial);
@@ -29,6 +34,7 @@ router.delete('/citas/:idCita/:idUsuario', AdminController.deleteCitas);
 router.get('/citas/user/:idUsuario', AdminController.getCitasUser);
 router.get('/citas/doctor/:idDoc', AdminController.getCitasDoc);
 router.get('/citas/:idCita', AdminController.getCitasId);
+
 
 // Auditoría routes
 router.get('/auditorias/colilla-pago', AdminController.getAllAudColillaPago);

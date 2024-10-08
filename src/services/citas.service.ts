@@ -1,7 +1,10 @@
 import connection from '../providers/database';
 import { NotFoundError, BadRequestError, DatabaseError } from '../middlewares/customErrors'; // Incluye DatabaseError
 import { Cita } from '../Interfaces/Citas';
+import { CitaDetalladaParaAgendar } from '../Interfaces/CitasDetalladasparaagendar';
 
+import { CitaConPacientesYDoctores } from '../Interfaces/CitaConPacientesYDoctores'; // Asegúrate de que la ruta sea correcta
+import { ReagendarCitadetallada } from '../Interfaces/ReagendarCitadetallada'; // A
 import { format } from 'date-fns';
 
 class CitasService {
@@ -151,5 +154,257 @@ class CitasService {
       throw new DatabaseError('Error en la base de datos al obtener la cita por ID');
     }
   }
+
+
+
+
+
+
+
+  public async getCitasWithPatientsAndDoctors(): Promise<CitaConPacientesYDoctores[]> {
+    try {
+        const query = `
+            SELECT 
+                C.hora AS 'Hora',
+                C.dia AS 'Día',
+                paciente.nombreUsuario AS NombrePaciente,
+                doctor.nombreUsuario AS NombreDoctor
+            FROM 
+                CITAS AS C
+            INNER JOIN 
+                USUARIOS AS paciente ON C.idUsuarioCC = paciente.CC
+            LEFT JOIN 
+                USUARIOS AS doctor ON C.idDocCC = doctor.CC`;
+                
+        const [rows]: any = await connection.query(query);
+        
+        // Comprobación de resultados
+        if (rows.length === 0) {
+            throw new NotFoundError('No se encontraron citas.');
+        }
+
+        // Mapear las filas a la interfaz
+        return rows.map((row: any) => ({
+            Hora: row.Hora,
+            Día: format(new Date(row.Día), 'dd/MM/yyyy'), // Formatear la fecha si es necesario
+            NombrePaciente: row.NombrePaciente,
+            NombreDoctor: row.NombreDoctor || null // Asignar null si no hay doctor
+        })) as CitaConPacientesYDoctores[];
+    } catch (error: any) {
+        console.error('Error getting citas with patients and doctors:', error);
+        throw new DatabaseError('Error en la base de datos al obtener citas con pacientes y doctores');
+    }
+  }
+
+
+
+    public async metodoDetalladoParaAgendarCitas(): Promise<CitaDetalladaParaAgendar[]> {
+      try {
+        const query = `
+          SELECT 
+              CONCAT(paciente.nombreUsuario, ' ', paciente.apellidoUsuario) AS NombreCompleto,
+              paciente.emailUsuario AS CorreoElectronico,
+              paciente.CC AS Documento,
+              CONCAT(C.dia, ' ', C.hora) AS FechaHora,
+              S.nombreServicio AS TipoCita,
+              S.precioServicio AS ValorConsulta,
+              CONCAT(doctor.nombreUsuario, ' ', doctor.apellidoUsuario) AS Doctor
+          FROM 
+              CITAS AS C
+          INNER JOIN 
+              USUARIOS AS paciente ON C.idUsuarioCC = paciente.CC
+          LEFT JOIN 
+              USUARIOS AS doctor ON C.idDocCC = doctor.CC
+          INNER JOIN 
+              SERVICIOS AS S ON C.idServicio = S.idServicio;
+        `;
+        const [rows]: any = await connection.query(query);
+        if (rows.length === 0) {
+          throw new NotFoundError('No se encontraron citas.');
+        }
+    
+        return rows.map((row: any) => ({
+          NombreCompleto: row.NombreCompleto,
+          CorreoElectronico: row.CorreoElectronico,
+          Documento: row.Documento,
+          FechaHora: row.FechaHora,
+          TipoCita: row.TipoCita,
+          ValorConsulta: row.ValorConsulta,
+          Doctor: row.Doctor || null // Asignar null si no hay doctor
+        })) as CitaDetalladaParaAgendar[];
+      } catch (error: any) {
+        console.error('Error retrieving detailed appointment data:', error);
+        throw new DatabaseError('Error en la base de datos al obtener los detalles de las citas');
+      }
+    }
+
+
+    public async getCitasWithPatientsAndDoctorsByCC(cedula: string): Promise<CitaConPacientesYDoctores[]> {
+      try {
+          const query = `
+              SELECT 
+                  C.hora AS 'Hora',
+                  C.dia AS 'Día',
+                  paciente.nombreUsuario AS NombrePaciente,
+                  doctor.nombreUsuario AS NombreDoctor
+              FROM 
+                  CITAS AS C
+              INNER JOIN 
+                  USUARIOS AS paciente ON C.idUsuarioCC = paciente.CC
+              LEFT JOIN 
+                  USUARIOS AS doctor ON C.idDocCC = doctor.CC
+              WHERE 
+                  paciente.CC = ?`; // Filtrar por cédula del paciente
+                  
+          const [rows]: any = await connection.query(query, [cedula]);
+          
+          // Comprobación de resultados
+          if (rows.length === 0) {
+              throw new NotFoundError('No se encontraron citas para la cédula proporcionada.');
+          }
+  
+          // Mapear las filas a la interfaz
+          return rows.map((row: any) => ({
+              Hora: row.Hora,
+              Día: format(new Date(row.Día), 'dd/MM/yyyy'), // Formatear la fecha si es necesario
+              NombrePaciente: row.NombrePaciente,
+              NombreDoctor: row.NombreDoctor || null // Asignar null si no hay doctor
+          })) as CitaConPacientesYDoctores[];
+      } catch (error: any) {
+          console.error('Error getting citas with patients and doctors by CC:', error);
+          throw new DatabaseError('Error en la base de datos al obtener citas con pacientes y doctores por cédula');
+      }
+  }
+  
+  public async getCitasDetalladasParaAgendarByCC(cedula: string): Promise<CitaDetalladaParaAgendar[]> {
+    try {
+        const query = `
+          SELECT 
+              CONCAT(paciente.nombreUsuario, ' ', paciente.apellidoUsuario) AS NombreCompleto,
+              paciente.emailUsuario AS CorreoElectronico,
+              paciente.CC AS Documento,
+              CONCAT(C.dia, ' ', C.hora) AS FechaHora,
+              S.nombreServicio AS TipoCita,
+              S.precioServicio AS ValorConsulta,
+              CONCAT(doctor.nombreUsuario, ' ', doctor.apellidoUsuario) AS Doctor
+          FROM 
+              CITAS AS C
+          INNER JOIN 
+              USUARIOS AS paciente ON C.idUsuarioCC = paciente.CC
+          LEFT JOIN 
+              USUARIOS AS doctor ON C.idDocCC = doctor.CC
+          INNER JOIN 
+              SERVICIOS AS S ON C.idServicio = S.idServicio
+          WHERE 
+              paciente.CC = ?;`; // Filtrar por cédula del paciente
+          
+        const [rows]: any = await connection.query(query, [cedula]);
+        if (rows.length === 0) {
+          throw new NotFoundError('No se encontraron citas para la cédula proporcionada.');
+        }
+    
+        return rows.map((row: any) => ({
+          NombreCompleto: row.NombreCompleto,
+          CorreoElectronico: row.CorreoElectronico,
+          Documento: row.Documento,
+          FechaHora: row.FechaHora,
+          TipoCita: row.TipoCita,
+          ValorConsulta: row.ValorConsulta,
+          Doctor: row.Doctor || null // Asignar null si no hay doctor
+        })) as CitaDetalladaParaAgendar[];
+      } catch (error: any) {
+        console.error('Error retrieving detailed appointment data by CC:', error);
+        throw new DatabaseError('Error en la base de datos al obtener los detalles de las citas por cédula');
+      }
 }
+public async getCitasDetalladasPorId(idUsuarioCC: string): Promise<ReagendarCitadetallada[]> {
+  try {
+    const query = `
+      SELECT 
+          CONCAT(paciente.nombreUsuario, ' ', paciente.apellidoUsuario) AS NombreCompleto,
+          paciente.emailUsuario AS CorreoElectronico,
+          paciente.CC AS Documento,
+          CONCAT(C.dia, ' ', C.hora) AS FechaHora,
+          S.nombreServicio AS TipoCita,
+          S.precioServicio AS ValorConsulta,
+          CONCAT(doctor.nombreUsuario, ' ', doctor.apellidoUsuario) AS Doctor,
+          hv.direccion AS Direccion,
+          hv.telefonoUsuario AS Telefono
+      FROM 
+          CITAS AS C
+      INNER JOIN 
+          USUARIOS AS paciente ON C.idUsuarioCC = paciente.CC
+      LEFT JOIN 
+          USUARIOS AS doctor ON C.idDocCC = doctor.CC
+      INNER JOIN 
+          SERVICIOS AS S ON C.idServicio = S.idServicio
+      INNER JOIN 
+          HOJAS_VIDA AS hv ON paciente.idHoja_Vida = hv.idHoja_Vida
+      WHERE 
+          paciente.CC = ?;
+    `;
+
+    const [rows]: any = await connection.query(query, [idUsuarioCC]);
+
+    if (rows.length === 0) {
+      throw new NotFoundError('No se encontraron citas para el paciente especificado.');
+    }
+
+    return rows.map((row: any) => ({
+      NombreCompleto: row.NombreCompleto,
+      CorreoElectronico: row.CorreoElectronico,
+      Documento: row.Documento,
+      FechaHora: row.FechaHora,
+      TipoCita: row.TipoCita,
+      ValorConsulta: row.ValorConsulta,
+      Doctor: row.Doctor || null,
+      Direccion: row.Direccion || null, // Asegúrate de que esto esté presente
+      Telefono: row.Telefono || null      // Asegúrate de que esto esté presente
+    })) as ReagendarCitadetallada[];
+  } catch (error: any) {
+    console.error('Error retrieving detailed appointment data by patient ID:', error);
+    throw new DatabaseError('Error en la base de datos al obtener los detalles de las citas');
+  }
+}
+
+
+
+
+
+
+
+public async deleteCitaById(idCita: number): Promise<boolean> {
+  try {
+    await connection.beginTransaction(); // Iniciar la transacción
+
+    // Eliminar las emergencias relacionadas a la cita
+    await connection.query('DELETE FROM EMERGENCIAS_CITAS WHERE idCita = ?', [idCita]);
+
+    // Eliminar las facturas relacionadas a la cita
+    await connection.query('DELETE FROM FACTURA_ELECTRONICA WHERE idCita = ?', [idCita]);
+
+    // Eliminar la cita
+    const [result]: any = await connection.query('DELETE FROM CITAS WHERE idCita = ?', [idCita]);
+    if (result.affectedRows === 0) {
+      throw new NotFoundError('Cita no encontrada para eliminar');
+    }
+
+    await connection.commit(); // Confirmar la transacción
+    return true;
+  } catch (error: any) {
+    console.error('Error deleting cita by ID:', error);
+    await connection.rollback(); // Revertir cambios en caso de error
+    if (error instanceof NotFoundError) throw error;
+    throw new DatabaseError('Error en la base de datos al eliminar la cita por ID');
+  }
+}
+
+
+}
+
+
+  
+
+
 export default new CitasService();
+

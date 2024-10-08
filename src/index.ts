@@ -13,6 +13,8 @@ import authRoutes from './routes/auth.routes';
 import hojaVida from './routes/hojaVida.routes';
 import apiSedes from './routes/api.sedes.routes';
 
+import moduloAdminRoutes from './routes/moduloadmin.routes'; // Ajusta la ruta según la ubicación de tus rutas
+
 // import middelware
 import {errorHandler} from './middlewares/errorHandler';
 //import medicalRoutes from './routes/medical.routes';
@@ -72,6 +74,7 @@ app.use('/api/admin', adminRouter);
 app.use('/api/auth', authRoutes);
 app.use('/apiSedes', apiSedes);
 
+app.use('/api', moduloAdminRoutes); 
 
 //Middelware para errores
 app.use(errorHandler);
