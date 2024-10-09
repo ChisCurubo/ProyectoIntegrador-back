@@ -400,3 +400,9 @@ FodyWeavers.xsd
 
 # function of program
 .env
+
+# Ignorar el archivo yarn.lock
+yarn.lock
+
+# Ignorar la carpeta .idea
+.idea/

@@ -1,6 +1,6 @@
 import connection from '../providers/database';
 import { NotFoundError, BadRequestError, DatabaseError } from '../middlewares/customErrors'; // Incluye DatabaseError
-import { Cita } from '../interfaces/citas';
+import { Cita, CitaHorario } from '../interfaces/Citas';
 
 import { format } from 'date-fns';
 
@@ -77,10 +77,38 @@ class CitasService {
       }
     }
   
-    public async deleteCitas(idCita: number, idUsuario: number): Promise<boolean> {
+    public async deleteCitasAll(idCita: number, idUsuario: number): Promise<boolean> {
       try {
         const query = 'DELETE FROM CITAS WHERE idCita = ? AND idUsuarioCC = ?';
         const [result]: any = await connection.execute(query, [idCita, idUsuario]);
+        if (result.affectedRows === 0) {
+          throw new NotFoundError('Cita no encontrada para eliminar');
+        }
+        return true;
+      } catch (error: any) {
+        console.error('Error deleting cita:', error);
+        if (error instanceof NotFoundError) throw error;
+        throw new DatabaseError('Error en la base de datos al eliminar la cita');
+      }
+    }
+    public async deleteCitasId(idCita: number): Promise<boolean> {
+      try {
+        const query = 'DELETE FROM CITAS WHERE idCita = ? ';
+        const [result]: any = await connection.execute(query, [idCita]);
+        if (result.affectedRows === 0) {
+          throw new NotFoundError('Cita no encontrada para eliminar');
+        }
+        return true;
+      } catch (error: any) {
+        console.error('Error deleting cita:', error);
+        if (error instanceof NotFoundError) throw error;
+        throw new DatabaseError('Error en la base de datos al eliminar la cita');
+      }
+    }
+    public async deleteCitasUsuario(idUsuario: number): Promise<boolean> {
+      try {
+        const query = 'DELETE FROM CITAS WHERE idUsuarioCC = ?';
+        const [result]: any = await connection.execute(query, [idUsuario]);
         if (result.affectedRows === 0) {
           throw new NotFoundError('Cita no encontrada para eliminar');
         }
@@ -151,5 +179,45 @@ class CitasService {
       throw new DatabaseError('Error en la base de datos al obtener la cita por ID');
     }
   }
+
+  public async viewSchedule(ccDoc: string, dia: Date): Promise<string[]> {
+    try {
+      // Asegúrate de formatear el valor de la fecha si es necesario
+      //const formattedDate = format(dia, 'yyyy-MM-dd'); 
+      
+      // Consulta SQL que obtiene las horas disponibles
+      const queryStr = `
+        WITH RECURSIVE available_hours AS (
+          SELECT CAST('06:00:00' AS TIME) AS hora
+          UNION ALL
+          SELECT ADDTIME(hora, '00:30:00') 
+          FROM available_hours 
+          WHERE hora < '18:00:00'
+        )
+        SELECT hora 
+        FROM available_hours
+        WHERE hora NOT IN (
+          SELECT hora
+          FROM CITAS 
+          WHERE dia = ? AND idDocCC = ? AND estadoCita = 1
+        );
+      `;
+      
+      // Ejecuta la consulta y obtiene el resultado
+      const [result]: any = await connection.query(queryStr, [dia, ccDoc]);
+      
+      if (result.length === 0) {
+        throw new Error('No se encontraron horas disponibles para el día seleccionado');
+      }
+      
+      return result.map((row: CitaHorario) => row.hora); // Devuelve un array de horas disponibles
+  
+    } catch (error) {
+      console.error("Error al obtener horas disponibles:", error);
+      throw new Error('Error al obtener el horario disponible');
+    }
+  }  
 }
+
+
 export default new CitasService();

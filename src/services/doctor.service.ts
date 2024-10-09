@@ -45,9 +45,10 @@ class DoctorService {
   public async verPacientesQueAtendera(idDoctor: string): Promise<RowDataPacket[]> {
     try {
       const query = `
-        SELECT u.* 
+        SELECT u.* , c*, h*
         FROM USUARIOS u
         JOIN CITAS c ON u.CC = c.idUsuarioCC
+        JOIN HOJA_VIDA h ON u.CC = h.idUsuarioCC
         WHERE c.idDocCC = ?
       `;
       const [filas] = await connection.query<RowDataPacket[]>(query, [idDoctor]);

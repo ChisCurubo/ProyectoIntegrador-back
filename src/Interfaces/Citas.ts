@@ -14,4 +14,8 @@ export interface Cita1 {
   CC: string;                // Número de identificación
  
 }
+export interface CitaHorario {
+  hora: string,                
+ 
+}
   
