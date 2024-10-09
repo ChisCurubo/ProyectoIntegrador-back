@@ -101,14 +101,15 @@ export const updateBill = async (req: Request, res: Response) => {
 export const checkBill = async (req: Request, res: Response) => {
     try {
         const { idCita } = req.body;
+        const id = Number(idCita)
 
         // Validar que se haya enviado idCita
-        if (!idCita) {
+        if (id === 0) {
             throw new BadRequestError('Se requiere idCita para verificar la factura.');
         }
 
         // Buscar la factura existente
-        const [existingBill]: any = await pool.query(`SELECT * FROM FACTURA_ELECTRONICA WHERE idCita = ?`, [idCita]);
+        const [existingBill]: any = await pool.query(`SELECT * FROM FACTURA_ELECTRONICA WHERE idCita = ?`, [id]);
 
         if (existingBill && existingBill.length > 0) {
             const billData = existingBill[0];
