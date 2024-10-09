@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import {validateSedes} from'../services/auth.service';
 import UsuarioService from'../services/usuario.service';
 import CitaService from '../services/citas.service';
-import HistoriaClinicaService from '../services/historiaClinica.service';
+import HistoriaClinicaService from '../services/HistoriaClinica.service';
 import {  NotFoundError,  InternalServerError,UnauthorizedError,BadRequestError} from '../middlewares/customErrors';
 
 /**

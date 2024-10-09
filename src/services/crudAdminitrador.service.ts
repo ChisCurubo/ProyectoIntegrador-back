@@ -1,12 +1,12 @@
 import connection from '../providers/database';
 import bcrypt from 'bcrypt';
-import { Usuario } from '../interfaces/usuario';
-import { Cita } from '../interfaces/citas1';
-import { Emergencia } from '../interfaces/emergencias1';
+import { Usuario } from '../Interfaces/Usuario';
+import { Cita } from '../Interfaces/citas1';
+import { Emergencia } from '../Interfaces/Emergencias1';
 
-import { HojaVidafront } from '../interfaces/hojaVidafront';
-import { EmergenciaDetalle} from '../interfaces/emergenciaDetalle';
-import { CitaEmergencia } from '../interfaces/emergenciaCita1';
+import { HojaVidafront } from '../Interfaces/HojaVidafront';
+import { EmergenciaDetalle} from '../Interfaces/EmergenciaDetalle';
+import { CitaEmergencia } from '../Interfaces/EmergenciaCita1';
 import { 
   AudColillaPago, 
   AudFacturaElectronica, 
@@ -15,7 +15,7 @@ import {
   AudUsuarios, 
   AudSedes, 
   AutorizacionesMedicas 
-} from '../interfaces/auditorias'; // 
+} from '../Interfaces/Auditorias'; // 
 class AdminService {
   // Crear un nuevo médico o paciente
   public async createUsuario(usuario: Usuario, rol: number): Promise<void> {

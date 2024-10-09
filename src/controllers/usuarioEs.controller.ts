@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import UsuarioService from '../services/usuarioEs.service';
-import { Usuario } from '../interfaces/usuario';
+import { Usuario } from '../Interfaces/Usuario';
 
 class UsuarioController {
   // Obtener todos los usuarios

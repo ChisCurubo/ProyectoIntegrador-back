@@ -1,10 +1,10 @@
 import connection from '../providers/database';
 import { NotFoundError, BadRequestError, DatabaseError } from '../middlewares/customErrors'; // Incluye DatabaseError
-import { Cita } from '../interfaces/citas';
-import { CitaDetalladaParaAgendar } from '../interfaces/citasDetalladasparaagendar';
+import { Cita } from '../Interfaces/Citas';
+import { CitaDetalladaParaAgendar } from '../Interfaces/CitasDetalladasparaagendar';
 
-import { CitaConPacientesYDoctores } from '../interfaces/citaConPacientesYDoctores'; // Asegúrate de que la ruta sea correcta
-import { ReagendarCitadetallada } from '../interfaces/reagendarCitadetallada'; // A
+import { CitaConPacientesYDoctores } from '../Interfaces/CitaConPacientesYDoctores'; // Asegúrate de que la ruta sea correcta
+import { ReagendarCitadetallada } from '../Interfaces/ReagendarCitadetallada'; // A
 import { format } from 'date-fns';
 
 class CitasService {
@@ -372,20 +372,33 @@ public async getCitasDetalladasPorId(idUsuarioCC: string): Promise<ReagendarCita
 
 
 
+
 public async deleteCitaById(idCita: number): Promise<boolean> {
   try {
-    const query = 'DELETE FROM CITAS WHERE idCita = ?';
-    const [result]: any = await connection.execute(query, [idCita]);
+    await connection.beginTransaction(); // Iniciar la transacción
+
+    // Eliminar las emergencias relacionadas a la cita
+    await connection.query('DELETE FROM EMERGENCIAS_CITAS WHERE idCita = ?', [idCita]);
+
+    // Eliminar las facturas relacionadas a la cita
+    await connection.query('DELETE FROM FACTURA_ELECTRONICA WHERE idCita = ?', [idCita]);
+
+    // Eliminar la cita
+    const [result]: any = await connection.query('DELETE FROM CITAS WHERE idCita = ?', [idCita]);
     if (result.affectedRows === 0) {
       throw new NotFoundError('Cita no encontrada para eliminar');
     }
+
+    await connection.commit(); // Confirmar la transacción
     return true;
   } catch (error: any) {
     console.error('Error deleting cita by ID:', error);
+    await connection.rollback(); // Revertir cambios en caso de error
     if (error instanceof NotFoundError) throw error;
     throw new DatabaseError('Error en la base de datos al eliminar la cita por ID');
   }
 }
+
 
 }
 
