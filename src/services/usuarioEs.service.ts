@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'; // Importa bcrypt
-import { Usuario } from '../Interfaces/Usuario';
+import { Usuario } from '../interfaces/usuario';
 import connection from '../providers/database';
 
 class UsuarioService {

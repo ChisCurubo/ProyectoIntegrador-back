@@ -1,10 +1,10 @@
 
 import { Pool, RowDataPacket } from 'mysql2/promise';
 import connection from '../providers/database';
-import { ordenMedica } from '../Interfaces/ordenMedica';
+import { ordenMedica } from '../interfaces/ordenMedica';
 import { DatabaseError, NotFoundError } from '../middlewares/customErrors';
 
-import { OrdenMedicaInformacion } from '../Interfaces/OrdenMedicaInformacion'; // Asegúrate de que la ruta sea correcta
+import { OrdenMedicaInformacion } from '../interfaces/ordenMedicaInformacion'; // Asegúrate de que la ruta sea correcta
 
 class DoctorService {
 

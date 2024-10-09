@@ -1,16 +1,16 @@
 import { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import connection from '../providers/database';
-import { ordenMedica } from '../Interfaces/ordenMedica';
+import { ordenMedica } from '../interfaces/ordenMedica';
 import { DatabaseError, NotFoundError } from '../middlewares/customErrors';
-import { DoctorInformacion } from '../Interfaces/DoctorInformacion';
-import { OrdenMedicaInformacion } from '../Interfaces/OrdenMedicaInformacion'; 
-import { HojaVidafront } from '../Interfaces/HojaVidafront'; 
-import { ColillaPagoInformacion } from '../Interfaces/ColillaPagoInformacion'; 
-import { FacturaInformacion } from '../Interfaces/FacturaInformacion'; 
-import { EmergenciaDetalle} from '../Interfaces/EmergenciaDetalle';
-import { Citainformacion } from '../Interfaces/CitaInformacion';
-import { CitaCompletaInformacion } from '../Interfaces/CitaCompletaInformacion'; 
-import { HojaVidaAdmin } from '../Interfaces/HojadevidaAdmin';
+import { DoctorInformacion } from '../interfaces/doctorInformacion';
+import { OrdenMedicaInformacion } from '../interfaces/ordenMedicaInformacion'; 
+import { HojaVidafront } from '../interfaces/hojaVidafront'; 
+import { ColillaPagoInformacion } from '../interfaces/colillaPagoInformacion'; 
+import { FacturaInformacion } from '../interfaces/facturaInformacion'; 
+import { EmergenciaDetalle} from '../interfaces/emergenciaDetalle';
+import { Citainformacion } from '../interfaces/citaInformacion';
+import { CitaCompletaInformacion } from '../interfaces/citaCompletaInformacion'; 
+import { HojaVidaAdmin } from '../interfaces/hojadevidaAdmin';
 
 class moduloAdmin {
 

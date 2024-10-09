@@ -1,7 +1,7 @@
 import { Pool, RowDataPacket } from 'mysql2/promise';
 import connection from '../providers/database';
 import { BadRequestError, DatabaseError } from '../middlewares/customErrors';
-import { Usuario } from '../Interfaces/Usuario';
+import { Usuario } from '../interfaces/usuario';
 
 class PacientesService {
 

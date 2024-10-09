@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import HistoriaClinicaService from '../services/HistoriaClinica.service';
+import HistoriaClinicaService from '../services/historiaClinica.service';
 import { join } from 'path';
 import { BadRequestError, NotFoundError, InternalServerError, DatabaseError } from '../middlewares/customErrors';
 

@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { Usuario } from '../Interfaces/Usuario';
+import { Usuario } from '../interfaces/usuario';
 import connection from '../providers/database';
 import { BadRequestError, NotFoundError, DatabaseError, ConflictError } from '../middlewares/customErrors';
 

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { generarToken, singUpSedes, iniciarSesion, validateSedes } from '../services/auth.service';
-import { Usuario } from '../Interfaces/Usuario';
+import { Usuario } from '../interfaces/usuario';
 import UsuarioService from '../services/usuario.service';
 import { BadRequestError, UnauthorizedError, InternalServerError } from '../middlewares/customErrors'; // Ajusta según tus errores personalizados
 

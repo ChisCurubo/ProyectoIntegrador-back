@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'; // Importa bcrypt
 import connection from '../providers/database';
-import { Sede, SedeLogIn } from '../Interfaces/Sedes';
-import { Usuario } from '../Interfaces/Usuario';
+import { Sede, SedeLogIn } from '../interfaces/sedes';
+import { Usuario } from '../interfaces/usuario';
 import { InternalServerError, UnauthorizedError } from '../middlewares/customErrors';
 const tokenKey = 'vitamed'
 
