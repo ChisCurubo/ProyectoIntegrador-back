@@ -59,22 +59,22 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Rutas
 app.use('/api/facturacion', facturacion);
 app.use('/api/citas', citas);
-app.use('/api/pdfhojadevida', hojaVida);
+app.use('/api/hojaVida', hojaVida);
 
 app.use('/api/usuarios', usuarioRoutes);
-app.use('/api/usuarios', usuarioRoutesEs);
+app.use('/api/usuariosE', usuarioRoutesEs);
 app.use('/api/historia-clinica', historiaClinicaRoutes);
-app.use('/api', DoctorRoutes);
-app.use('/api', pacientesRoutes);
+app.use('/api/doctor', DoctorRoutes);
+app.use('/api/patient', pacientesRoutes);
 
-app.use('/api/colilla/PAGO', colillaPagoRoutes); 
+app.use('/api/colillaPago', colillaPagoRoutes); 
 app.use('/api/mercadopago', mercadopagoRoutes);
 
 app.use('/api/admin', adminRouter); 
 app.use('/api/auth', authRoutes);
 app.use('/apiSedes', apiSedes);
 
-app.use('/api', moduloAdminRoutes); 
+app.use('/api/adminM', moduloAdminRoutes); 
 
 //Middelware para errores
 app.use(errorHandler);

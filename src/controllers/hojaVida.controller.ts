@@ -1,40 +1,122 @@
 import { Request, Response } from 'express';
-import { testConnection } from '../services/hojaVida.service';
-import { InternalServerError } from '../middlewares/customErrors';
+import HojaVidaService from '../services/hojaVida.service';
 
-export const hojaDeVida = async (req: Request, res: Response) => {
+export class HojaVidaContoller {
+
+
+  // Usar una función de flecha para mantener el contexto de 'this'
+  public async handleActionEmpleado (req: Request, res: Response){
+    const action = req.body.action;
+    console.log(action)
+    const id = req.body.id ? parseInt(req.body.id, 10) : null;
+    console.log(id)
+
     try {
-        const citas = await testConnection();
-        console.log('post /hojaVida/test - Response:');
-        res.status(200).json(citas);
+      switch (action) {
+        case 'getAll':
+          const allRecords = await HojaVidaService.getAllEmployer();
+          res.json(allRecords);
+          break;
+
+        case 'getById':
+          if (id === null) {
+            return res.status(400).json({ error: 'ID is required for getById.' });
+          }
+          const record = await HojaVidaService.getByIdEmployer(id);
+          if (record) {
+            res.json(record);
+          } else {
+            res.status(404).json({ error: 'Record not found.' });
+          }
+          break;
+
+        case 'create':
+          const newRecord = await HojaVidaService.createEmployer(req.body);
+          res.status(201).json({ id: newRecord.insertId });
+          break;
+
+        case 'update':
+          if (id === null) {
+            return res.status(400).json({ error: 'ID is required for update.' });
+          }
+          await HojaVidaService.updateEmployer(id, req.body);
+          res.status(204).send();
+          break;
+
+        case 'delete':
+          if (id === null) {
+            return res.status(400).json({ error: 'ID is required for delete.' });
+          }
+          await HojaVidaService.deleteEmployer(id);
+          res.status(204).send();
+          break;
+
+        default:
+          res.status(400).json({ error: 'Invalid action.' });
+      }
     } catch (error) {
-        console.error('Error en post /hojaVida/citas:', error);
-        // Lanzar un error personalizado
-        throw new InternalServerError('Error en el servidor al obtener las citas.');
+      console.error('Error in handleAction:', error);
+      const errorMessage = (error as Error).message || 'An error occurred.';
+      res.status(500).json({ error: errorMessage });
     }
-};
+  }
 
-export const hojaDeVidaPDF = async (req: Request, res: Response) => {
+  public async handleActionPaciente (req: Request, res: Response) {
+    const action = req.body.action;
+    console.log(action)
+    const id = req.body.id ? parseInt(req.body.id, 10) : null;
+    console.log(id)
+
+
     try {
-        const { nameService } = req.body;
+      switch (action) {
+        case 'getAll':
+          const allRecords = await HojaVidaService.getAllPatient();
+          res.json(allRecords);
+          break;
+
+        case 'getById':
         
-        if (!nameService) {
-            return res.status(400).json({ message: 'El nombre del servicio es obligatorio.' });
-        }
+          if (id === null) {
+            return res.status(400).json({ error: 'ID is required for getById.' });
+          }
+          const record = await HojaVidaService.getByIdPatient(id);
+          if (record) {
+            res.json(record);
+          } else {
+            res.status(404).json({ error: 'Record not found.' });
+          }
+          break;
 
-        const serviceData = { nameService };
+        case 'create':
+          const newRecord = await HojaVidaService.createPatient(req.body);
+          res.status(201).json({ id: newRecord.insertId });
+          break;
 
-        // Aquí podrías agregar la lógica para generar un PDF con los datos del servicio.
-        // Ejemplo: const pdfBuffer = await generatePDF(serviceData);
-        // res.setHeader('Content-Type', 'application/pdf');
-        // res.setHeader('Content-Disposition', 'attachment; filename=hoja_de_vida.pdf');
-        // res.send(pdfBuffer);
+        case 'update':
+          if (id === null) {
+            return res.status(400).json({ error: 'ID is required for update.' });
+          }
+          await HojaVidaService.updatePatient(id, req.body);
+          res.status(204).send();
+          break;
 
-        // Respuesta temporal para mostrar que se ha recibido la solicitud.
-        res.status(200).json({ message: 'PDF generado exitosamente', data: serviceData });
+        case 'delete':
+          if (id === null) {
+            return res.status(400).json({ error: 'ID is required for delete.' });
+          }
+          await HojaVidaService.deletePatient(id);
+          res.status(204).send();
+          break;
+
+        default:
+          res.status(400).json({ error: 'Invalid action.' });
+      }
     } catch (error) {
-        console.error('Error generando PDF de hoja de vida:', error);
-        // Lanzar un error personalizado
-        throw new InternalServerError('Error en el servidor al generar el PDF.');
+      console.error('Error in handleAction:', error);
+      const errorMessage = (error as Error).message || 'An error occurred.';
+      res.status(500).json({ error: errorMessage });
     }
-};
+  }
+}
+export default new HojaVidaContoller();

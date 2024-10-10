@@ -1,12 +1,14 @@
-import express from 'express';
-import { hojaDeVida, hojaDeVidaPDF } from '../controllers/hojaVida.controller';
+import { Router } from 'express';
+import  HojaVidaContoller  from '../controllers/hojaVida.controller';
 
-const router = express.Router();
+const router = Router();
 
-// Ruta 
-router.post('/createHojaVida', hojaDeVida);
 
-// Ruta 
-router.get('/hojaVida/:id', hojaDeVidaPDF);
+// Usar la función de acción del controlador para manejar las solicitudes POST
+router.post('/hvEmpleado', HojaVidaContoller.handleActionEmpleado);
+
+
+// Usar la función de acción del controlador para manejar las solicitudes POST
+router.post('/hvPaciente', HojaVidaContoller.handleActionPaciente);
 
 export default router;
