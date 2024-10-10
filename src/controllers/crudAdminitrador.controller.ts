@@ -261,7 +261,7 @@ class AdminController {
     const idCita = Number(req.params.idCita);
     const idUsuario = Number(req.params.idUsuario);
     try {
-      const success = await CitasService.deleteCitas(idCita, idUsuario);
+      const success = await CitasService.deleteCitasId(idCita);
       if (success) {
         res.status(200).json({ message: 'Cita eliminada correctamente' });
       } else {

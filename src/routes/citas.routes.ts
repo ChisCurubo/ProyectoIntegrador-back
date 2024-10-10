@@ -18,7 +18,9 @@ router.put('/updateCita-status/:idCita', citasController.updateStatusCita);
 router.put('/updateCita-all', citasController.updateCitasAll);
 
 // Borrar una cita por id del usuario y id de cita (con POST)
-router.delete('/deleteCita/:idCita/:idUsuario', citasController.deleteCitas);
+router.delete('/deleteCitaAll/:idCita/:idUsuario', citasController.deleteCitas);
+router.delete('/deleteCitaId/:idCita', citasController.deleteCitasID);
+router.delete('/deleteCitaUser/:idUsuario', citasController.deleteCitasUser);
 
 // Seleccionar citas por idUsuario (con POST)
 router.get('/getCitaUser', citasController.getCitasUser);
@@ -39,4 +41,6 @@ router.get('/pacientes-y-doctores/:cedula', CitasController.getCitasWithPatients
 router.get('/Reagendar/:cedula', CitasController.getCitasDetalladasParaAgendarByCC);
 router.delete('/citas/:idCita', CitasController.deleteCitaById); 
 router.get('/obtenercitas/:idUsuarioCC', CitasController.obtenerCitasDetalladasPorId);
+router.post('/horario', citasController.viewSchedule)
+
 export default router;
