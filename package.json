@@ -28,7 +28,7 @@
     "mercadopago": "^1.5.17",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
-    "mysql2": "^3.11.3",
+    "mysql2": "^3.9.2",
     "nodemon": "^3.1.4",
     "pdfkit-table": "^0.1.99",
     "puppeteer": "^23.3.0",

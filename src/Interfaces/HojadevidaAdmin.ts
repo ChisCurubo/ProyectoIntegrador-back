@@ -1,16 +1,13 @@
-// Interface with all the attributes of the HojaVidaPaciente table
-export interface HojaVida {
-
-    idHoja_Vida?: number;
+export interface HojaVidaAdmin {
     direccion: string;
-    estadoUsuario: number;
-    telefonoUsuario: string;
-    idEps: number;
+    estadoUsuario?: number;
+    telefonoUsuario?: string;
+    idEps?: number;
     tipo_documento: 'CC' | 'TI' | 'RC' | 'CE';
-    sexo: 'M' | 'F';
+    sexo?: 'M' | 'F';
     nacionalidad?: string;
     pais?: string;
-    fecha_nacimiento?: string;
+    fecha_nacimiento?: Date;
     lugar_nacimiento?: string;
     alergias?: string;
     discapacidad?: string;
@@ -19,19 +16,18 @@ export interface HojaVida {
     contacto_emergencia_telefono?: string;
     contacto_emergencia_correo?: string;
     cargo: string;
-    fechaIngreso: string;
-    tipoContrato: 'Indefinido' | 'Fijo' | 'Prestación de servicios';
-    salarioBasico: number;
+    fechaIngreso?: Date;
+    tipoContrato?: 'Indefinido' | 'Fijo' | 'Prestación de servicios';
+    salarioBasico?: number;
     bonificaciones?: number;
     deducciones?: number;
-    salarioNeto?: number;
-    fechaPago?: string;
+    fechaPago?: Date;
     metodoPago?: string;
     vacacionesPendientes?: number;
     diasIncapacidad?: number;
     historialPagos?: string;
     autorizacionesEspeciales?: string;
-    fechaTerminacion?: string;
+    fechaTerminacion?: Date;
     motivoTerminacion?: string;
     observaciones?: string;
-  }
+}

@@ -1,6 +1,6 @@
 import connection from '../providers/database';
-import {Sede, SedeLogIn} from '../interfaces/sedes';
-import { Usuario } from '../interfaces/usuario';
+import {Sede, SedeLogIn} from '../Interfaces/Sedes';
+import { Usuario } from '../Interfaces/Usuario';
 
 
 

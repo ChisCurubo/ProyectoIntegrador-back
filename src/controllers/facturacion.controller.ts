@@ -180,17 +180,17 @@ export const generateBill = async (req: Request, res: Response) => {
             valorLetras
         } = req.body; // Obtener todos los datos necesarios desde el cuerpo de la solicitud
 
+        /*
         // Verificar si solo se proporciona idCita
         if (idCita && Object.keys(req.body).length === 1) {
             // Buscar la factura existente
             const [existingBill]: any = await pool.query(`SELECT * FROM FACTURA_ELECTRONICA WHERE idCita = ?`, [idCita]);
 
             if (existingBill && existingBill.length > 0) {
-                return res.json({ success: true, message: 'Factura existente', factura: existingBill[0] });
-            } else {
-                throw new BadRequestError('No se encontró una factura existente para esta cita.');
+                
             }
         }
+        */
 
         // Validar que todos los campos obligatorios no sean nulos
         if (!idCita || !direccionUsuario || !telefonoUsuario || !formaPago || !item || !descripcion || cantidad === undefined || valor === undefined || valorTotal === undefined || iva === undefined || valorLetras === undefined) {
@@ -201,7 +201,7 @@ export const generateBill = async (req: Request, res: Response) => {
         const [existingBill]: any = await pool.query(`SELECT * FROM FACTURA_ELECTRONICA WHERE idCita = ?`, [idCita]);
 
         if (existingBill && existingBill.length > 0) {
-            return res.json({ success: true, message: 'Factura existente', factura: existingBill[0] });
+            throw new BadRequestError('Se encontró una factura existente para esta cita.');
         }
 
         // Realizar la consulta para obtener los datos del paciente

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import AdminService from '../services/crudAdminitrador.service';
 import CitasService from '../services/citas.service';
 import UsuarioService from '../services/usuarioEs.service';
-import HistorialClinicoService from '../services/historiaClinica.service';
+import HistorialClinicoService from '../services/HistoriaClinica.service';
 import { CitaEmergencia } from '../Interfaces/EmergenciaCita1';
 import { Usuario } from '../Interfaces/Usuario';
 import { BadRequestError, NotFoundError, InternalServerError } from '../middlewares/customErrors';
