@@ -1,8 +1,8 @@
-// services/emergencia.service.ts
 
 import connection from '../providers/database';
 import { RowDataPacket } from 'mysql2/promise';  // Importa RowDataPacket para manejar los resultados de SELECT
-
+import { Cita } from '../interfaces/Citas'
+import { EmergenciaCita } from '../interfaces/emergenciaCita';
 
 class EmergenciaService {
     // Crear una nueva emergencia
@@ -16,7 +16,7 @@ class EmergenciaService {
     public async getEmergenciaById(idEmergencia: number): Promise<any> {
         const query = 'SELECT * FROM EMERGENCIAS WHERE idEmergencia = ?';
         const [rows] = await connection.query<RowDataPacket[]>(query, [idEmergencia]);  // Especificar que el tipo es RowDataPacket[]
-        
+
         return rows.length > 0 ? rows[0] : null;  // Accede a rows[0] si existe al menos un resultado
     }
 
@@ -46,6 +46,99 @@ class EmergenciaService {
         const [rows] = await connection.query(query);
         return rows;
     }
-}
 
-export default new  EmergenciaService;
+
+    public async createEmergenciaCita(data: EmergenciaCita): Promise<EmergenciaCita | null> {
+        const query = `
+            INSERT INTO EMERGENCIAS_CITAS (idEmergencia, idCita, idServicio, estatusEmergencia_Cita)
+            VALUES (?, ?, ?, ?)
+        `;
+        try {
+            const [result] = await connection.query(query, [
+                data.idEmergencia,
+                data.idCita,
+                data.idServicio,
+                data.statusEmergencia_Cita
+            ]);
+            return { idEmergencia_Cita: (result as any).insertId, ...data };
+        } catch (error) {
+            console.error('Error al crear emergencia cita:', error);
+            throw new Error('No se pudo crear la emergencia cita');
+        }
+    }
+
+    public async getEmergenciaCitaById(idEmergencia_Cita: number): Promise<EmergenciaCita | null> {
+        const query = 'SELECT * FROM EMERGENCIAS_CITAS WHERE idEmergencia_Cita = ?';
+        try {
+            const [rows]: any = await connection.query(query, [idEmergencia_Cita]);
+            if (rows.length === 0) {
+                return null
+            }
+            return rows[0];
+        } catch (error) {
+            return  null
+        }
+    }
+
+    // Obtener una emergencia cita por ID de Cita
+    public async getCitaById(idCita: number): Promise<EmergenciaCita | null> {
+        const query = 'SELECT * FROM EMERGENCIAS_CITAS WHERE idCita = ?';
+        try {
+            const [rows]: any = await connection.query(query, [idCita]);
+            if (rows.length === 0) {
+                return null;
+            }
+            return rows[0];
+        } catch (error) {
+
+            return null
+        }
+    }
+
+    // Obtener todas las emergencias citas
+    public async getAllEmergenciasCitas(): Promise<EmergenciaCita[] | null> {
+        const query = 'SELECT * FROM EMERGENCIAS_CITAS';
+        try {
+            const [rows]: any = await connection.query(query);
+            return rows;
+        } catch (error) {
+            return null
+        }
+    }
+
+    // Actualizar una emergencia cita por ID
+    public async updateEmergenciaCita(idEmergencia_Cita: number, data: EmergenciaCita): Promise<boolean> {
+        const query = `
+            UPDATE EMERGENCIAS_CITAS 
+            SET idEmergencia = ?, idCita = ?, idServicio = ?, estatusEmergencia_Cita = ? 
+            WHERE idEmergencia_Cita = ?
+        `;
+        try {
+            const [result] = await connection.query(query, [
+                data.idEmergencia,
+                data.idCita,
+                data.idServicio,
+                data.statusEmergencia_Cita,
+                idEmergencia_Cita
+            ]);
+            return (result as any).affectedRows > 0; // Retorna true si se actualizó
+        } catch (error) {
+            console.error('Error al actualizar emergencia cita:', error);
+            throw new Error('No se pudo actualizar la emergencia cita');
+        }
+    }
+
+    // Eliminar una emergencia cita por ID
+    public async deleteEmergenciaCita(idEmergencia_Cita: number): Promise<boolean> {
+        const query = 'DELETE FROM EMERGENCIAS_CITAS WHERE idEmergencia_Cita = ?';
+        try {
+            const [result] = await connection.query(query, [idEmergencia_Cita]);
+            return (result as any).affectedRows > 0; // Retorna true si se eliminó
+        } catch (error) {
+            console.error('Error al eliminar emergencia cita:', error);
+            throw new Error('No se pudo eliminar la emergencia cita');
+        }
+    }
+}
+export default new EmergenciaService();
+

@@ -7,14 +7,13 @@ dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 import helmet from 'helmet';
 import citas from './routes/citas.routes';
 import facturacion from './routes/facturacion.routes';
-
+import adminRouter from '../src/routes/crudAdministrador.routes'; // 
 import usuarioRoutes from './routes/usuario.routes'; 
 import authRoutes from './routes/auth.routes';
 import hojaVida from './routes/hojaVida.routes';
-import ordenMedicaRoutes from './routes/ordenMedica.routes';
-import emergenciaRoutes from './routes/emergencia.routes'; 
-
 import apiSedes from './routes/api.sedes.routes';
+
+import moduloAdminRoutes from './routes/moduloadmin.routes'; // Ajusta la ruta según la ubicación de tus rutas
 
 // import middelware
 import {errorHandler} from './middlewares/errorHandler';
@@ -22,6 +21,7 @@ import {errorHandler} from './middlewares/errorHandler';
 
 
 
+import usuarioRoutesEs from './routes/usuarioEs.routes'; 
 
 import historiaClinicaRoutes from './routes/historialClinico.routes';
 import DoctorRoutes from './routes/doctor.routes';
@@ -59,23 +59,22 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Rutas
 app.use('/api/facturacion', facturacion);
 app.use('/api/citas', citas);
-app.use('/api/pdfhojadevida', hojaVida);
+app.use('/api/hojaVida', hojaVida);
 
 app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/usuariosE', usuarioRoutesEs);
 app.use('/api/historia-clinica', historiaClinicaRoutes);
-app.use('/api', DoctorRoutes);
-app.use('/api', pacientesRoutes);
+app.use('/api/doctor', DoctorRoutes);
+app.use('/api/patient', pacientesRoutes);
 
-app.use('/api/colilla/PAGO', colillaPagoRoutes); 
+app.use('/api/colillaPago', colillaPagoRoutes); 
 app.use('/api/mercadopago', mercadopagoRoutes);
 
-
+app.use('/api/admin', adminRouter); 
 app.use('/api/auth', authRoutes);
-app.use('/api/ordenes-medicas', ordenMedicaRoutes);
-app.use('/api', emergenciaRoutes);
-
 app.use('/apiSedes', apiSedes);
 
+app.use('/api/adminM', moduloAdminRoutes); 
 
 //Middelware para errores
 app.use(errorHandler);

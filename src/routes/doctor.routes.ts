@@ -19,4 +19,9 @@ router.get('/historia-clinica/:idHistoria_Medica', DoctorController.obtenerOrden
 // Obtener una orden médica por ID de Cita
 router.get('/orden-medica/cita/:idCita', DoctorController.obtenerOrdenMedicaPorIdCita);
 
+
+
+router.get('/ordenesimportantes/:cedula', DoctorController.obtenerOrdenesMedicasPorCedula);
+
+
 export default router;

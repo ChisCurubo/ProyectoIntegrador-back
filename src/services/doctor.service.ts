@@ -4,6 +4,8 @@ import connection from '../providers/database';
 import { ordenMedica } from '../Interfaces/ordenMedica';
 import { DatabaseError, NotFoundError } from '../middlewares/customErrors';
 
+import { OrdenMedicaInformacion } from '../Interfaces/OrdenMedicaInformacion'; // Asegúrate de que la ruta sea correcta
+
 class DoctorService {
 
   // Crear Orden Médica
@@ -45,9 +47,10 @@ class DoctorService {
   public async verPacientesQueAtendera(idDoctor: string): Promise<RowDataPacket[]> {
     try {
       const query = `
-        SELECT u.* 
+        SELECT u.* , c*, h*
         FROM USUARIOS u
         JOIN CITAS c ON u.CC = c.idUsuarioCC
+        JOIN HOJA_VIDA h ON u.CC = h.idUsuarioCC
         WHERE c.idDocCC = ?
       `;
       const [filas] = await connection.query<RowDataPacket[]>(query, [idDoctor]);
@@ -86,6 +89,47 @@ class DoctorService {
       throw new DatabaseError('Error al obtener orden médica por ID de cita');
     }
   }
+
+
+
+ 
+
+public async buscarOrdenesMedicasInformacionPorCedula(cedula: string): Promise<OrdenMedicaInformacion[]> { 
+  try {
+      const query = `
+          SELECT 
+              OM.idOrden_Medica,  -- Agregar la id de la orden
+              CONCAT(paciente.nombreUsuario, ' ', paciente.apellidoUsuario) AS nombre,
+              paciente.CC AS cc,
+              OM.fecha AS fechaOrden,
+              CONCAT(doctor.nombreUsuario, ' ', doctor.apellidoUsuario) AS doctorAsignado,
+              CASE 
+                  WHEN OM.estadoOM = 1 THEN 'Activo'
+                  WHEN OM.estadoOM = 0 THEN 'Inactivo'
+                  ELSE 'Desconocido'
+              END AS estado
+          FROM 
+              ORDENES_MEDICAS AS OM
+          INNER JOIN 
+              CITAS AS C ON OM.idCita = C.idCita
+          INNER JOIN 
+              USUARIOS AS paciente ON C.idUsuarioCC = paciente.CC
+          LEFT JOIN 
+              USUARIOS AS doctor ON C.idDocCC = doctor.CC
+          WHERE 
+              paciente.CC = ?;
+      `;
+
+      const [filas] = await connection.query<RowDataPacket[]>(query, [cedula]);
+      return filas as OrdenMedicaInformacion[]; // Devuelve las filas obtenidas con el tipo específico
+  } catch (error) {
+      console.error('Error al buscar órdenes médicas por cédula:', error);
+      throw new DatabaseError('Error al buscar órdenes médicas por cédula');
+  }
+}
+
+
+
 }
 
 export default new DoctorService();

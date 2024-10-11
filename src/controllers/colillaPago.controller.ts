@@ -23,25 +23,27 @@ export class ColillaPagoController {
     }
   }
 
-  // Obtener una colilla de pago por su ID
   public async obtenerColillaPorId(req: Request, res: Response): Promise<void> {
     try {
       const id = parseInt(req.params.id);  // Obtenemos el ID de los parámetros de la ruta
       const colilla = await ColillaPagoService.obtenerColillaPorId(id);
+      
       if (colilla) {
         res.status(200).json(colilla);  // Si se encuentra la colilla, la devolvemos
       } else {
-        throw new NotFoundError('Colilla no encontrada');
+        res.status(404).json({ error: 'Colilla no encontrada' });  // Respuesta 404 si no se encuentra
       }
     } catch (error) {
       if (error instanceof DatabaseError) {
-        throw new DatabaseError('Error al obtener la colilla desde la base de datos');
+        console.error(`Error al obtener la colilla desde la base de datos:`, error);
+        res.status(500).json({ error: 'Error al obtener la colilla desde la base de datos' });
       } else {
         console.error(`Error al obtener la colilla con ID ${req.params.id}:`, error);
-        throw new InternalServerError('Error al obtener la colilla');
+        res.status(500).json({ error: 'Error al obtener la colilla' });
       }
     }
   }
+  
 
   // Obtener todas las colillas de pago
   public async obtenerTodasLasColillas(req: Request, res: Response): Promise<void> {
