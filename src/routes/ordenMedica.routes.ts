@@ -3,7 +3,6 @@ import OrdenMedicaController from '../controllers/ordenMedica.controller';
 
 const router = Router();
 
-
 // Ruta para crear una nueva orden médica (POST)
 router.post('/', OrdenMedicaController.createOrdenMedica);
 

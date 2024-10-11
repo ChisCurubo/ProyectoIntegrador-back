@@ -1,6 +1,5 @@
 
 import connection from '../providers/database';
-import HistorialClinico from '../models/HistorialClinico';
 import { Cita } from '../Interfaces/Citas';
 import { HistoriaClinica } from '../Interfaces/HistoriaClinica';
 import { NotFoundError, DatabaseError, InternalServerError } from '../middlewares/customErrors';
