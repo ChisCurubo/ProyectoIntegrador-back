@@ -1,6 +1,6 @@
 import { Pool } from 'mysql2/promise';
 import pool from '../providers/database';  
-import { ColillaPago } from '../Interfaces/ColillaPago';  
+import { ColillaPago } from '../interface/colillaPago';  
 import { buildPDF } from '../libs/Facturacion/colilla';
 import { InternalServerError, BadRequestError } from '../middlewares/customErrors';
 export class ColillaPagoService {

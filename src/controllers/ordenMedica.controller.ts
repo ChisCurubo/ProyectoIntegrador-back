@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as htmlPdf from 'html-pdf';
 import OrdenMedicaService from '../services/ordenMedica.service';
-import { ordenMedica } from '../Interfaces/ordenMedica';
+import { ordenMedica } from '../interface/ordenMedica';
 import { BadRequestError, NotFoundError, InternalServerError } from '../middlewares/customErrors';
 
 class OrdenMedicaController {

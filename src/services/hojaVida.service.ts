@@ -1,4 +1,4 @@
-import { HojaVida } from 'interfaces/HojaVida';
+import { HojaVida } from 'interface/hojaVida';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import connection from '../providers/database';
 

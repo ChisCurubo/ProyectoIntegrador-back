@@ -1,8 +1,8 @@
 
 import connection from '../providers/database';
 import { RowDataPacket } from 'mysql2/promise';  // Importa RowDataPacket para manejar los resultados de SELECT
-import { Cita } from '../interfaces/Citas'
-import { EmergenciaCita } from '../interfaces/emergenciaCita';
+import { Cita } from '../interface/Citas'
+import { EmergenciaCita } from '../interface/Emergencias';
 
 class EmergenciaService {
     // Crear una nueva emergencia

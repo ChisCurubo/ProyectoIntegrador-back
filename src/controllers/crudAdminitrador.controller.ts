@@ -3,10 +3,10 @@ import AdminService from '../services/crudAdminitrador.service';
 import CitasService from '../services/citas.service';
 import UsuarioService from '../services/usuarioEs.service';
 import HistorialClinicoService from '../services/HistoriaClinica.service';
-import { CitaEmergencia } from '../Interfaces/EmergenciaCita1';
-import { Usuario } from '../Interfaces/Usuario';
+import { CitaEmergencia } from '../interface/Emergencias';
+import { Usuario } from '../interface/User';
 import { BadRequestError, NotFoundError, InternalServerError } from '../middlewares/customErrors';
-import { HojaVidafront } from '../Interfaces/HojaVidafront';
+import { HojaVidafront } from '../interface/hojaVida';
 class AdminController {
   // Emergencia endpoints
   public async getAllEmergencias(req: Request, res: Response): Promise<void> {

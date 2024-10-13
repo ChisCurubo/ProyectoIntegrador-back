@@ -3,7 +3,7 @@ import HistoriaClinicaService from '../services/HistoriaClinica.service';
 import * as htmlPdf from 'html-pdf';
 import { join } from 'path';
 import { BadRequestError, NotFoundError, InternalServerError, DatabaseError } from '../middlewares/customErrors';
-import { HistoriaClinica } from 'Interfaces/HistoriaClinica';
+import { HistoriaClinica } from '../interface/historiaClinica';
 
 class HistoriaClinicaController {
   // Obtener todas las historias clínicas
