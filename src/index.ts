@@ -76,7 +76,7 @@ app.use('/api/admin', adminRouter);
 app.use('/api/auth', authRoutes);
 app.use('/apiSedes', apiSedes);
 
-app.use('/api/adminM', moduloAdminRoutes); 
+app.use('/api/', moduloAdminRoutes); 
 
 //Middelware para errores
 app.use(errorHandler);

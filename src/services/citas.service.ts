@@ -392,37 +392,6 @@ class CitasService {
   }
 
 
-
-
-
-
-
-  public async deleteCitaById(idCita: number): Promise<boolean> {
-    try {
-      await connection.beginTransaction(); // Iniciar la transacción
-
-      // Eliminar las emergencias relacionadas a la cita
-      await connection.query('DELETE FROM EMERGENCIAS_CITAS WHERE idCita = ?', [idCita]);
-
-      // Eliminar las facturas relacionadas a la cita
-      await connection.query('DELETE FROM FACTURA_ELECTRONICA WHERE idCita = ?', [idCita]);
-
-      // Eliminar la cita
-      const [result]: any = await connection.query('DELETE FROM CITAS WHERE idCita = ?', [idCita]);
-      if (result.affectedRows === 0) {
-        throw new NotFoundError('Cita no encontrada para eliminar');
-      }
-
-      await connection.commit(); // Confirmar la transacción
-      return true;
-    } catch (error: any) {
-      console.error('Error deleting cita by ID:', error);
-      await connection.rollback(); // Revertir cambios en caso de error
-      if (error instanceof NotFoundError) throw error;
-      throw new DatabaseError('Error en la base de datos al eliminar la cita por ID');
-    }
-  }
-
   public async viewSchedule(ccDoc: string, dia: Date): Promise<string[]> {
     try {
       // Asegúrate de formatear el valor de la fecha si es necesario
@@ -458,6 +427,31 @@ class CitasService {
     } catch (error) {
       console.error("Error al obtener horas disponibles:", error);
       throw new Error('Error al obtener el horario disponible');
+    }
+  }
+
+
+  public async deleteCitaById(idCita: number): Promise<boolean> {
+    const conn = await connection.getConnection();
+    try {
+      await conn.beginTransaction();
+
+      const [result]: any = await conn.query('DELETE FROM CITAS WHERE idCita = ?', [idCita]);
+      
+      if (result.affectedRows === 0) {
+        await conn.rollback();
+        throw new NotFoundError('Cita no encontrada para eliminar');
+      }
+
+      await conn.commit();
+      return true;
+    } catch (error: any) {
+      await conn.rollback();
+      console.error('Error deleting cita by ID:', error);
+      if (error instanceof NotFoundError) throw error;
+      throw new DatabaseError('Error en la base de datos al eliminar la cita por ID: ' + error.message);
+    } finally {
+      conn.release();
     }
   }
 

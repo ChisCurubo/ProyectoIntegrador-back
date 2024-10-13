@@ -9,7 +9,8 @@ import { ColillaPagoInformacion } from '../interface/colillaPago';
 import { FacturaInformacion } from '../interface/factura'; 
 import { EmergenciaDetalle} from '../interface/Emergencias';
 import {Citainformacion, CitaCompletaInformacion} from '../interface/Citas'
-
+import { ResumenFinanciero } from '../interface/ResumenFinanciero';
+import { CRMInformacion, CitasPorEspecialidad } from '../interface/CRMinformacion';
 
 class moduloAdmin {
 
@@ -329,9 +330,108 @@ class moduloAdmin {
 
 
     
+        }
 
-
+        public async obtenerResumenFinanciero(): Promise<ResumenFinanciero> {
+            try {
+                console.log('Iniciando obtenerResumenFinanciero');
+                const [results] = await connection.query<RowDataPacket[][]>(`
+                    CALL generar_resumen_financiero(MONTH(CURRENT_DATE()), YEAR(CURRENT_DATE()));
+                `);
         
+                console.log('Resultado completo de la consulta:', JSON.stringify(results, null, 2));
         
-}}
+                if (!results || !Array.isArray(results) || results.length === 0) {
+                    console.error('No se encontraron resultados');
+                    throw new Error('No se encontraron resultados');
+                }
+        
+                const firstResultSet = results[0];
+        
+                if (!Array.isArray(firstResultSet) || firstResultSet.length === 0) {
+                    console.error('El conjunto de resultados está vacío');
+                    throw new Error('El conjunto de resultados está vacío');
+                }
+        
+                const resumen = firstResultSet[0];
+                console.log('Resumen extraído:', JSON.stringify(resumen, null, 2));
+        
+                // Función auxiliar para parsear valores monetarios
+                const parseMonetaryValue = (value: string): number => {
+                    return parseFloat(value.replace(/[$,]/g, '')) || 0;
+                };
+        
+                // Función auxiliar para parsear porcentajes
+                const parsePercentage = (value: string): number => {
+                    return parseFloat(value.replace('%', '')) || 0;
+                };
+        
+                return {
+                    ingresosMensuales: parseMonetaryValue(resumen['Ingresos Mensuales']),
+                    gastosOperativos: parseMonetaryValue(resumen['Gastos Operativos']),
+                    margenOperativo: parsePercentage(resumen['Margen Operativo']),
+                    presupuestoRestante: parseMonetaryValue(resumen['Presupuesto Restante']),
+                };
+            } catch (error) {
+                console.error('Error al obtener el resumen financiero:', error);
+                throw new DatabaseError('Error al obtener el resumen financiero');
+            }
+        }
+        
+        public  async obtenerResumenCRM(): Promise<CRMInformacion> {
+            try {
+                const [result] = await connection.query<RowDataPacket[]>(`
+                    SELECT 
+                        CRM_TotalCitas() AS TotalCitas,
+                        CRM_CitasRealizadas() AS CitasRealizadas,
+                        CRM_DoctorMasSolicitado() AS DoctorMasSolicitado,
+                        CRM_UsuariosEnSistema() AS UsuariosEnSistema;
+                `);
+        
+                if (!result[0]) {
+                    throw new Error('No se obtuvieron resultados del resumen CRM');
+                }
+        
+                const resumen = result[0];
+                return {
+                    totalCitas: resumen.TotalCitas,
+                    citasRealizadas: resumen.CitasRealizadas,
+                    doctorMasSolicitado: resumen.DoctorMasSolicitado,
+                    usuariosEnSistema: resumen.UsuariosEnSistema,
+                };
+            } catch (error) {
+                console.error('Error al obtener el resumen CRM:', error);
+                throw new Error('Error al obtener el resumen CRM');
+            }
+        }
+        
+        // Obtener el número de citas por especialidad
+        public  async obtenerCitasPorEspecialidad(): Promise<CitasPorEspecialidad> {
+            try {
+                const [result] = await connection.query<RowDataPacket[]>(`
+                    SELECT 
+                        CRM_CitasPorEspecialidad('Medicina General') AS MedicinaGeneral,
+                        CRM_CitasPorEspecialidad('Emergencias') AS Emergencias,
+                        CRM_CitasPorEspecialidad('Laboratorios') AS Laboratorios,
+                        CRM_CitasPorEspecialidad('Imágenes Diagnósticas') AS ImagenesDiagnosticas;
+                `);
+        
+                if (!result[0]) {
+                    throw new Error('No se obtuvieron resultados de citas por especialidad');
+                }
+        
+                const especialidades = result[0];
+                return {
+                    medicinaGeneral: especialidades.MedicinaGeneral,
+                    emergencias: especialidades.Emergencias,
+                    laboratorios: especialidades.Laboratorios,
+                    imagenesDiagnosticas: especialidades.ImagenesDiagnosticas,
+                };
+            } catch (error) {
+                console.error('Error al obtener citas por especialidad:', error);
+                throw new Error('Error al obtener citas por especialidad');
+            }
+        }
+        
+}
 export default new moduloAdmin();

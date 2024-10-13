@@ -176,8 +176,41 @@ class ModuloAdminController {
 
 
 
+  
+
+}
+
+public static async obtenerResumenCRM(req: Request, res: Response): Promise<void> {
+    try {
+        const resumen = await moduloAdmin.obtenerResumenCRM();
+        res.json(resumen);
+    } catch (error) {
+        console.error('Error al obtener el resumen CRM:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+}
+
+public static async obtenerCitasPorEspecialidad(req: Request, res: Response): Promise<void> {
+    try {
+        const citasPorEspecialidad = await moduloAdmin.obtenerCitasPorEspecialidad();
+        res.json(citasPorEspecialidad);
+    } catch (error) {
+        console.error('Error al obtener citas por especialidad:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+}
+
+public static async obtenerResumenFinanciero(req: Request, res: Response): Promise<void> {
+    try {
+        const resumen = await moduloAdmin.obtenerResumenFinanciero();
+        res.json(resumen);
+    } catch (error) {
+        console.error('Error al obtener el resumen financiero:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+}
 
 
-}}
+}
 
 export default ModuloAdminController; // Exporta la clase directamente
