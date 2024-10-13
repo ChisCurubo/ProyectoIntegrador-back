@@ -1,7 +1,7 @@
 import connection from '../providers/database';
 import { NotFoundError, BadRequestError, DatabaseError } from '../middlewares/customErrors'; // Incluye DatabaseError
 import { CitaDetalladaParaAgendar } from '../Interfaces/CitasDetalladasparaagendar';
-import { Cita, CitaHorario } from '../interfaces/Citas';
+import { Cita, CitaHorario } from '../Interfaces/Citas';
 
 import { CitaConPacientesYDoctores } from '../Interfaces/CitaConPacientesYDoctores'; // Asegúrate de que la ruta sea correcta
 import { ReagendarCitadetallada } from '../Interfaces/ReagendarCitadetallada'; // A
