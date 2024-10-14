@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { generarToken, singUpSedes, iniciarSesion, validateSedes } from '../services/auth.service';
-import { Usuario } from '../Interfaces/Usuario';
+import { Usuario } from '../interface/User';
 import UsuarioService from '../services/usuario.service';
 import { BadRequestError, UnauthorizedError, InternalServerError } from '../middlewares/customErrors'; // Ajusta según tus errores personalizados
 
@@ -81,7 +81,7 @@ class AuthController {
             if (!aws) {
                 throw new UnauthorizedError('Acceso denegado. Por favor, inicie sesión nuevamente');
             }
-            return res.status(200).json('Validación exitosa');
+            return res.status(200).json(aws);
         } catch (error) {
             next(error);
         }

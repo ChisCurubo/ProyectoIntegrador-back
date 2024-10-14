@@ -1,10 +1,10 @@
-import { HojaVida } from 'Interfaces/HojaVida';
-import { ResultSetHeader, RowDataPacket } from 'mysql2';
-import connection from '../providers/database';
-import { BadRequestError, InternalServerError } from '../middlewares/customErrors';
-import path from 'path';
 import fs from 'fs';
-import { generatePDF } from '../utils/pdfGenerator';
+import { HojaVida } from '../interface/hojaVida';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
+import path from 'path';
+import { generatePDF } from '../libs/HojaVida/pdfGenerator';
+import { BadRequestError, InternalServerError } from '../middlewares/customErrors';
+import connection from '../providers/database';
 
 export class HojaVidaPacientesService {
     // Obtener todas las hojas de vida

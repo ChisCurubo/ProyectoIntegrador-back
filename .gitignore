@@ -400,4 +400,9 @@ FodyWeavers.xsd
 
 # function of program
 .env
-ngrok.exe
+
+# Ignorar el archivo yarn.lock
+yarn.lock
+
+# Ignorar la carpeta .idea
+.idea/

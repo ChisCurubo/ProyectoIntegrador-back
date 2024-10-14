@@ -1,13 +1,14 @@
-import { ResultSetHeader, RowDataPacket } from 'mysql2/promise';
-import { CitaCompletaInformacion, Citainformacion } from '../interface/Citas';
-import { DoctorInformacion } from '../interface/DoctorInformacion';
-import { EmergenciaDetalle } from '../interface/Emergencias';
-import { HojaVidaAdmin, HojaVidafront } from '../interface/HojaVida';
-import { ColillaPagoInformacion } from '../interface/colillaPago';
-import { FacturaInformacion } from '../interface/factura';
-import { OrdenMedicaInformacion } from '../interface/ordenMedica';
-import { DatabaseError } from '../middlewares/customErrors';
+import { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import connection from '../providers/database';
+import { ordenMedica } from '../interface/ordenMedica';
+import { DatabaseError, NotFoundError } from '../middlewares/customErrors';
+import { DoctorInformacion } from '../interface/DoctorInformacion';
+import { OrdenMedicaInformacion } from '../interface/ordenMedica'; 
+import { HojaVidafront, HojaVidaAdmin } from '../interface/hojaVida'; 
+import { ColillaPagoInformacion } from '../interface/colillaPago'; 
+import { FacturaInformacion } from '../interface/factura'; 
+import { EmergenciaDetalle} from '../interface/Emergencias';
+import {Citainformacion, CitaCompletaInformacion} from '../interface/Citas'
 
 
 class moduloAdmin {

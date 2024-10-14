@@ -6,6 +6,7 @@ import CitasService from '../services/citas.service';
 import AdminService from '../services/crudAdminitrador.service';
 import HistorialClinicoService from '../services/HistoriaClinica.service';
 import UsuarioService from '../services/usuarioEs.service';
+import { HojaVidafront } from '../interface/hojaVida';
 class AdminController {
   // Emergencia endpoints
   public async getAllEmergencias(req: Request, res: Response): Promise<void> {

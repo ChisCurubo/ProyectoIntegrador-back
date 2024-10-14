@@ -14,6 +14,7 @@ import {
     AutorizacionesMedicas
 } from '../interface/Auditorias'; // 
 import { CitaEmergencia, EmergenciaDetalle } from '../interface/Emergencias';
+
 class AdminService {
   // Crear un nuevo médico o paciente
   public async createUsuario(usuario: Usuario, rol: number): Promise<void> {

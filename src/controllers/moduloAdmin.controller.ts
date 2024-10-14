@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { HojaVidaAdmin, HojaVidafront } from '../interface/HojaVida'; // Asegúrate de que la ruta sea correcta
-import { OrdenMedicaInformacion } from '../interface/ordenMedica';
 import moduloAdmin from '../services/moduloAdmin.service';
+import { DoctorInformacion } from '../interface/DoctorInformacion';
+import { OrdenMedicaInformacion } from '../interface/ordenMedica';
+import { HojaVidafront, HojaVidaAdmin } from '../interface/hojaVida'; // Asegúrate de que la ruta sea correcta
 
 class ModuloAdminController {
 

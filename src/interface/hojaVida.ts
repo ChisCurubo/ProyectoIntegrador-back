@@ -1,4 +1,5 @@
 // Interface with all the attributes of the HojaVidaPaciente table
+// Interface with all the attributes of the HojaVidaPaciente table
 export interface HojaVida {
 
   idHoja_Vida?: number;
@@ -34,6 +35,7 @@ export interface HojaVida {
   fechaTerminacion?: string;
   motivoTerminacion?: string;
   observaciones?: string;
+  logo_url?: string;
 }
 // src/interfaces/HojaVida.ts
 export interface HojaVidafront {

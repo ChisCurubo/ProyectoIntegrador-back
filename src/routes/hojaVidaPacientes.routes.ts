@@ -1,3 +1,4 @@
+
 // src/routes/hojaVidaPacientes.routes.ts
 import express from 'express';
 import { HojaVidaPacientesController } from '../controllers/hojaVidaPacientes.controller';
