@@ -1,6 +1,7 @@
 import connection from '../providers/database';
-import { Cita } from '../interfaces/Citas';
-import { HistoriaClinica } from '../interfaces/historiaClinica';
+import { Cita } from '../interface/Citas';
+import { HistoriaClinica } from '../interface/historiaClinica';
+
 import { NotFoundError, DatabaseError, InternalServerError } from '../middlewares/customErrors';
 
 class HistoriaClinicaService {

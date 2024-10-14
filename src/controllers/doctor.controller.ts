@@ -99,6 +99,29 @@ class DoctorController {
       }
     }
   }
+
+  
+public static async obtenerOrdenesMedicasPorCedula(req: Request, res: Response): Promise<void> {
+  const { cedula } = req.params; // Obtener la cédula de los parámetros de la solicitud
+
+  try {
+    const ordenesMedicas = await DoctorService.buscarOrdenesMedicasInformacionPorCedula(cedula);
+
+    if (ordenesMedicas.length === 0) {
+      throw new NotFoundError('No se encontraron órdenes médicas para esta cédula.');
+    }
+
+    res.status(200).json(ordenesMedicas); // Devolver las órdenes médicas encontradas
+  } catch (error) {
+    if (error instanceof NotFoundError) {
+      res.status(404).json({ message: error.message }); // Manejo de error si no se encontraron órdenes
+    } else {
+      console.error('Error al obtener órdenes médicas por cédula:', error);
+      res.status(500).json({ message: 'Error en el servidor al obtener las órdenes médicas.' });
+    }
+  }
+}
+
 }
 
 export default DoctorController;

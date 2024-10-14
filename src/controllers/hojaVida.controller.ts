@@ -7,7 +7,9 @@ export class HojaVidaContoller {
   // Usar una función de flecha para mantener el contexto de 'this'
   public async handleActionEmpleado (req: Request, res: Response){
     const action = req.body.action;
+    console.log(action)
     const id = req.body.id ? parseInt(req.body.id, 10) : null;
+    console.log(id)
 
     try {
       switch (action) {
@@ -61,7 +63,10 @@ export class HojaVidaContoller {
 
   public async handleActionPaciente (req: Request, res: Response) {
     const action = req.body.action;
+    console.log(action)
     const id = req.body.id ? parseInt(req.body.id, 10) : null;
+    console.log(id)
+
 
     try {
       switch (action) {
@@ -71,6 +76,7 @@ export class HojaVidaContoller {
           break;
 
         case 'getById':
+        
           if (id === null) {
             return res.status(400).json({ error: 'ID is required for getById.' });
           }
