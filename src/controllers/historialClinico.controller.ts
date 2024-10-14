@@ -78,6 +78,21 @@ class HistoriaClinicaController {
     }
   }
 
+  public async getHistoriaClinicaByUsuarioCC(req: Request, res: Response, next: NextFunction) {
+    const idUsuarioCC = req.params.idUsuarioCC;
+  
+    try {
+      const historia = await HistoriaClinicaService.getHistoriaClinicaByUsuarioCC(idUsuarioCC);
+      if (!historia) {
+        return next(new NotFoundError('Historia clínica no encontrada para este paciente'));
+      }
+      res.status(200).json(historia);
+    } catch (error) {
+      next(new InternalServerError('Error al obtener la historia clínica'));
+    }
+  }
+  
+
   public async deleteHistoriaClinicaById(req: Request, res: Response, next: NextFunction) {
     const id = Number(req.params.id);
     if (isNaN(id)) {
@@ -121,5 +136,6 @@ class HistoriaClinicaController {
     }
   }
 }
+
 
 export default new HistoriaClinicaController();

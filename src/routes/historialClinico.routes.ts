@@ -24,4 +24,7 @@ router.get('/historial-clinico', HistoriaClinicaController.renderHistorialClinic
 // Mostrar la Orden Médica en HTML
 router.get('/orden-medica', HistoriaClinicaController.renderOrdenMedicaPage);
 
+router.get('/getHistorias-clinicas/usuario/:idUsuarioCC', HistoriaClinicaController.getHistoriaClinicaByUsuarioCC);
+
+
 export default router;
