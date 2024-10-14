@@ -12,7 +12,7 @@ import usuarioRoutes from './routes/usuario.routes';
 import authRoutes from './routes/auth.routes';
 import hojaVida from './routes/hojaVida.routes';
 import apiSedes from './routes/api.sedes.routes';
-
+import mercadopagoFrontRoutes from './routes/mercadopagofront.routes';  
 import moduloAdminRoutes from './routes/moduloadmin.routes'; // Ajusta la ruta según la ubicación de tus rutas
 
 // import middelware
@@ -75,7 +75,7 @@ app.use('/api/mercadopago', mercadopagoRoutes);
 app.use('/api/admin', adminRouter); 
 app.use('/api/auth', authRoutes);
 app.use('/apiSedes', apiSedes);
-
+app.use('/api/MercadoPagoFront', mercadopagoFrontRoutes);
 app.use('/api/', moduloAdminRoutes); 
 
 //Middelware para errores
