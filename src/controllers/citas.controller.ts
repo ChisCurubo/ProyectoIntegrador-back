@@ -2,9 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import CitasService from '../services/citas.service';
 import HistorialClinicoService from '../services/HistoriaClinica.service';
 import { BadRequestError, NotFoundError, InternalServerError } from '../middlewares/customErrors';
-import { CitaDetalladaParaAgendar } from '../Interfaces/CitasDetalladasparaagendar';
-import { CitaConPacientesYDoctores } from '../Interfaces/CitaConPacientesYDoctores';
-import { ReagendarCitadetallada } from '../Interfaces/ReagendarCitadetallada'; // A
+import {Cita, CitaDetalladaParaAgendar, ReagendarCitadetallada, CitaConPacientesYDoctores } from '../interface/Citas'
+
 export class CitasController {
 
   public async createCita(req: Request, res: Response, next: NextFunction): Promise<void> {

@@ -1,12 +1,11 @@
 import connection from '../providers/database';
 import bcrypt from 'bcrypt';
-import { Usuario } from '../Interfaces/Usuario';
-import { Cita } from '../Interfaces/citas1';
-import { Emergencia } from '../Interfaces/Emergencias1';
+import { Usuario } from '../interface/User';
+import { Cita1 } from '../interface/Citas';
+import { Emergencia } from '../interface/Emergencias';
 
-import { HojaVidafront } from '../Interfaces/HojaVidafront';
-import { EmergenciaDetalle} from '../Interfaces/EmergenciaDetalle';
-import { CitaEmergencia } from '../Interfaces/EmergenciaCita1';
+import { HojaVidafront } from '../interface/hojaVida';
+import { EmergenciaDetalle, CitaEmergencia} from '../interface/Emergencias';
 import { 
   AudColillaPago, 
   AudFacturaElectronica, 
@@ -15,7 +14,7 @@ import {
   AudUsuarios, 
   AudSedes, 
   AutorizacionesMedicas 
-} from '../Interfaces/Auditorias'; // 
+} from '../interface/Auditorias'; // 
 class AdminService {
   // Crear un nuevo médico o paciente
   public async createUsuario(usuario: Usuario, rol: number): Promise<void> {
@@ -157,11 +156,11 @@ public async createEmergencia(emergencia: CitaEmergencia): Promise<void> {
   }
 
   // Obtener todas las citas
-  public async getAllCitas(): Promise<Cita[]> {
+  public async getAllCitas(): Promise<Cita1[]> {
     try {
       const query = 'SELECT * FROM CITAS';
       const [rows]: any[] = await connection.query(query);
-      return rows as Cita[];
+      return rows as Cita1[];
     } catch (error) {
       console.error('Error al obtener citas:', error);
       throw new Error('Error al obtener citas');
@@ -169,11 +168,11 @@ public async createEmergencia(emergencia: CitaEmergencia): Promise<void> {
   }
 
   // Obtener una cita por ID
-  public async getCitaById(idCita: number): Promise<Cita | null> {
+  public async getCitaById(idCita: number): Promise<Cita1 | null> {
     try {
       const query = 'SELECT * FROM CITAS WHERE idCita = ?';
       const [rows]: any[] = await connection.query(query, [idCita]);
-      return rows.length > 0 ? (rows[0] as Cita) : null;
+      return rows.length > 0 ? (rows[0] as Cita1) : null;
     } catch (error) {
       console.error(`Error al obtener la cita con ID ${idCita}:`, error);
       throw new Error(`Error al obtener la cita con ID ${idCita}`);
@@ -181,7 +180,7 @@ public async createEmergencia(emergencia: CitaEmergencia): Promise<void> {
   }
 
  // Crear una nueva cita
-public async createCita(cita: Cita): Promise<void> {
+public async createCita(cita: Cita1): Promise<void> {
   try {
     const query = `INSERT INTO CITAS (dia, hora, estadoCita, idServicio, idHistoria_Medica, idUsuarioCC, idDocCC)
                    VALUES (?, ?, ?, ?, ?, ?, ?)`;
@@ -204,7 +203,7 @@ public async createCita(cita: Cita): Promise<void> {
 
 
 // Actualizar una cita por ID
-public async updateCitaById(idCita: number, cita: Cita): Promise<void> {
+public async updateCitaById(idCita: number, cita: Cita1): Promise<void> {
   try {
     const query = `UPDATE CITAS SET dia = ?, hora = ?, estadoCita = ?, idServicio = ?, idHistoria_Medica = ?, idUsuarioCC = ?, idDocCC = ? WHERE idCita = ?`;
     const params = [

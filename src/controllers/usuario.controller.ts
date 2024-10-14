@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import UsuarioService from '../services/usuario.service';
-import { Usuario } from '../Interfaces/Usuario';
+import { Usuario } from '../interface/User';
 import { InternalServerError, NotFoundError } from '../middlewares/customErrors';
 
 class UsuarioController {

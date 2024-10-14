@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import moduloAdmin from '../services/moduloAdmin.service';
-import { DoctorInformacion } from '../Interfaces/DoctorInformacion';
-import { OrdenMedicaInformacion } from '../Interfaces/OrdenMedicaInformacion';
-import { HojaVidafront } from '../Interfaces/HojaVidafront'; // Asegúrate de que la ruta sea correcta
+import { DoctorInformacion } from '../interface/DoctorInformacion';
+import { OrdenMedicaInformacion } from '../interface/ordenMedica';
+import { HojaVidafront, HojaVidaAdmin } from '../interface/hojaVida'; // Asegúrate de que la ruta sea correcta
 
-import { HojaVidaAdmin } from '../Interfaces/HojadevidaAdmin';
 class ModuloAdminController {
 
     // Buscar órdenes médicas por cédula
