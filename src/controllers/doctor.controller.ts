@@ -3,6 +3,45 @@ import DoctorService from '../services/doctor.service'; // Asegúrate de la ruta
 import {BadRequestError, NotFoundError, InternalServerError,DatabaseError} from '../middlewares/customErrors';
 
 class DoctorController {
+
+   // Encolar Paciente
+   public static async encolarPaciente(req: Request, res: Response): Promise<void> {
+    try {
+      const { idDoctor, paciente, prioridad } = req.body;
+      if (!paciente || prioridad === undefined) {
+        throw new BadRequestError('Paciente y prioridad son requeridos.');
+      }
+      await DoctorService.encolarPaciente(idDoctor, paciente, prioridad);
+      res.status(201).json({ mensaje: 'Paciente encolado con éxito' });
+    } catch (error) {
+      if (error instanceof DatabaseError) {
+        throw new DatabaseError('Error al encolar paciente');
+      } else {
+        console.error('Error al encolar paciente:', error);
+        throw new InternalServerError('Error al encolar paciente');
+      }
+    }
+  }
+
+  // Obtener Siguiente Paciente
+  public static async obtenerPacientePrioritario(req: Request, res: Response): Promise<void> {
+    try {
+      const { idDoctor } = req.params;
+      const paciente = await DoctorService.obtenerPacientePrioritario(idDoctor);
+      if (!paciente) {
+        throw new NotFoundError('No hay pacientes en la cola');
+      }
+      res.status(200).json(paciente);
+    } catch (error) {
+      if (error instanceof DatabaseError) {
+        throw new DatabaseError('Error al obtener paciente prioritario');
+      } else {
+        console.error('Error al obtener paciente prioritario:', error);
+        throw new InternalServerError('Error al obtener paciente prioritario');
+      }
+    }
+  }
+  
   // Crear Orden Médica
   public static async crearOrdenMedica(req: Request, res: Response): Promise<void> {
     try {

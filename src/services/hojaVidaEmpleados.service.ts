@@ -1,6 +1,11 @@
-import { HojaVida } from 'Interfaces/HojaVida';
+import { HojaVida } from '../Interfaces/HojaVida';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import connection from '../providers/database';
+import { generatePDF } from '../utils/pdfGenerator';
+import path from 'path';
+import fs from 'fs';
+import Handlebars from 'handlebars';
+import { BadRequestError, InternalServerError } from '../middlewares/customErrors';
 
 export class HojaVidaEmpleadosService {
     // Obtener todas las hojas de vida
@@ -101,5 +106,36 @@ export class HojaVidaEmpleadosService {
         throw new Error('Error deleting Hoja de Vida Paciente');
       }
     }
+
+    /**
+     * Genera el PDF de la Hoja de Vida de un empleado por ID.
+     * @param id ID de la Hoja de Vida.
+     * @returns Buffer del PDF generado.
+     */
+    async generarHojaVidaPDF(id: number): Promise<Buffer> {
+      try {
+          const hojaVida = await this.getById(id);
+
+          if (!hojaVida) {
+              throw new BadRequestError('Hoja de Vida no encontrada.');
+          }
+
+          // Ruta a la plantilla HTML
+          const templatePath = path.join(__dirname, '../templates/hojaVidaEmpleado.html');
+          const template = fs.readFileSync(templatePath, 'utf-8');
+
+          // Datos adicionales
+          const baseUrl = `${process.env.BASE_URL || 'http://localhost:3002'}`;
+          hojaVida.logo_url = `${baseUrl}/public/images/logo.jpeg`;
+
+          // Generar el PDF
+          const pdfBuffer = await generatePDF(template, hojaVida);
+
+          return pdfBuffer;
+      } catch (error) {
+          console.error('Error generando el PDF de Hoja de Vida:', error);
+          throw new InternalServerError('Error interno generando el PDF de Hoja de Vida');
+      }
   }
+}
   

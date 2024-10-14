@@ -400,3 +400,4 @@ FodyWeavers.xsd
 
 # function of program
 .env
+ngrok.exe

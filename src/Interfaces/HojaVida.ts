@@ -34,4 +34,5 @@ export interface HojaVida {
     fechaTerminacion?: string;
     motivoTerminacion?: string;
     observaciones?: string;
+    logo_url?: string;
   }

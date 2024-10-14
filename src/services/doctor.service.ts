@@ -1,10 +1,43 @@
 
-import { Pool, RowDataPacket } from 'mysql2/promise';
-import connection from '../providers/database';
+import { RowDataPacket } from 'mysql2/promise';
 import { ordenMedica } from '../Interfaces/ordenMedica';
 import { DatabaseError, NotFoundError } from '../middlewares/customErrors';
+import connection from '../providers/database';
+import { PriorityQueue } from './PriorityQueue';
 
 class DoctorService {
+
+  private colaPrioridad = new PriorityQueue();
+
+  // Encolar un paciente basándose en la prioridad
+  public async encolarPaciente(idDoctor: string, paciente: any, prioridad: number): Promise<void> {
+    try {
+      this.colaPrioridad.enqueue(paciente, prioridad);
+      console.log(`Paciente ${paciente.nombre} encolado con prioridad ${prioridad}`);
+    } catch (error) {
+      console.error('Error al encolar paciente:', error);
+      throw new DatabaseError('Error al encolar paciente');
+    }
+  }
+
+  // Obtener el siguiente paciente para el doctor
+  public async obtenerPacientePrioritario(idDoctor: string): Promise<any> {
+    try {
+      if (this.colaPrioridad.isEmpty()) {
+        throw new NotFoundError('No hay pacientes en la cola de prioridad');
+      }
+      const paciente = this.colaPrioridad.dequeue();
+      if (paciente && paciente.paciente) {
+        console.log(`Siguiente paciente a atender: ${paciente.paciente.nombre}`);
+      } else {
+        console.log('Paciente no encontrado');
+      }
+      return paciente?.paciente ?? null;
+    } catch (error) {
+      console.error('Error al obtener paciente prioritario:', error);
+      throw new DatabaseError('Error al obtener paciente prioritario');
+    }
+  }
 
   // Crear Orden Médica
   public async crearOrdenMedica(orden: ordenMedica): Promise<void> {
