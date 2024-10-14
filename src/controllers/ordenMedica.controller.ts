@@ -19,7 +19,7 @@ class OrdenMedicaController {
           const ordenGuardada = await OrdenMedicaService.createOrdenMedica(nuevaOrdenMedica);
     
           // Generar el PDF con los datos de la orden médica
-          const pdfBuffer = await this.generarPDF(ordenGuardada);
+          const pdfBuffer = await OrdenMedicaController.generarPDF(ordenGuardada);
     
           // Configurar la respuesta para enviar el PDF
           res.set({
@@ -35,7 +35,7 @@ class OrdenMedicaController {
       };
     
       // Método para generar el PDF usando html-pdf
-      private generarPDF(ordenMedica: ordenMedica): Promise<Buffer> {
+      private static generarPDF(ordenMedica: ordenMedica): Promise<Buffer> {
         return new Promise<Buffer>((resolve, reject) => {
           const fechaActual = new Date().toLocaleDateString('es-ES', {
             year: 'numeric',
@@ -190,24 +190,32 @@ class OrdenMedicaController {
             resolve(buffer);
           });
         });
-      }
+    }
 
-    // Método para obtener una orden médica por ID
     public async getOrdenMedica(req: Request, res: Response, next: NextFunction) {
       try {
         const { id } = req.params;
         const ordenMedica = await OrdenMedicaService.getOrdenMedica(id);
-        if (ordenMedica) {
-          res.status(200).json(ordenMedica);
-        } else {
+        
+        if (!ordenMedica) {
           throw new NotFoundError('Orden Médica no encontrada');
         }
+    
+        const pdfBuffer = await OrdenMedicaController.generarPDF(ordenMedica);
+    
+        res.set({
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': `attachment; filename="orden_medica_${id}.pdf"`,
+          'Content-Length': pdfBuffer.length,
+        });
+    
+        res.send(pdfBuffer);
       } catch (error) {
+        console.error('Error al obtener la orden médica:', error);
         next(error);
       }
     }
-  
-    // Método para actualizar una orden médica
+          
     public async updateOrdenMedica(req: Request, res: Response, next: NextFunction) {
       try {
         const { id } = req.params;
@@ -218,6 +226,7 @@ class OrdenMedicaController {
           throw new NotFoundError('Orden Médica no encontrada');
         }
       } catch (error) {
+        console.error('Error al actualizar la orden médica:', error);
         next(error);
       }
     }

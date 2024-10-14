@@ -40,15 +40,18 @@ class HistoriaClinicaService {
   public async getHistoriaClinicaById(idHistoria: number): Promise<HistoriaClinica | null> {
     const query = 'SELECT * FROM HISTORIA_MEDICA WHERE idHistoria_Medica = ?';
     try {
-      const [rows]: any = await connection.query(query, [idHistoria]); // Desestructura para obtener solo las filas
+      const [rows]: any = await connection.query(query, [idHistoria]);
       if (rows.length === 0) {
-        throw new NotFoundError('No se encontró la historia clínica');
+        console.log(`No se encontró historia clínica con ID: ${idHistoria}`);
+        return null;
       }
-      return rows[0]; // Retorna la primera fila, que es la historia clínica
+      return rows[0] as HistoriaClinica;
     } catch (error) {
-      throw new DatabaseError('Error al obtener la historia clínica');
+      console.error('Error al obtener la historia clínica:', error);
+      throw new DatabaseError(`Error al obtener la historia clínica: ${(error as Error).message}`);
     }
   }
+  
 
 
   // Actualizar una historia clínica por ID

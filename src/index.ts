@@ -12,6 +12,7 @@ import usuarioRoutes from './routes/usuario.routes';
 import authRoutes from './routes/auth.routes';
 import hojaVida from './routes/hojaVida.routes';
 import apiSedes from './routes/api.sedes.routes';
+import ordenMedicaRoutes from './routes/ordenMedica.routes';
 
 import moduloAdminRoutes from './routes/moduloadmin.routes'; // Ajusta la ruta según la ubicación de tus rutas
 
@@ -64,6 +65,7 @@ app.use('/api/hojaVida', hojaVida);
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/usuariosE', usuarioRoutesEs);
 app.use('/api/historia-clinica', historiaClinicaRoutes);
+app.use('/api/ordenes-medicas', ordenMedicaRoutes)
 app.use('/api/doctor', DoctorRoutes);
 app.use('/api/patient', pacientesRoutes);
 
