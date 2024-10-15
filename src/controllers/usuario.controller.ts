@@ -27,7 +27,6 @@ class UsuarioController {
       }
     } catch (error) {
       console.error(`Error al obtener el usuario con CC ${CC}:`, error);
-      throw new InternalServerError('Error al obtener el usuario');
     }
   }
 

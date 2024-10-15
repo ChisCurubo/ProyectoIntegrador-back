@@ -11,7 +11,7 @@ router.get('/pacientesPrueba/:idDoctor', DoctorController.pacientesAsignadosAlDo
 router.put('/orden-medica/:idOrden_Medica', DoctorController.editarOrdenMedicaPorId);
 
 // Ver Pacientes que Atenderá
-router.get('/pacientes/:idDoctor', DoctorController.verPacientesQueAtendera);
+router.get('/pacientes/:idDoctor', DoctorController.verPacientesQueAtendera); 
 
 // Obtener una historia clínica por ID
 router.get('/historia-clinica/:idHistoria_Medica', DoctorController.obtenerOrdenMedicaPorIdCita);
