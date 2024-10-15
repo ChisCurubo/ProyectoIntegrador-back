@@ -9,6 +9,7 @@ import { ColillaPagoInformacion } from '../interface/colillaPago';
 import { FacturaInformacion } from '../interface/factura'; 
 import { EmergenciaDetalle} from '../interface/Emergencias';
 import {Citainformacion, CitaCompletaInformacion} from '../interface/Citas'
+import { ResumenFinanciero, CRMInformacion, CitasPorEspecialidad } from '../interface/admin';
 
 
 class moduloAdmin {
