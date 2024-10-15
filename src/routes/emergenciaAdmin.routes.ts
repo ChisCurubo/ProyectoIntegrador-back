@@ -1,15 +1,26 @@
 import express from 'express';
-import AdminController from '../controllers/crudAdminitrador.controller';
+import AdminController from '../controllers/emergenciaAdmin.contollerr';
 
 const router = express.Router();
 
 // Emergencia routes
 router.get('/emergencias', AdminController.getAllEmergencias);
-router.get('/emergencias/:id', AdminController.getEmergenciaById);
+router.get('/emergencias/:id', AdminController.getEmergencia1ById);
 router.post('/emergencias', AdminController.createEmergencia);
 router.delete('/emergencias/:id', AdminController.deleteEmergenciaById);
 
 
+router.get('/Gtemergencias/:idEmergencia', AdminController.getEmergenciaById); // Obtener emergencia por ID
+router.put('/Upemergencias/:idEmergencia', AdminController.updateEmergencia); // Actualizar emergencia por ID
+router.patch('/Paemergencias/:idEmergencia/estado', AdminController.updateEstadoEmergencia); // Actualizar estado de emergencia
+router.get('/emergencias-prioridad', AdminController.getEmergenciasPorPrioridad); // Obtener emergencias por prioridad
+
+// Rutas para las emergencias-citas
+router.post('/Psemergencias-citas', AdminController.createEmergenciaCita); // Crear una nueva emergencia-cita
+router.get('/Gtemergencias-citas/:idEmergenciaCita', AdminController.getEmergenciaCitaById); // Obtener emergencia-cita por ID
+router.get('/Gtemergencias-citas', AdminController.getAllEmergenciasCitas); // Obtener todas las emergencias-citas
+router.put('/Ptemergencias-citas/:idEmergenciaCita', AdminController.updateEmergenciaCita); // Actualizar emergencia-cita por ID
+router.delete('/Demergencias-citas/:idEmergenciaCita', AdminController.deleteEmergenciaCita); // Eliminar emergencia-cita por ID
 
 
 
