@@ -7,7 +7,7 @@ dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 import helmet from 'helmet';
 import citas from './routes/citas.routes';
 import facturacion from './routes/facturacion.routes';
-import adminRouter from '../src/routes/crudAdministrador.routes'; // 
+import emergencia from './routes/emergenciaAdmin.routes'; // 
 import usuarioRoutes from './routes/usuario.routes'; 
 import authRoutes from './routes/auth.routes';
 import hojaVida from './routes/hojaVida.routes';
@@ -72,11 +72,13 @@ app.use('/api/colillaPago', colillaPagoRoutes);
 app.use('/api/ordenes-medicas', ordenMedica); 
 app.use('/api/mercadopago', mercadopagoRoutes);
 
-app.use('/api/admin', adminRouter); 
+
+app.use('/api/emergencia', emergencia)
+app.use('/api/admin', emergencia); 
 app.use('/api/auth', authRoutes);
 app.use('/apiSedes', apiSedes);
 
-app.use('/api/adminM', moduloAdminRoutes); 
+app.use('/api', moduloAdminRoutes); 
 
 //Middelware para errores
 app.use(errorHandler);
