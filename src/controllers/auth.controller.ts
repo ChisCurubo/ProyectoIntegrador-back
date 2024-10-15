@@ -81,7 +81,7 @@ class AuthController {
             if (!aws) {
                 throw new UnauthorizedError('Acceso denegado. Por favor, inicie sesión nuevamente');
             }
-            return res.status(200).json('Validación exitosa');
+            return res.status(200).json(aws);
         } catch (error) {
             next(error);
         }

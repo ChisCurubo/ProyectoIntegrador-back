@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import moduloAdmin from '../services/moduloAdmin.service';
-import { DoctorInformacion } from '../interface/DoctorInformacion';
+import { DoctorInformacion } from '../interface/doctor';
 import { OrdenMedicaInformacion } from '../interface/ordenMedica';
 import { HojaVidafront, HojaVidaAdmin } from '../interface/hojaVida'; // Asegúrate de que la ruta sea correcta
 
