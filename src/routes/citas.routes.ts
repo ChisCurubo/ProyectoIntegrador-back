@@ -21,7 +21,7 @@ router.put('/updateCita-all', citasController.updateCitasAll);
 router.delete('/deleteCita/:idCita/:idUsuario', citasController.deleteCitas);
 
 // Seleccionar citas por idUsuario (con POST)
-router.get('/getCitaUser', citasController.getCitasUser);
+router.get('/getCitaUser/:idUsuario', citasController.getCitasUser);
 
 // Seleccionar citas solo por médico (con POST)
 router.get('/getCitaDoc/:idDoc', citasController.getCitasDoc);

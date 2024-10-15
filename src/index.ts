@@ -5,7 +5,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
-dotenv.config({ path: path.join(__dirname, '../.env') });
+dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 
 // Importar rutas
 import citas from './routes/citas.routes';
@@ -45,13 +45,13 @@ app.use(express.static(path.join(__dirname, '../public')));
 // Middleware para registrar el cuerpo de la solicitud y respuesta
 app.use((req: Request, res: Response, next: NextFunction) => {
   console.log('Request Body:', req.body);
-  
+
   const originalSend = res.send.bind(res);
   res.send = (body: any) => {
     console.log('Response Body:', body);
     return originalSend(body);
   };
-  
+
   next();
 });
 

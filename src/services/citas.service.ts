@@ -93,6 +93,7 @@ class CitasService {
     }
   
     public async getCitasByUser(idUsuario: number): Promise<any[]> {
+      console.log('idUsuario:', idUsuario);
       try {
         const query = 'SELECT hora, dia, idDocCC, idCita FROM CITAS WHERE idUsuarioCC = ?';
         const [rows]: any = await connection.query(query, [idUsuario]);

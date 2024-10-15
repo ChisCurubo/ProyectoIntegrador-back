@@ -95,7 +95,8 @@ export class CitasController {
 
   public async getCitasUser(req: Request, res: Response, next: NextFunction): Promise<void> {
     const idUsuario = req.params.idUsuario;
-    const id = Number(idUsuario) 
+    console.log(idUsuario);
+    const id = Number(idUsuario);
     try {
       const citas = await CitasService.getCitasByUser(id);
       if (citas.length > 0) {

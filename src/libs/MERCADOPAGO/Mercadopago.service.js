@@ -1,7 +1,7 @@
 import mercadopago from "mercadopago";
 import { ColillaPagoService } from '../../services/colillaPago.service'; // Ajusta la importación según tu estructura
 
-class MercadoPagoService {
+export class MercadoPagoService {
     constructor() {
         // Configura el SDK de MercadoPago
         mercadopago.configure({
