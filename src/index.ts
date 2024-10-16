@@ -10,7 +10,6 @@ import facturacion from './routes/facturacion.routes';
 import adminRouter from '../src/routes/crudAdministrador.routes'; // 
 import usuarioRoutes from './routes/usuario.routes'; 
 import authRoutes from './routes/auth.routes';
-import hojaVida from './routes/hojaVidaEmpleados.routes';
 import apiSedes from './routes/api.sedes.routes';
 
 import moduloAdminRoutes from './routes/moduloadmin.routes'; // Ajusta la ruta según la ubicación de tus rutas
@@ -26,13 +25,11 @@ import DoctorRoutes from './routes/doctor.routes';
 import pacientesRoutes from './routes/pacientes.routes'; 
 import colillaPagoRoutes from './routes/colilladePago.routes';
 import ordenMedicaRoutes from './routes/ordenMedica.routes';
-import emergenciaRoutes from './routes/emergencia.routes'; 
 import mercadopagoRoutes from './routes/mercadopago.routes';
 import hojaVidaPacientesRoutes from './routes/hojaVidaPacientes.routes';
 import hojaVidaEmpleadosRoutes from './routes/hojaVidaEmpleados.routes';
 import ordenMedica from './routes/ordenMedica.routes';
 
-import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 const port = process.env.PORT || 3002;
@@ -74,7 +71,6 @@ app.use('/api/pacientes', pacientesRoutes);
 app.use('/api/colilla/PAGO', colillaPagoRoutes); 
 app.use('/api/mercadopago', mercadopagoRoutes);
 app.use('/api/ordenes-medicas', ordenMedicaRoutes);
-app.use('/api/emergencia', emergenciaRoutes);
 app.use('/api/hoja-vida-pacientes', hojaVidaPacientesRoutes);
 app.use('/api/hoja-vida-empleados', hojaVidaEmpleadosRoutes);
 app.use('/apiSedes', apiSedes);

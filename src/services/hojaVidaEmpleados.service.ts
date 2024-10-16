@@ -1,12 +1,16 @@
 import fs from 'fs';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import path from 'path';
-import { HojaVida } from '../interface/HojaVida';
+import { HojaVida } from '../interface/hojaVida';
 import { generatePDF } from '../libs/HojaVida/pdfGenerator';
 import { BadRequestError, InternalServerError } from '../middlewares/customErrors';
 import connection from '../providers/database';
 
-export class HojaVidaService {
+export class HojaVidaEmpleadosService {
+
+  // Crear constructor vacio
+    constructor() {}
+
     // Obtener todas las hojas de vida
     public async getAllEmployer(): Promise<HojaVida[]> {
       try {
@@ -227,5 +231,5 @@ export class HojaVidaService {
       }
   }
 }
-  export default new HojaVidaService();
+  export default new HojaVidaEmpleadosService();
   

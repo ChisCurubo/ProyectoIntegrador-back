@@ -152,6 +152,7 @@ export class CitasController {
   }
 
   public async getCitasId(req: Request, res: Response, next: NextFunction): Promise<void> {
+    console.log("hola")
     const idCita = req.params;
     const id = Number(idCita)
     try {
