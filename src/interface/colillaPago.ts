@@ -38,3 +38,22 @@ export interface ColillaPagoInformacion {
   IDColilla: number; // O el tipo que corresponda
   Estado: string;
 }
+
+// Exportamos la interfaz ColillaPago
+export interface MercadopagoFront {
+  Nombre: string;
+  CC: string;
+  'Fecha Colilla': Date;
+  'ID Colilla': number;
+  'Nombre del Servicio': string;
+  Valor: number;
+}
+
+// interface/colillaPago.ts
+export interface ColillaPagoEstado {
+  ID_Colilla: number;
+  Estado_Anterior: number;
+  Nuevo_Estado: number;
+  Descripcion_Anterior: string;
+  Nueva_Descripcion: string;
+}

@@ -7,11 +7,13 @@ dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 import helmet from 'helmet';
 import citas from './routes/citas.routes';
 import facturacion from './routes/facturacion.routes';
-import adminRouter from '../src/routes/crudAdministrador.routes'; // 
+import emergencia from './routes/emergenciaAdmin.routes'; // 
 import usuarioRoutes from './routes/usuario.routes'; 
 import authRoutes from './routes/auth.routes';
 import apiSedes from './routes/api.sedes.routes';
+import ordenMedicaRoutes from './routes/ordenMedica.routes';
 
+import mercadopagoFrontRoutes from './routes/mercadopagofront.routes';  
 import moduloAdminRoutes from './routes/moduloadmin.routes'; // Ajusta la ruta según la ubicación de tus rutas
 
 // import middelware
@@ -24,7 +26,6 @@ import historiaClinicaRoutes from './routes/historialClinico.routes';
 import DoctorRoutes from './routes/doctor.routes';
 import pacientesRoutes from './routes/pacientes.routes'; 
 import colillaPagoRoutes from './routes/colilladePago.routes';
-import ordenMedicaRoutes from './routes/ordenMedica.routes';
 import mercadopagoRoutes from './routes/mercadopago.routes';
 import hojaVidaPacientesRoutes from './routes/hojaVidaPacientes.routes';
 import hojaVidaEmpleadosRoutes from './routes/hojaVidaEmpleados.routes';
@@ -79,6 +80,7 @@ app.use('/apiSedes', apiSedes);
 app.get('/api/hoja-vida-pacientes/test', (req: Request, res: Response) => {
     res.send('Ruta de prueba funcionando correctamente.');
 });
+app.use('/api/ordenes-medicas', ordenMedicaRoutes)
 app.use('/api/doctor', DoctorRoutes);
 app.use('/api/patient', pacientesRoutes);
 
@@ -86,11 +88,13 @@ app.use('/api/colillaPago', colillaPagoRoutes);
 app.use('/api/ordenes-medicas', ordenMedica); 
 app.use('/api/mercadopago', mercadopagoRoutes);
 
-app.use('/api/admin', adminRouter); 
+
+app.use('/api/emergencia', emergencia)
+app.use('/api/admin', emergencia); 
 app.use('/api/auth', authRoutes);
 app.use('/apiSedes', apiSedes);
-
-app.use('/api/adminM', moduloAdminRoutes); 
+app.use('/api/MercadoPagoFront', mercadopagoFrontRoutes);
+app.use('/api/', moduloAdminRoutes); 
 
 // Manejadores de Errores
 app.use(errorHandler);

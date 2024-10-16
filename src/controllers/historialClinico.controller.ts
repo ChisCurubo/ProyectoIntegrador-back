@@ -16,7 +16,7 @@ class HistoriaClinicaController {
     }
   }
 
-  // Obtener una historia clínica por ID
+  // Obtener una historia clínica por ID y generar PDF
   public async getHistoriaClinicaById(req: Request, res: Response, next: NextFunction) {
     const id = Number(req.params.id);
     if (isNaN(id)) {
@@ -28,8 +28,23 @@ class HistoriaClinicaController {
       if (!historia) {
         return next(new NotFoundError('Historia clínica no encontrada'));
       }
-      res.status(200).json(historia);
+      
+      try {
+        const pdfBuffer = await HistoriaClinicaController.generarPDF(historia);
+
+        res.set({
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': 'attachment; filename="historia_clinica.pdf"',
+          'Content-Length': pdfBuffer.length,
+        });
+
+        res.send(pdfBuffer);
+      } catch (pdfError) {
+        console.error('Error al generar PDF:', pdfError);
+        next(new InternalServerError('Error al generar el PDF de la historia clínica'));
+      }
     } catch (error) {
+      console.error('Error al obtener la historia clínica:', error);
       next(new InternalServerError('Error al obtener la historia clínica desde la base de datos'));
     }
   }
@@ -48,7 +63,7 @@ class HistoriaClinicaController {
       const nuevaHistoria = await HistoriaClinicaService.createHistorialClinico(historiaClinica);
 
       // Generar PDF con los datos de la historia clínica
-      const pdfBuffer = await this.generarPDF(nuevaHistoria);
+      const pdfBuffer = await HistoriaClinicaController.generarPDF(nuevaHistoria);
 
       // Devolver el PDF generado como respuesta
       res.set({
@@ -63,10 +78,10 @@ class HistoriaClinicaController {
     }
   }
 
-  // Método para generar el PDF usando html-pdf
-  private generarPDF(historiaClinica: HistoriaClinica): Promise<Buffer> {
+  // Método estático para generar el PDF
+  private static generarPDF(historiaClinica: HistoriaClinica): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
-      // Contenido HTML del PDF
+      // Contenido HTML del PDF con los nuevos datos
       const html = `
         <!DOCTYPE html>
         <html lang="es">
@@ -152,6 +167,22 @@ class HistoriaClinicaController {
                   <td>Discapacidad</td>
                   <td>${historiaClinica.discapacidad || 'N/A'}</td>
                 </tr>
+                <tr>
+                  <td>Fecha de Revisión</td>
+                  <td>${historiaClinica.fecha_Rev || 'N/A'}</td>
+                </tr>
+                <tr>
+                  <td>Hora de Revisión</td>
+                  <td>${historiaClinica.hora_Rev || 'N/A'}</td>
+                </tr>
+                <tr>
+                  <td>Motivo</td>
+                  <td>${historiaClinica.motivo || 'N/A'}</td>
+                </tr>
+                <tr>
+                  <td>Descripción del Motivo</td>
+                  <td>${historiaClinica.descripcion_Motivo || 'N/A'}</td>
+                </tr>
               </table>
             </div>
             <div class="section">
@@ -179,8 +210,16 @@ class HistoriaClinicaController {
                   <td>${historiaClinica.presion_Sangre || 'N/A'}</td>
                 </tr>
                 <tr>
+                  <td>Presión Arterial Promedio</td>
+                  <td>${historiaClinica.presion_Sangre_Prom || 'N/A'}</td>
+                </tr>
+                <tr>
                   <td>Pulso</td>
                   <td>${historiaClinica.pulso || 'N/A'}</td>
+                </tr>
+                <tr>
+                  <td>Saturación</td>
+                  <td>${historiaClinica.saturacion || 'N/A'}</td>
                 </tr>
                 <tr>
                   <td>Altura</td>
@@ -211,39 +250,42 @@ class HistoriaClinicaController {
                   <td>Vacunas</td>
                   <td>${historiaClinica.vacunas || 'N/A'}</td>
                 </tr>
+                <tr>
+                  <td>Antecedentes Familiares</td>
+                  <td>${historiaClinica.familiares || 'N/A'}</td>
+                </tr>
               </table>
             </div>
             <div class="signature-section">
               <h2>Firma del Médico</h2>
-              <span style="border-top: 2px solid #333; display: inline-block; width: 200px;"></span>
+              <span style="border-top: 2px solid #333; display: inline-block; width: 200px;"></span><br>
+              ${historiaClinica.firma_digital_doctor || 'N/A'}
             </div>
           </div>
         </body>
         </html>`;
-  
-        // Configuración del PDF
-        const options = {
-          format: 'A4',
-          orientation: 'portrait',
-          border: {
-            top: '10mm',
-            right: '10mm',
-            bottom: '10mm',
-            left: '10mm',
-          },
-        };
-  
-        // Generar el PDF
-        htmlPdf.create(html, options).toBuffer((err: Error | null, buffer: Buffer) => {
-          if (err) {
-            console.error('Error al generar el PDF:', err);
-            return reject(err);  // Manejar el error al generar el PDF
-          }
-          resolve(buffer);
-        });
+
+      // Configuración del PDF
+      const options = {
+        format: 'A4',
+        orientation: 'portrait',
+        border: {
+          top: '10mm',
+          right: '10mm',
+          bottom: '10mm',
+          left: '10mm',
+        },
+      };
+
+      // Generar el PDF
+      htmlPdf.create(html, options).toBuffer((err: Error | null, buffer: Buffer) => {
+        if (err) {
+          return reject(err); // Manejar el error al generar el PDF
+        }
+        resolve(buffer);
       });
-    }
-    
+    });
+  }  
 
   // Actualizar una historia clínica por ID
   public async updateHistoriaClinicaById(req: Request, res: Response, next: NextFunction) {
@@ -268,6 +310,21 @@ class HistoriaClinicaController {
     }
   }
 
+  public async getHistoriaClinicaByUsuarioCC(req: Request, res: Response, next: NextFunction) {
+    const idUsuarioCC = req.params.idUsuarioCC;
+  
+    try {
+      const historia = await HistoriaClinicaService.getHistoriaClinicaByUsuarioCC(idUsuarioCC);
+      if (!historia) {
+        return next(new NotFoundError('Historia clínica no encontrada para este paciente'));
+      }
+      res.status(200).json(historia);
+    } catch (error) {
+      next(new InternalServerError('Error al obtener la historia clínica'));
+    }
+  }
+  
+
   // Eliminar una historia clínica por ID
   public async deleteHistoriaClinicaById(req: Request, res: Response, next: NextFunction) {
     const id = Number(req.params.id);
@@ -285,6 +342,7 @@ class HistoriaClinicaController {
       next(new InternalServerError('Error al eliminar la historia clínica'));
     }
   }
+  
 }
 
 export default new HistoriaClinicaController();

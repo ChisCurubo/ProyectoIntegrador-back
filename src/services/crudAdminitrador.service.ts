@@ -103,7 +103,7 @@ class AdminService {
   // Actualizar una emergencia por ID
 public async updateEmergenciaById(idEmergencia_Cita: number, emergencia: CitaEmergencia): Promise<void> {
     try {
-      const query = `UPDATE EMERGENCIAS SET idEmergencia = ?, idCita = ?, idServicio = ?, estatusEmergencia_Cita = ? WHERE idEmergencia_Cita = ?`;
+      const query = `UPDATE EMERGENCIAS_CITAS SET idEmergencia = ?, idCita = ?, idServicio = ?, estatusEmergencia_Cita = ? WHERE idEmergencia_Cita = ?`;
       const params = [
         emergencia.idEmergencia,
         emergencia.idCita,
@@ -126,7 +126,7 @@ public async updateEmergenciaById(idEmergencia_Cita: number, emergencia: CitaEme
   // Crear una nueva emergencia
 public async createEmergencia(emergencia: CitaEmergencia): Promise<void> {
     try {
-      const query = `INSERT INTO EMERGENCIAS (idEmergencia, idCita, idServicio, estatusEmergencia_Cita)
+      const query = `INSERT INTO EMERGENCIAS_CITAS (idEmergencia, idCita, idServicio, estatusEmergencia_Cita)
                      VALUES (?, ?, ?, ?)`;
       const params = [
         emergencia.idEmergencia,
@@ -146,7 +146,7 @@ public async createEmergencia(emergencia: CitaEmergencia): Promise<void> {
   // Eliminar una emergencia por ID
   public async deleteEmergenciaById(idEmergencia: number): Promise<void> {
     try {
-      const query = 'DELETE FROM EMERGENCIAS WHERE idEmergencia = ?';
+      const query = 'DELETE FROM EMERGENCIAS_CITAS WHERE idEmergencia = ?';
       await connection.query(query, [idEmergencia]);
       console.log(`Emergencia con ID ${idEmergencia} eliminada exitosamente.`);
     } catch (error) {

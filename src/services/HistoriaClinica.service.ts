@@ -1,4 +1,3 @@
-
 import connection from '../providers/database';
 import { Cita } from '../interface/Citas';
 import { HistoriaClinica } from '../interface/historiaClinica';
@@ -6,6 +5,26 @@ import { HistoriaClinica } from '../interface/historiaClinica';
 import { NotFoundError, DatabaseError, InternalServerError } from '../middlewares/customErrors';
 
 class HistoriaClinicaService {
+
+  public async getHistoriaClinicaByUsuarioCC(idUsuarioCC: string): Promise<HistoriaClinica | null> {
+    const query = `
+      SELECT HM.* FROM HISTORIA_MEDICA HM
+      INNER JOIN CITAS C ON C.idHistoria_Medica = HM.idHistoria_Medica
+      WHERE C.idUsuarioCC = ?
+      ORDER BY C.dia DESC, C.hora DESC LIMIT 1;
+    `;
+  
+    try {
+      const [rows]: [any[], any] = await connection.query(query, [idUsuarioCC]);
+      if (rows.length === 0) {
+        throw new NotFoundError('No se encontró la historia clínica para el paciente');
+      }
+      return rows[0]; // Devuelve la primera fila, que es la historia clínica
+    } catch (error) {
+      throw new DatabaseError('Error al obtener la historia clínica para el paciente');
+    }
+  }
+  
   // Crear una nueva historia clínica
   public async createHistorialClinico(historiaClinica: HistoriaClinica): Promise<HistoriaClinica> {
     const query = `
@@ -40,16 +59,18 @@ class HistoriaClinicaService {
   public async getHistoriaClinicaById(idHistoria: number): Promise<HistoriaClinica | null> {
     const query = 'SELECT * FROM HISTORIA_MEDICA WHERE idHistoria_Medica = ?';
     try {
-      const [rows]: any = await connection.query(query, [idHistoria]); // Desestructura para obtener solo las filas
+      const [rows]: any = await connection.query(query, [idHistoria]);
       if (rows.length === 0) {
-        throw new NotFoundError('No se encontró la historia clínica');
+        console.log(`No se encontró historia clínica con ID: ${idHistoria}`);
+        return null;
       }
-      return rows[0]; // Retorna la primera fila, que es la historia clínica
+      return rows[0] as HistoriaClinica;
     } catch (error) {
-      throw new DatabaseError('Error al obtener la historia clínica');
+      console.error('Error al obtener la historia clínica:', error);
+      throw new DatabaseError(`Error al obtener la historia clínica: ${(error as Error).message}`);
     }
   }
-
+  
 
   // Actualizar una historia clínica por ID
   public async updateHistoriaClinicaById(idHistoria: number, historiaClinica: HistoriaClinica): Promise<HistoriaClinica | null> {
@@ -82,7 +103,6 @@ class HistoriaClinicaService {
     }
   }
 
-
   public async deleteHistoriaClinicaById(idHistoria: number): Promise<boolean> {
     const query = 'DELETE FROM HISTORIA_MEDICA WHERE idHistoria_Medica = ?';
     try {
@@ -91,14 +111,14 @@ class HistoriaClinicaService {
       // Verifica si alguna fila fue afectada (lo que indica que la historia clínica fue eliminada)
       if (result.affectedRows === 0) {
         throw new NotFoundError('No se encontró la historia clínica para eliminar');
-      }else{
+      } else {
         return result.affectedRows;
       }
     } catch (error) {
       throw new DatabaseError('Error al eliminar la historia clínica');
     }
   }
-  
+
   // Obtener todas las historias clínicas
   public async getHistoriasClinicas(): Promise<HistoriaClinica[]> {
     const query = 'SELECT * FROM HISTORIA_MEDICA';
@@ -150,7 +170,7 @@ class HistoriaClinicaService {
       throw new InternalServerError('Error interno al duplicar el historial clínico');
     }
   }
+  
 }
-
 
 export default new HistoriaClinicaService();
