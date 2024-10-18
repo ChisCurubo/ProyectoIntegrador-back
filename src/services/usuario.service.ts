@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { Usuario } from '../interface/User';
+import { UserQueue, Usuario } from '../interface/User';
 import connection from '../providers/database';
 import { BadRequestError, NotFoundError, DatabaseError, ConflictError } from '../middlewares/customErrors';
 
@@ -32,6 +32,21 @@ public async getUsersbyCC(CC: string): Promise<Usuario | null> {
     }
 }
 
+public async getUsersbyCCUserQue(CC: string): Promise<UserQueue | null> {
+  try {
+      const query = 'SELECT * FROM USUARIOS WHERE CC = ?';
+      const [rows]: any[] = await connection.query(query, [CC]);
+
+      if (rows.length === 0) {
+          return null;  // Usuario no encontrado
+      }
+
+      return rows[0] as UserQueue;
+  } catch (error) {
+      console.error(`Error al obtener el usuario con CC ${CC}:`, error);
+      throw new DatabaseError('Error al obtener el usuario');
+  }
+} 
 
   // Crear un nuevo usuario completo
   public async createUserCompleate(usuario: Usuario): Promise<void> {

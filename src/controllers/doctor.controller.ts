@@ -1,8 +1,12 @@
 import { Request, Response } from 'express';
 import DoctorService from '../services/doctor.service'; // Asegúrate de la ruta correcta
-import {BadRequestError, NotFoundError, InternalServerError,DatabaseError} from '../middlewares/customErrors';
+import { BadRequestError, NotFoundError, InternalServerError, DatabaseError, ServiceUnavailableError } from '../middlewares/customErrors';
+import { doctorQueue } from '../services/queue.service';
+import { UserQueue } from 'interface/User';
+import UsuarioService from '../services/usuario.service';
 
 class DoctorController {
+
   // Crear Orden Médica
   public static async crearOrdenMedica(req: Request, res: Response): Promise<void> {
     try {
@@ -100,27 +104,71 @@ class DoctorController {
     }
   }
 
-  
-public static async obtenerOrdenesMedicasPorCedula(req: Request, res: Response): Promise<void> {
-  const { cedula } = req.params; // Obtener la cédula de los parámetros de la solicitud
 
-  try {
-    const ordenesMedicas = await DoctorService.buscarOrdenesMedicasInformacionPorCedula(cedula);
+  public static async obtenerOrdenesMedicasPorCedula(req: Request, res: Response): Promise<void> {
+    const { cedula } = req.params; // Obtener la cédula de los parámetros de la solicitud
 
-    if (ordenesMedicas.length === 0) {
-      throw new NotFoundError('No se encontraron órdenes médicas para esta cédula.');
-    }
+    try {
+      const ordenesMedicas = await DoctorService.buscarOrdenesMedicasInformacionPorCedula(cedula);
 
-    res.status(200).json(ordenesMedicas); // Devolver las órdenes médicas encontradas
-  } catch (error) {
-    if (error instanceof NotFoundError) {
-      res.status(404).json({ message: error.message }); // Manejo de error si no se encontraron órdenes
-    } else {
-      console.error('Error al obtener órdenes médicas por cédula:', error);
-      res.status(500).json({ message: 'Error en el servidor al obtener las órdenes médicas.' });
+      if (ordenesMedicas.length === 0) {
+        throw new NotFoundError('No se encontraron órdenes médicas para esta cédula.');
+      }
+
+      res.status(200).json(ordenesMedicas); // Devolver las órdenes médicas encontradas
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new DatabaseError('Error al obtener la orden médica desde la base de datos'); // Manejo de error si no se encontraron órdenes
+      } else {
+        console.error('Error al obtener órdenes médicas por cédula:', error);
+        throw new InternalServerError('Error en el servidor al obtener las órdenes médicas.');
+      }
     }
   }
-}
+
+  public static async enqueueDoctor(req: Request, res: Response): Promise<void> {
+    const idDoc: String = req.params.idDoc; // Obtener la cédula de los parámetros de la solicitud
+    const doctorId: string = String(idDoc);
+    console.log(doctorId)
+    try {
+      const doc: UserQueue | null = await UsuarioService.getUsersbyCCUserQue(doctorId);
+
+      if (doc != null) {
+        const resp = await doctorQueue.enqueue(doc);
+        if (resp) {
+          res.status(200).json(true);
+        } else {
+          throw new ServiceUnavailableError('No se pudo Encolar el doc')
+        }
+      } else {
+        throw new NotFoundError('No se encontraron Doctores por este cc');
+      }
+    } catch (error) {
+      console.error('Error al obtener órdenes médicas por cédula:', error);
+      throw new InternalServerError('Error en el servidor al obtener las Medico Cola.');
+
+    }
+  }
+
+  public static async popDoctor(req: Request, res: Response): Promise<void> {
+    try {
+      const dequeuedDoc: UserQueue | null = doctorQueue.pop(); // Desencolar un médico
+
+      if (dequeuedDoc !== null) {
+        res.status(200).json({
+          message: 'Médico desencolado exitosamente',
+          doctor: dequeuedDoc // Retorna el médico desencolado
+        });
+      } else {
+        res.status(404).json({ message: 'No hay médicos en la cola para desencolar.',
+          doctor: null 
+        });
+      }
+    } catch (error) {
+      console.error('Error al obtener órdenes médicas por cédula:', error);
+      throw new InternalServerError('Error en el servidor al obtener las Medico Cola.');
+    }
+  }
 
 }
 

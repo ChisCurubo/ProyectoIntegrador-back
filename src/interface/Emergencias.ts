@@ -32,3 +32,4 @@ export interface EmergenciaCita {
   idServicio: number;
   statusEmergencia_Cita: string;
 }
+

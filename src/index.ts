@@ -76,7 +76,7 @@ app.use('/api/ordenes-medicas', ordenMedica);
 app.use('/api/mercadopago', mercadopagoRoutes);
 
 
-app.use('/api/emergencia', emergencia)
+app.use('/api/emergencias', emergencia)
 app.use('/api/admin', emergencia); 
 app.use('/api/auth', authRoutes);
 app.use('/apiSedes', apiSedes);
