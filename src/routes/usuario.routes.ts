@@ -3,7 +3,6 @@ import UsuarioController from '../controllers/usuario.controller';
 
 const router = Router();
 
-
 // Obtener todos los usuarios
 router.get('/getUsers', UsuarioController.getUsersController);
 

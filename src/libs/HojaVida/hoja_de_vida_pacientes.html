@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hoja de Vida del Paciente</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <style>
-        /* Mismos estilos que antes */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -84,46 +84,45 @@
         }
     </style>
 </head>
-<body>
+<body onload="generatePDF()">
     <div class="page" id="content">
         <!-- Encabezado -->
         <div class="header">
-            <img src="{{logo_url}}" alt="Logo de la IPS" />
+            <img src="../../img/logovm.jpeg" alt="Logo de la IPS" />
             <h3>FORMATO ÚNICO HOJA DE VIDA DEL PACIENTE</h3>
-            <p>ID EPS: {{id_eps}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; REF: {{ref}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fecha: {{fecha}}</p>
+            <p>ID EPS: ___________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; REF: ___________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fecha: </p>
         </div>
 
         <!-- Datos Personales -->
         <div class="section-title">Datos Personales</div>
-        <table class="data-table">
+        <table class="data-table">                        
             <tr>
-                <th>Primer Apellido</th><td>{{primer_apellido}}</td>
-                <th>Segundo Apellido</th><td>{{segundo_apellido}}</td>
+                <th>Primer Apellido</th><td></td>
+                <th>Segundo Apellido</th><td></td>
+            <tr>
+                <th>Nombres</th><td colspan="3"></td>
             </tr>
             <tr>
-                <th>Nombres</th><td colspan="3">{{nombres}}</td>
+                <th>Número de Documento</th><td></td>
+                <th>Tipo de Documento</th><td></td>
             </tr>
             <tr>
-                <th>Número de Documento</th><td>{{numero_documento}}</td>
-                <th>Tipo de Documento</th><td>{{tipo_documento}}</td>
+                <th>Sexo</th><td></td>
+                <th>Fecha de Nacimiento</th><td></td>
             </tr>
             <tr>
-                <th>Sexo</th><td>{{sexo}}</td>
-                <th>Fecha de Nacimiento</th><td>{{fecha_nacimiento}}</td>
+                <th>Departamento</th><td></td>
+                <th>Municipio</th><td></td>
             </tr>
             <tr>
-                <th>Departamento</th><td>{{departamento}}</td>
-                <th>Municipio</th><td>{{municipio}}</td>
+                <th>Lugar de Nacimiento</th><td></td>
+                <th>Nacionalidad</th><td></td>
             </tr>
             <tr>
-                <th>Lugar de Nacimiento</th><td>{{lugar_nacimiento}}</td>
-                <th>Nacionalidad</th><td>{{nacionalidad}}</td>
+                <th>Estado del Paciente</th><td colspan="3"></td>
             </tr>
             <tr>
-                <th>Estado del Paciente</th><td colspan="3">{{estado_paciente}}</td>
-            </tr>
-            <tr>
-                <th>ID Hoja de Vida</th><td colspan="3">{{idHoja_Vida}}</td>
+                <th>ID Hoja de Vida</th><td colspan="3"></td>
             </tr>
         </table>
 
@@ -131,10 +130,10 @@
         <div class="section-title">Información de Contacto</div>
         <table class="data-table">
             <tr>
-                <th>Teléfono</th><td colspan="3">{{telefonoUsuario}}</td>
+                <th>Teléfono</th><td colspan="3"></td>
             </tr>
             <tr>
-                <th>Correo Electrónico</th><td colspan="3">{{correo}}</td>
+                <th>Correo Electrónico</th><td colspan="3"></td>
             </tr>
         </table>
 
@@ -142,12 +141,12 @@
         <div class="section-title">Dirección de Residencia</div>
         <table class="data-table">
             <tr>
-                <th>Departamento</th><td>{{departamento}}</td>
-                <th>Ciudad</th><td>{{ciudad}}</td>
+                <th>Departamento</th><td></td>
+                <th>Ciudad</th><td></td>
             </tr>
             <tr>
-                <th>Barrio</th><td>{{barrio}}</td>
-                <th>Teléfono</th><td>{{telefono_residencia}}</td>
+                <th>Barrio</th><td></td>
+                <th>Teléfono</th><td></td>
             </tr>
         </table>
 
@@ -155,25 +154,35 @@
         <div class="section-title">Datos de Contacto de Emergencia</div>
         <table class="data-table">
             <tr>
-                <th>Nombre</th><td>{{contacto_emergencia_nombre}}</td>
-                <th>Parentesco</th><td>{{contacto_emergencia_parentesco}}</td>
+                <th>Primer Apellido</th><td></td>
+                <th>Segundo Apellido</th><td></td>
             </tr>
             <tr>
-                <th>Teléfono</th><td>{{contacto_emergencia_telefono}}</td>
-                <th>Correo Electrónico</th><td>{{contacto_emergencia_correo}}</td>
+                <th>Nombres</th><td colspan="3"></td>
+            </tr>
+            <tr>
+                <th>Parentesco</th><td></td>
+                <th>Telefono</th><td></td>
+            </tr>
+            <tr>
+                <th>Correo Electrónico</th><td colspan="3"></td>
             </tr>
         </table>
 
         <!-- Firma -->
-        <div class="signature">
+        <div class="signature" style="margin-top: 100px;">
             <div>
                 <span>Firma del Paciente</span>
             </div>
         </div>
 
-        <div class="footer">
-            <p>Gracias por confiar en nosotros.</p>
-        </div>
-    </div>
+    <script>
+        function generatePDF() {
+            const element = document.getElementById('content');
+            html2pdf()
+                .from(element)
+                .save('hoja-de-vida-paciente.pdf');
+        }
+    </script>
 </body>
 </html>
