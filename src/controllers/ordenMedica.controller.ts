@@ -5,6 +5,43 @@ import { ordenMedica } from '../interface/ordenMedica';
 import { BadRequestError, NotFoundError, InternalServerError } from '../middlewares/customErrors';
 
 class OrdenMedicaController {
+
+  // Método para obtener una orden médica por CC del usuario
+  public async getOrdenMedicaPorCC(req: Request, res: Response, next: NextFunction) {
+    const { CC } = req.params; // Asegúrate de que estás extrayendo correctamente la CC de los parámetros
+  
+    try {
+      const ordenMedica = await OrdenMedicaService.getOrdenMedicaPorCC(CC);
+      res.status(200).json(ordenMedica); // Devuelve solo la última orden médica
+    } catch (error) {
+      next(error);
+    }
+  }  
+
+  public async getOrdenMedicaPorCCc(req: Request, res: Response, next: NextFunction) {
+    const { CC } = req.params;
+  
+    try {
+      const ordenMedica = await OrdenMedicaService.getOrdenMedicaPorCC(CC);
+      
+      if (!ordenMedica) {
+        throw new NotFoundError('Orden Médica no encontrada para esta CC');
+      }
+  
+      const pdfBuffer = await OrdenMedicaController.generarPDF(ordenMedica);
+  
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="orden_medica_${CC}.pdf"`,
+        'Content-Length': pdfBuffer.length,
+      });
+  
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Error al obtener la orden médica por CC:', error);
+      next(error);
+    }
+  }
     
     public createOrdenMedica = async (req: Request, res: Response, next: NextFunction) => {
         const nuevaOrdenMedica: ordenMedica = req.body;
@@ -231,5 +268,6 @@ class OrdenMedicaController {
       }
     }
   }
+  
   
 export default new OrdenMedicaController();
