@@ -24,7 +24,7 @@ router.get('/orden-medica/cita/:idCita', DoctorController.obtenerOrdenMedicaPorI
 router.get('/ordenesimportantes/:cedula', DoctorController.obtenerOrdenesMedicasPorCedula);
 
 router.get('/encolar/:idDoc', DoctorController.enqueueDoctor )
-router.get('/pop', DoctorController.popDoctor )
+router.get('/pop/:idDoc', DoctorController.popDoctor )
 
 
 export default router;

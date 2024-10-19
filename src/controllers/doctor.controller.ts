@@ -4,6 +4,12 @@ import { BadRequestError, NotFoundError, InternalServerError, DatabaseError, Ser
 import { doctorQueue } from '../services/queue.service';
 import { UserQueue } from 'interface/User';
 import UsuarioService from '../services/usuario.service';
+import UusarioUsuario from '../services/usuario.service';
+import EmergenciaService from '../services/emergencia.service';
+import UsarioAdmin from '../services/crudAdminitrador.service';
+import CitasService from '../services/citas.service';
+import { CitaEmergencia } from '../interface/Emergencias';
+import HistoriaClinicaService  from '../services/HistoriaClinica.service';
 
 class DoctorController {
 
@@ -151,24 +157,73 @@ class DoctorController {
   }
 
   public static async popDoctor(req: Request, res: Response): Promise<void> {
+    const idDoc: string = req.params.idDoc;
     try {
-      const dequeuedDoc: UserQueue | null = doctorQueue.pop(); // Desencolar un médico
-
-      if (dequeuedDoc !== null) {
-        res.status(200).json({
-          message: 'Médico desencolado exitosamente',
-          doctor: dequeuedDoc // Retorna el médico desencolado
-        });
+      const emergencias = await EmergenciaService.getEmergenciasPorPrioridad();
+      
+      if (emergencias.length > 0) {
+        const dequeuedDoc: UserQueue | null = doctorQueue.pop();
+        
+        if (dequeuedDoc !== null) {
+          const emerPrio = emergencias[0];
+  
+          const updSta = await UsarioAdmin.updateEmergenciaByIdStatus(0, emerPrio.idEmergencia);
+          
+          if (updSta !== null) {
+            try {
+              console.log(emerPrio.ccPatient)
+              // Intentar duplicar el historial clínico
+              const idInstr: number = await HistoriaClinicaService.duplicateHistorial(emerPrio.ccPatient);
+              const crearCita = await CitasService.createCitaLocal(idDoc, emerPrio.ccPatient, idInstr);
+              
+              if (crearCita && crearCita.insertId) {
+                const citaEmergencia: CitaEmergencia = {
+                  idEmergencia: emerPrio.idEmergencia,
+                  idCita: crearCita.insertId,
+                  idServicio: 9,
+                  estatusEmergencia_Cita: 1
+                };
+  
+                await UsarioAdmin.createEmergencia(citaEmergencia);
+  
+                res.status(200).json({
+                  message: 'Médico desencolado y cita creada exitosamente',
+                  doctor: dequeuedDoc
+                });
+              } else {
+                throw new Error('No se pudo crear la cita');
+              }
+            } catch (err) {
+              if (err instanceof NotFoundError) {
+                // Caso en que no se encuentra historial médico
+                console.error('Error al duplicar el historial clínico:', err);
+                res.status(404).json({
+                  message: 'No se encontró un historial médico asociado a la cita del usuario'
+                });
+              } else {
+                throw err; // Relanzar otros errores para manejarlos más adelante
+              }
+            }
+          } else {
+            throw new Error('No se pudo actualizar el estado de la emergencia');
+          }
+        } else {
+          res.status(404).json({ 
+            message: 'No hay médicos en la cola para desencolar.',
+            doctor: null 
+          });
+        }
       } else {
-        res.status(404).json({ message: 'No hay médicos en la cola para desencolar.',
-          doctor: null 
-        });
+        res.status(404).json({ message: 'No hay emergencias disponibles.' });
       }
     } catch (error) {
-      console.error('Error al obtener órdenes médicas por cédula:', error);
-      throw new InternalServerError('Error en el servidor al obtener las Medico Cola.');
+      console.error('Error al desencolar médico:', error);
+      res.status(500).json({ message: 'Error en el servidor al desencolar médico.' });
     }
   }
+  
+  
+  
 
 }
 

@@ -1,6 +1,6 @@
 import connection from '../providers/database';
 import { NotFoundError, BadRequestError, DatabaseError } from '../middlewares/customErrors'; // Incluye DatabaseError
-import { Cita, CitaHorario, CitaDetalladaParaAgendar, CitaConPacientesYDoctores, ReagendarCitadetallada  } from '../interface/Citas';
+import { Cita, CitaHorario, CitaDetalladaParaAgendar, CitaConPacientesYDoctores, ReagendarCitadetallada } from '../interface/Citas';
 import { format } from 'date-fns';
 
 class CitasService {
@@ -18,7 +18,7 @@ class CitasService {
     }
   }
 
-  public async createCitaWithHistorial(fecha: string, hora: string, medico: string, idUsuario: number, historialPasado: number): Promise<any> {
+  public async createCitaWithHistorial(fecha: string, hora: string, medico: string, idUsuario: string, historialPasado: number): Promise<any> {
     try {
       const query = `INSERT INTO CITAS (dia, hora, idDocCC, idUsuarioCC, idHistoria_Medica)
                        VALUES (?, ?, ?, ?, ?)`;
@@ -29,6 +29,23 @@ class CitasService {
       throw new DatabaseError('Error en la base de datos al crear la cita con historial');
     }
   }
+
+  public async createCitaLocal(idDocCC: string, idUsuarioCC: string, idHistoria: number): Promise<any> {
+    try {
+      const [result] = await connection.execute(
+        'INSERT INTO CITAS (dia, hora, idDocCC, idUsuarioCC, estadoCita, idServicio, idHistoria_Medica) VALUES (CURDATE(), LEFT(CURTIME(), 5), ?, ?, 1, 9,?)',
+        [idDocCC, idUsuarioCC, idHistoria]
+      );
+
+      console.log(`Cita creada para el doctor ${idDocCC} y el usuario ${idUsuarioCC}`);
+
+      return result;
+    } catch (error) {
+      console.error('Error creating cita:', error);
+      throw new DatabaseError('Error en la base de datos al crear la cita');
+    }
+  }
+
 
   public async updateDateCita(fecha: string, hora: string, idCita: number): Promise<boolean> {
     try {
@@ -437,7 +454,7 @@ class CitasService {
       await conn.beginTransaction();
 
       const [result]: any = await conn.query('DELETE FROM CITAS WHERE idCita = ?', [idCita]);
-      
+
       if (result.affectedRows === 0) {
         await conn.rollback();
         throw new NotFoundError('Cita no encontrada para eliminar');
