@@ -133,29 +133,29 @@ class HistoriaClinicaService {
   public async duplicateHistorial(idUser: number): Promise<number> {
     try {
       // Obtener la última cita del usuario
-      const query = 'SELECT * FROM citas WHERE idUsuarioCC = ? AND estadoCita = 0 ORDER BY dia DESC, hora DESC LIMIT 1;';
-      const res: Cita | any = await connection.query(query, [idUser]);
-
+      const query = 'SELECT * FROM CITAS WHERE idUsuarioCC = ? AND estadoCita = 0 ORDER BY dia DESC, hora DESC LIMIT 1;';
+      const [rows]: [any, any] = await connection.query(query, [idUser]);
+  
       // Verificar si hay una cita y si tiene un historial médico asociado
-      if (res && res.idHistoria_Medica != null) {
-        const idHistoriaMedica = res.idHistoria_Medica;
-
+      if (rows.length > 0 && rows[0].idHistoria_Medica != null) {
+        const idHistoriaMedica = rows[0].idHistoria_Medica;
+  
         // Duplicar el historial médico asociado a la cita
         const query2 = `
-                INSERT INTO ProyectoIntegrador1.HISTORIA_MEDICA (
-                    tipoSangre, genero, fecha_Nac, discapacidad, fecha_Rev, hora_Rev, motivo, descripcion_Motivo, 
-                    presion_Sangre, presion_Sangre_Prom, pulso, saturacion, altura, peso, perinatales, 
-                    patologicos, quirurgicos, vacunas, familiares, conclusion
-                )
-                SELECT 
-                    tipoSangre, genero, fecha_Nac, discapacidad, fecha_Rev, hora_Rev, motivo, descripcion_Motivo, 
-                    presion_Sangre, presion_Sangre_Prom, pulso, saturacion, altura, peso, perinatales, 
-                    patologicos, quirurgicos, vacunas, familiares, conclusion
-                FROM ProyectoIntegrador1.HISTORIA_MEDICA
-                WHERE idHistoria_Medica = ?;
-            `;
-        const result: any = await connection.query(query2, [idHistoriaMedica]);
-
+          INSERT INTO ProyectoIntegrador1.HISTORIA_MEDICA (
+              tipoSangre, genero, fecha_Nac, discapacidad, fecha_Rev, hora_Rev, motivo, descripcion_Motivo, 
+              presion_Sangre, presion_Sangre_Prom, pulso, saturacion, altura, peso, perinatales, 
+              patologicos, quirurgicos, vacunas, familiares, conclusion
+          )
+          SELECT 
+              tipoSangre, genero, fecha_Nac, discapacidad, fecha_Rev, hora_Rev, motivo, descripcion_Motivo, 
+              presion_Sangre, presion_Sangre_Prom, pulso, saturacion, altura, peso, perinatales, 
+              patologicos, quirurgicos, vacunas, familiares, conclusion
+          FROM ProyectoIntegrador1.HISTORIA_MEDICA
+          WHERE idHistoria_Medica = ?;
+        `;
+        const [result]: any = await connection.query(query2, [idHistoriaMedica]);
+  
         // Devolver el último idHistoria_Medica insertado
         if (result && result.insertId) {
           return result.insertId;
@@ -167,9 +167,10 @@ class HistoriaClinicaService {
       }
     } catch (error) {
       console.error('Error al duplicar el historial clínico:', error);
-      throw new InternalServerError('Error interno al duplicar el historial clínico');
+      throw error instanceof NotFoundError ? error : new InternalServerError('Error interno al duplicar el historial clínico');
     }
   }
+  
   
 }
 

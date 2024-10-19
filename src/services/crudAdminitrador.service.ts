@@ -5,7 +5,7 @@ import { Cita1 } from '../interface/Citas';
 import { Emergencia } from '../interface/Emergencias';
 
 import { HojaVidafront } from '../interface/hojaVida';
-import { EmergenciaDetalle, CitaEmergencia} from '../interface/Emergencias';
+import { EmergenciaDetalle, CitaEmergencia, Eme} from '../interface/Emergencias';
 import { 
   AudColillaPago, 
   AudFacturaElectronica, 
@@ -122,6 +122,22 @@ public async updateEmergenciaById(idEmergencia_Cita: number, emergencia: CitaEme
     }
   }
 
+  public async updateEmergenciaByIdStatus(idEmergencia_Cita: number, emergencia: string): Promise<boolean> {
+    try {
+      const query = `UPDATE EMERGENCIAS SET  estadoEmergencia = ? WHERE idEmergencia = ?`;
+
+      const [result]: any = await connection.query(query,[0, emergencia]);
+      if(result.affectedRows != 0){
+        return true;
+      }else{
+        return false;
+      }
+    } catch (error) {
+      console.error(`Error al actualizar la emergencia con ID ${idEmergencia_Cita}:`, error);
+      throw new Error(`Error al actualizar la emergencia con ID ${idEmergencia_Cita}`);
+      return false;
+    }
+  }
   
   // Crear una nueva emergencia
 public async createEmergencia(emergencia: CitaEmergencia): Promise<void> {
