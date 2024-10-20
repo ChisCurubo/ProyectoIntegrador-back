@@ -23,7 +23,7 @@ class UsuarioController {
       if (usuario) {
         res.status(200).json(usuario);
       } else {
-        throw new NotFoundError('Usuario no encontrado' );
+        res.status(404).json();
       }
     } catch (error) {
       console.error(`Error al obtener el usuario con CC ${CC}:`, error);
