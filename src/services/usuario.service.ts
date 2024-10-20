@@ -20,15 +20,14 @@ public async getUsersbyCC(CC: string): Promise<Usuario | null> {
     try {
         const query = 'SELECT * FROM USUARIOS WHERE CC = ?';
         const [rows]: any[] = await connection.query(query, [CC]);
-
         if (rows.length === 0) {
-            return null;  // Usuario no encontrado
+         return null;
         }
 
         return rows[0] as Usuario;
     } catch (error) {
         console.error(`Error al obtener el usuario con CC ${CC}:`, error);
-        throw new DatabaseError('Error al obtener el usuario');
+        throw new Error('Error al obtener el usuario');
     }
 }
 
