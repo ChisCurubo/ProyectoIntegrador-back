@@ -18,4 +18,7 @@ router.delete('/colillas/:id', ColillaPagoController.eliminarColilla);
 // Ruta para actualizar una colilla de pago por su ID
 router.put('/colillas/:id', ColillaPagoController.actualizarColilla);
 
+router.get('/pdf/:id', ColillaPagoController.obtenerColillaPDF);
+
+
 export default router;

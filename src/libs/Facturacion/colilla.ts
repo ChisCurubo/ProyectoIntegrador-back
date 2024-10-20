@@ -1,4 +1,5 @@
 import PDFDocument from "pdfkit-table";
+import path from 'path';
 
 interface PacienteData {
   paciente: string;
@@ -53,11 +54,11 @@ export function buildPDF(
   doc.on("data", dataCallback);
   doc.on("end", endCallback);
 
-  // Agregar el logo (ajustado para que se alinee sin usar 'stretch')
-  doc.image('logovm.jpeg', 40, 50, {
-    fit: [140, 260],
-    align: 'center', // Ajustado para cumplir con los tipos
-    valign: 'center' // Puedes cambiar a 'right' si lo prefieres
+  const imagePath = path.join(__dirname, '../../img/Logovm.jpeg');
+  doc.image(imagePath, 30, -70, {
+      fit: [180, 300],
+      align: 'center',
+      valign: 'center'
   });
 
   // Título y detalles de la colilla
@@ -67,31 +68,31 @@ export function buildPDF(
 
   doc
     .fontSize(8)
-    .text('Periodo de pago: ', 200, 70);
+    .text('Periodo de pago: 20/10/2024', 200, 70);
 
   doc
     .fontSize(8)
-    .text('Fecha de generación: ', 200, 100);
+    .text('Fecha de generación: 20/10/2024 ', 200, 100);
 
   doc
     .fontSize(8)
-    .text('Fecha de emisión: ', 200, 115);
+    .text('Fecha de emisión: 20/10/2024 ', 200, 115);
 
   doc
     .fontSize(8)
-    .text(`Nombre: ${pacienteData.paciente}`, 400, 70);
+    .text(`Nombre: Juan pérez`, 400, 70);
 
   doc
     .fontSize(8)
-    .text(`Número de cc: ${pacienteData.cc}`, 400, 85);
+    .text(`Número de cc: 1117246578`, 400, 85);
 
   doc
     .fontSize(8)
-    .text(`Cargo: ${pacienteData.cargo}`, 400, 100);
+    .text(`Cargo: Doctor`, 400, 100);
 
   doc
     .fontSize(8)
-    .text(`Salario básico: ${pacienteData.salario}`, 400, 115);
+    .text(`Salario básico: 2,300,500`, 400, 115);
 
   // Rectángulos para los ingresos y deducciones
   doc.rect(30, 140, 260, 20).stroke();
@@ -157,11 +158,11 @@ export function buildPDF(
   const totalInWords = numberToWords(Math.floor(totalAmount));
 
   // Detalles finales
-  doc.fontSize(8).text(`Total ingresos: $${totalAmount}`, 30, 300);
+  doc.fontSize(8).text(`Total ingresos: $ 200000`, 30, 300);
   doc.fontSize(8).text('Total deducciones: $0', 350, 300);
 
   doc.rect(30, 330, 200, 40).stroke();
-  doc.fontSize(8).text('Medio de pago: ', 32, 332);
+  doc.fontSize(8).text('Medio de pago: BANCOLOMBIA', 32, 332);
 
   doc.rect(320, 330, 200, 40).stroke();
   doc.fontSize(8).text('Neto a pagar: ', 322, 332);

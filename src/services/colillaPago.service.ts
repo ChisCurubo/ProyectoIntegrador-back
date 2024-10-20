@@ -10,6 +10,37 @@ export class ColillaPagoService {
     this.db = pool;  
   }
 
+  public async generarColillaPDF(idColilla: string): Promise<Buffer> {
+    const query = `SELECT * FROM COLILLA_PAGO WHERE idColilla_Pago = ?;`;
+    const [rows]: any = await this.db.execute(query, [idColilla]);
+
+    if (rows.length === 0) {
+      throw new Error('Colilla no encontrada');
+    }
+
+    const colillaData = rows[0];
+    
+    // Aquí debes adaptar los datos de la colilla al formato esperado por buildPDF
+    const empleadoData = {
+      paciente: colillaData.nombreEmpleado,
+      cc: colillaData.ccEmpleado,
+      cargo: colillaData.cargo,
+      salario: colillaData.salarioBasico
+    };
+
+    const services = [colillaData.item];
+    const quantities = [colillaData.cantidad];
+
+    return new Promise<Buffer>((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      buildPDF(
+        (chunk) => chunks.push(chunk),
+        () => resolve(Buffer.concat(chunks)),
+        empleadoData, services, quantities
+      );
+    });
+  }
+
   // Método para crear una nueva colilla de pago
   public async crearColillaPago(data: ColillaPago): Promise<number> {
     const query = `

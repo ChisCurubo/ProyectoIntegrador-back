@@ -70,13 +70,13 @@ export async function generarFacturaelectronica(
 
       doc.fontSize(8).text('VITAMED IPS SALUD INTEGRAL S.A', 240, 60);
       doc.fontSize(8).text('Factura Electrónica de Venta', 240, 75);
-      doc.fontSize(8).text('Factura No: ', 240, 90);
+      doc.fontSize(8).text('Factura No: 1 ', 240, 90);
       doc.fontSize(8).text('Fecha Generación: ', 240, 105);
       doc.fontSize(8).text('Fecha Vencimiento: ', 240, 120);
-      doc.fontSize(8).text('DIRECCION:  ', 40, 170);
-      doc.fontSize(8).text('TELEFONO:  ', 40, 185);
-      doc.fontSize(8).text('FORMA DE PAGO:  ', 40, 200);
-      doc.fontSize(8).text('NIT:  ', 320, 170);
+      doc.fontSize(8).text('DIRECCION: Universidad pontificia', 40, 170);
+      doc.fontSize(8).text('TELEFONO: 3223458899 ', 40, 185);
+      doc.fontSize(8).text('FORMA DE PAGO: Efectivo ', 40, 200);
+      doc.fontSize(8).text('NIT: 0659542 ', 320, 170);
       doc.fontSize(8).text('DATOS DEL PACIENTE.  ', 40, 230);
 
       // Verificar si pacienteData tiene los campos esperados
