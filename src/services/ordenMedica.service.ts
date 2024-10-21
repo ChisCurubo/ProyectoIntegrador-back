@@ -2,6 +2,27 @@ import { RowDataPacket } from 'mysql2/promise';
 import connection from '../providers/database';
 
 class OrdenMedicaService {
+
+  public async getOrdenMedicaPorCC(cc: string): Promise<any | null> {
+    const query = `
+    SELECT OM.idOrden_Medica, OM.idCita, OM.estadoOM, OM.fecha, OM.diagnostico, OM.ordenes, OM.recomendaciones
+    FROM ORDENES_MEDICAS OM
+    INNER JOIN CITAS C ON C.idCita = OM.idCita
+    INNER JOIN USUARIOS U ON U.cc = C.idUsuarioCC
+    WHERE U.cc = ?
+    ORDER BY OM.fecha DESC
+    LIMIT 1; -- Devuelve solo la última orden médica
+  `;
+
+    try {
+      const [rows]: [RowDataPacket[], any] = await connection.query(query, [cc]);
+      if (rows.length === 0) {
+      }
+      return rows[0]; // Devuelve la primera fila, que es la orden médica
+    } catch (error) {
+    }
+  }
+  
   // Crear una Orden Médica
   public async createOrdenMedica(data: any): Promise<any> {
     const query = `

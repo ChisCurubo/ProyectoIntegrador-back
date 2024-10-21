@@ -4,6 +4,20 @@ import { BadRequestError, NotFoundError, InternalServerError, DatabaseError } fr
 
 export class ColillaPagoController {
 
+  public async obtenerColillaPDF(req: Request, res: Response): Promise<void> {
+    try {
+      const idColilla = req.params.id;
+      const pdfBuffer = await ColillaPagoService.generarColillaPDF(idColilla);
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename=colilla_${idColilla}.pdf`);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Error al generar el PDF de la colilla:', error);
+      res.status(500).json({ error: 'Error al generar el PDF de la colilla' });
+    }
+  }
+
   // Crear una nueva colilla de pago
   public async crearColillaPago(req: Request, res: Response): Promise<void> {
     try {

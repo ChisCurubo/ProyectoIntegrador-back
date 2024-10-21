@@ -20,7 +20,13 @@ router.delete('/deleteHistorias-clinicas/:id', HistoriaClinicaController.deleteH
 
 //router.get('/historial/html/:id', HistoriaClinicaController.getHistoriaClinicaHTML);
 
+
+
 router.get('/getHistorias-clinicas/usuario/:idUsuarioCC', HistoriaClinicaController.getHistoriaClinicaByUsuarioCC);
+
+//para generar factura
+router.get('/getHistorias-clinicas/usuarios/:idUsuarioCC', HistoriaClinicaController.getHistoriaClinicaByUsuarioCCC);
+
 
 
 export default router;

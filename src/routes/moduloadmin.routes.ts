@@ -13,6 +13,8 @@ router.get('/citas/:cedula', ModuloAdminController.obtenerCitasPorCedula);
 router.get('/citas/completas/:cedula', ModuloAdminController.obtenerCitasCompletasPorCedula);
 router.post('/crearHojaVida', ModuloAdminController.crearHojaVida);
 router.get('/resumen-financiero', ModuloAdminController.obtenerResumenFinanciero);
+router.get('/especialidades', ModuloAdminController.getSpecialties);
+router.get('/services', ModuloAdminController.getServices);
 
 router.get('/resumen-crm', ModuloAdminController.obtenerResumenCRM);
 router.get('/citas-por-especialidad', ModuloAdminController.obtenerCitasPorEspecialidad);

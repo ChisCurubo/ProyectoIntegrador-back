@@ -323,6 +323,37 @@ class HistoriaClinicaController {
       next(new InternalServerError('Error al obtener la historia clínica'));
     }
   }
+
+  public async getHistoriaClinicaByUsuarioCCC(req: Request, res: Response, next: NextFunction) {
+    const { idUsuarioCC } = req.params;  // Obtenemos el parámetro CC
+  
+    try {
+      // Obtenemos la historia clínica por el número de CC del usuario
+      const historia = await HistoriaClinicaService.getHistoriaClinicaByUsuarioCC(idUsuarioCC);
+  
+      if (!historia) {
+        // Si no se encuentra la historia clínica, lanzamos un error 404
+        throw new NotFoundError('Historia clínica no encontrada para este paciente');
+      }
+  
+      // Generamos el PDF de la historia clínica
+      const pdfBuffer = await HistoriaClinicaController.generarPDF(historia);
+  
+      // Configuramos los encabezados de la respuesta
+      res.set({
+        'Content-Type': 'application/pdf',  // Tipo de contenido como PDF
+        'Content-Disposition': `attachment; filename="historia_clinica_${idUsuarioCC}.pdf"`,  // Nombre del archivo
+        'Content-Length': pdfBuffer.length,  // Longitud del archivo PDF
+      });
+  
+      // Enviamos el buffer PDF como respuesta
+      res.send(pdfBuffer);
+    } catch (error) {
+      // Capturamos cualquier error y lo manejamos con el middleware de errores
+      console.error('Error al obtener la historia clínica por CC:', error);
+      next(error);  // Pasamos el error al middleware de manejo de errores
+    }
+  }
   
 
   // Eliminar una historia clínica por ID

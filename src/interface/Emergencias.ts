@@ -19,12 +19,21 @@ export interface EmergenciaDetalle {
 
 // Interfaz que define la estructura de una Emergencia asociada a una cita
 export interface CitaEmergencia  {
-  idEmergencia_Cita: number;
+  idEmergencia_Cita?: number;
   idEmergencia: number;
   idCita: number;
   idServicio: number;
   estatusEmergencia_Cita: number;
 }
+
+export interface Eme {
+  idEmergencia: number;          // ID de la emergencia
+  estadoEmergencia: number;      // Estado de la emergencia (1 = activo, etc.)
+  horaLlegada: string;           // Hora de llegada en formato de fecha (YYYY-MM-DD HH:mm:ss)
+  idTipo_Emergencia: number;     // ID del tipo de emergencia
+  ccPatient: string;             // Cédula del paciente (puede incluir valores numéricos o cadenas mixtas)
+}
+
 export interface EmergenciaCita {
   idEmergencia_Cita?: number;
   idEmergencia: number;
@@ -32,3 +41,4 @@ export interface EmergenciaCita {
   idServicio: number;
   statusEmergencia_Cita: string;
 }
+

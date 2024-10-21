@@ -3,17 +3,18 @@ import { Cita1 } from '../interface/Citas';
 import { Emergencia } from '../interface/Emergencias';
 import { Usuario } from '../interface/User';
 import connection from '../providers/database';
-
-import {
-    AudColillaPago,
-    AudFacturaElectronica,
-    AudHistoriaMedica,
-    AudHojasVida,
-    AudSedes,
-    AudUsuarios,
-    AutorizacionesMedicas
-} from '../interface/Auditorias'; // 
 import { CitaEmergencia, EmergenciaDetalle } from '../interface/Emergencias';
+
+import { 
+  AudColillaPago, 
+  AudFacturaElectronica, 
+  AudHistoriaMedica, 
+  AudHojasVida, 
+  AudUsuarios, 
+  AudSedes, 
+  AutorizacionesMedicas 
+} from '../interface/Auditorias'; // 
+
 
 class AdminService {
   // Crear un nuevo médico o paciente
@@ -122,6 +123,22 @@ public async updateEmergenciaById(idEmergencia_Cita: number, emergencia: CitaEme
     }
   }
 
+  public async updateEmergenciaByIdStatus(idEmergencia_Cita: number, emergencia: string): Promise<boolean> {
+    try {
+      const query = `UPDATE EMERGENCIAS SET  estadoEmergencia = ? WHERE idEmergencia = ?`;
+
+      const [result]: any = await connection.query(query,[0, emergencia]);
+      if(result.affectedRows != 0){
+        return true;
+      }else{
+        return false;
+      }
+    } catch (error) {
+      console.error(`Error al actualizar la emergencia con ID ${idEmergencia_Cita}:`, error);
+      throw new Error(`Error al actualizar la emergencia con ID ${idEmergencia_Cita}`);
+      return false;
+    }
+  }
   
   // Crear una nueva emergencia
 public async createEmergencia(emergencia: CitaEmergencia): Promise<void> {

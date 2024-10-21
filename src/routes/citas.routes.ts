@@ -1,50 +1,50 @@
 // citas.routes.ts
-import { Router } from 'express';
-import { CitasController } from '../controllers/citas.controller';
+import { Router } from "express";
+import { CitasController } from "../controllers/citas.controller";
 
 const router = Router();
 const citasController = new CitasController();
 
 // Insertar una cita
-router.post('/insertCita', citasController.createCita);
+router.post("/insertCita", citasController.createCita);
 
-// Editar fecha y hora de una cita por id de cita
-router.put('/updateCita-date', citasController.updateDateCita);
+// Editar fecha y día de una cita por id de cita (con POST)
+router.put("/updateCita-date", citasController.updateDateCita);
 
-// Editar estado de una cita por id de cita
-router.put('/updateCita-status/:idCita', citasController.updateStatusCita);
+// Editar estado de la cita (con POST)
+router.put("/updateCita-status/:idCita", citasController.updateStatusCita);
 
-// Editar todos los campos de una cita por id de usuario y id de cita
-router.put('/updateCita-all', citasController.updateCitasAll);
+// Editar todos los campos de una cita por id de usuario o id de cita (con POST)
+router.put("/updateCita-all", citasController.updateCitasAll);
 
-// Borrar una cita por id del usuario y id de cita
-router.delete('/deleteCitaAll/:idCita/:idUsuario', citasController.deleteCitas);
+// Borrar una cita por id del usuario y id de cita (con POST)
+router.delete("/deleteCitaAll/:idCita/:idUsuario", citasController.deleteCitas);
+router.delete("/deleteCitaId/:idCita", citasController.deleteCitasID);
+router.delete("/deleteCitaUser/:idUsuario", citasController.deleteCitasUser);
 
-// Borrar una cita por id de cita
-router.delete('/deleteCitaId/:idCita', citasController.deleteCitasID);
+// Seleccionar citas por idUsuario (con POST)
+router.get("/getCitaUser/:idUsuario", citasController.getCitasUser);
 
-// Borrar todas las citas de un usuario por id de usuario
-router.delete('/deleteCitaUser/:idUsuario', citasController.deleteCitasUser);
+// Seleccionar citas solo por médico (con POST)
+router.get("/getCitaDoc", citasController.getCitasDoc);
 
-// Seleccionar citas por idUsuario
-router.get('/getCitaUser/:idUsuario', citasController.getCitasUser);
+router.get("/getCItaId", citasController.getCitasId);
 
-// Seleccionar citas solo por médico (idDoc)
-router.get('/getCitaDoc/:idDoctor', citasController.getCitasDoc);
+router.get("/getCitasWithPatientsAndDoctors", citasController.getCitasWithPatientsAndDoctors);
 
-// Seleccionar cita por idCita
-router.get('/getCitaId/:idCita', citasController.getCitasId);
+router.get("/metodoDetalladoParaAgendarCitas", citasController.metodoDetalladoParaAgendarCitas);
 
-// Obtener todas las citas con pacientes y doctores
-router.get('/getCitasWithPatientsAndDoctors', citasController.getCitasWithPatientsAndDoctors);
+// Ruta para obtener citas con pacientes y doctores
+router.get("pacientesdoctores/:cedula", CitasController.getCitasWithPatientsAndDoctorsByCC);
+router.get("/pacientes-y-doctores/:cedula", CitasController.getCitasWithPatientsAndDoctorsByCC);
+// Ruta para obtener citas detalladas para agendar por cédula
+router.get("/Reagendar/:cedula", CitasController.getCitasDetalladasParaAgendarByCC);
+router.delete("/citas/:idCita", CitasController.deleteCitaById);
+router.get("/obtenercitas/:idUsuarioCC", CitasController.obtenerCitasDetalladasPorId);
+router.post("/horario", citasController.viewSchedule);
 
-// Método detallado para agendar citas
-router.get('/metodoDetalladoParaAgendarCitas', citasController.metodoDetalladoParaAgendarCitas);
+router.post("/horario", citasController.viewSchedule);
 
-// Borrar una cita por idCita
-router.delete('/citas/:idCita', CitasController.deleteCitaById);
-
-// Obtener citas detalladas por id de usuario (idUsuarioCC)
-router.get('/obtenercitas/:idUsuarioCC', CitasController.obtenerCitasDetalladasPorId);
+router.put("/cita/:idCita", citasController.updateCita);
 
 export default router;
