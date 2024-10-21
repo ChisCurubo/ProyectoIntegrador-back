@@ -10,6 +10,6 @@ router.post('/create', OrdenMedicaController.createOrdenMedica);
 router.get('/get/:id', OrdenMedicaController.getOrdenMedica);
 
 // Ruta para actualizar una orden médica por ID (PUT)
-router.put('/update:id', OrdenMedicaController.updateOrdenMedica);
+router.put('/update/:id', OrdenMedicaController.updateOrdenMedica);
 
 export default router;
