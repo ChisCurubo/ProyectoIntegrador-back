@@ -1,36 +1,13 @@
-import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import * as dotenv from 'dotenv';
+import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import path from 'path';
-import * as dotenv from 'dotenv';
-dotenv.config({ path: path.join(__dirname, '../environment/.env') });
-import helmet from 'helmet';
 import citas from './routes/citas.routes';
 import facturacion from './routes/facturacion.routes';
-import emergencia from './routes/emergenciaAdmin.routes'; // 
-import usuarioRoutes from './routes/usuario.routes'; 
-import authRoutes from './routes/auth.routes';
-import apiSedes from './routes/api.sedes.routes';
-import ordenMedicaRoutes from './routes/ordenMedica.routes';
-
-import mercadopagoFrontRoutes from './routes/mercadopagofront.routes';  
-import moduloAdminRoutes from './routes/moduloadmin.routes'; // Ajusta la ruta según la ubicación de tus rutas
-
-// import middelware
-import {errorHandler} from './middlewares/errorHandler';
-
-//import medicalRoutes from './routes/medical.routes';
-import usuarioRoutesEs from './routes/usuarioEs.routes'; 
-
-import historiaClinicaRoutes from './routes/historialClinico.routes';
-import DoctorRoutes from './routes/doctor.routes';
-import pacientesRoutes from './routes/pacientes.routes'; 
-import colillaPagoRoutes from './routes/colilladePago.routes';
-import mercadopagoRoutes from './routes/mercadopago.routes';
-import hojaVidaPacientesRoutes from './routes/hojaVidaPacientes.routes';
-import hojaVidaEmpleadosRoutes from './routes/hojaVidaEmpleados.routes';
-import ordenMedica from './routes/ordenMedica.routes';
-
+import hojaVidaRoutes from './routes/hojaVida.routes';
+import usuarioRoutes from './routes/usuario.routes';
+dotenv.config({ path: path.join(__dirname, '../environment/.env') });
 
 const app = express();
 const port = process.env.PORT || 3002;
@@ -43,7 +20,6 @@ app.use(cors({
 
 app.use(morgan('dev'));
 app.use(express.json());
-//app.use(helmet());
 
 // Servir archivos estáticos desde la carpeta 'public'
 app.use(express.static(path.join(__dirname, '../public')));
@@ -65,52 +41,14 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use('/api/facturacion', facturacion);
 app.use('/api/citas', citas);
 app.use('/api/usuarios', usuarioRoutes);
-app.use('/api/usuariosE', usuarioRoutesEs);
-app.use('/api/historia-clinica', historiaClinicaRoutes);
-app.use('/api/doctor', DoctorRoutes); // Ruta base más clara
-app.use('/api/pacientes', pacientesRoutes);
-app.use('/api/colilla/PAGO', colillaPagoRoutes); 
-app.use('/api/mercadopago', mercadopagoRoutes);
-app.use('/api/ordenes-medicas', ordenMedicaRoutes);
-app.use('/api/hoja-vida-pacientes', hojaVidaPacientesRoutes);
-app.use('/api/hoja-vida-empleados', hojaVidaEmpleadosRoutes);
-app.use('/apiSedes', apiSedes);
+app.use('/api/hoja-vida', hojaVidaRoutes); // Rutas para Hoja de Vida
 
-// Ruta de prueba para verificar que las rutas están funcionando
-app.get('/api/hoja-vida-pacientes/test', (req: Request, res: Response) => {
+// Ruta de prueba
+app.get('/api/hoja-vida/test', (req: Request, res: Response) => {
     res.send('Ruta de prueba funcionando correctamente.');
-});
-app.use('/api/ordenes-medicas', ordenMedicaRoutes)
-app.use('/api/doctor', DoctorRoutes);
-app.use('/api/patient', pacientesRoutes);
-
-app.use('/api/colillaPago', colillaPagoRoutes); 
-app.use('/api/ordenes-medicas', ordenMedica); 
-app.use('/api/mercadopago', mercadopagoRoutes);
-
-
-app.use('/api/emergencia', emergencia)
-app.use('/api/admin', emergencia); 
-app.use('/api/auth', authRoutes);
-app.use('/apiSedes', apiSedes);
-app.use('/api/MercadoPagoFront', mercadopagoFrontRoutes);
-app.use('/api/', moduloAdminRoutes); 
-
-// Manejadores de Errores
-app.use(errorHandler);
-
-// Manejador de errores genérico (opcional)
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error('Error en el servidor:', err.stack);
-  res.status(500).send('¡Algo salió mal en el servidor!');
 });
 
 // Iniciar el servidor
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
-});
-
-// Manejo de errores
-app.on('error', (err: any) => {
-  console.error('Error al iniciar el servidor:', err);
 });

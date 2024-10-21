@@ -1,6 +1,5 @@
-// src/utils/pdfGenerator.ts
-import puppeteer, { PDFOptions } from 'puppeteer';
 import Handlebars from 'handlebars';
+import puppeteer, { PDFOptions } from 'puppeteer';
 
 /**
  * Genera un PDF a partir de una plantilla HTML y datos.
@@ -41,7 +40,7 @@ export const generatePDF = async (
 
         return Buffer.from(pdfBuffer);
     } catch (error) {
-        console.error('Error en generatePDF:', error);
+        console.error('Error generando el PDF:', error);
         throw error;
     }
 };

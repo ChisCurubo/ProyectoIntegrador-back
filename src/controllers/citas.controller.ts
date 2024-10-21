@@ -237,9 +237,6 @@ export class CitasController {
       }
     }
   }
-
-  
-
 }
 
 export default new CitasController();

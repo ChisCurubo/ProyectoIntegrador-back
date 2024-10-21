@@ -1,6 +1,43 @@
 // Interface with all the attributes of the HojaVidaPaciente table
 // Interface with all the attributes of the HojaVidaPaciente table
 export interface HojaVida {
+  cc: any;
+  apellidoUsuario: any;
+  nombreUsuario: any;
+  num_documento: any;
+  departamento: any;
+  municipio: any;
+  estado_usuario: any;
+  email: any;
+  direccion_departamento: any;
+  direccion_ciudad: any;
+  direccion_barrio: any;
+  direccion_telefono: any;
+  emergencia_apellido1: any;
+  emergencia_apellido2: any;
+  emergencia_nombres: any;
+  emergencia_parentesco: any;
+  emergencia_telefono: any;
+  emergencia_email: any;
+  id_empleado: any;
+  nombre_completo: any;
+  fecha_ingreso: any;
+  tipo_contrato: any;
+  salario_basico: any;
+  salario_neto: any;
+  fecha_pago: any;
+  metodo_pago: any;
+  vacaciones_pendientes: any;
+  dias_incapacidad: any;
+  historial_pagos: any;
+  autorizaciones_especiales: any;
+  fecha_terminacion: any;
+  motivo_terminacion: any;
+  fecha: any;
+  ref: any;
+  nombres: any;
+  segundo_apellido: any;
+  primer_apellido: any;
 
   idHoja_Vida?: number;
   direccion: string;

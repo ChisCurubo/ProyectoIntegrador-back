@@ -1,5 +1,75 @@
-<!DOCTYPE html>
-<html lang="es">
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
+import { HojaVida } from '../interface/hojaVida';
+import { generatePDF } from '../libs/HojaVida/GeneratePDF'; // Asegúrate de que la ruta es correcta
+import connection from '../providers/database';
+
+export class HojaVidaService {
+  public async getHojaVidaById(idHoja_Vida: number): Promise<any> {
+    const [rows]: [RowDataPacket[], any] = await connection.query(`
+        SELECT HV.*, 
+               U.nombreUsuario, 
+               U.apellidoUsuario, 
+               U.cc,
+               HV.direccion, 
+               HV.telefonoUsuario, 
+               HV.idEps, 
+               HV.tipo_documento, 
+               HV.sexo, 
+               HV.fecha_nacimiento,
+               HV.lugar_nacimiento, 
+               HV.estadoUsuario, 
+               HV.nacionalidad,
+               HV.cargo,
+               HV.salarioBasico,
+               HV.salarioNeto,
+               HV.tipoContrato
+        FROM HOJAS_VIDA HV 
+        INNER JOIN USUARIOS U ON HV.idHoja_Vida = U.idHoja_Vida 
+        WHERE HV.idHoja_Vida = ?`, 
+        [idHoja_Vida]
+    );
+    return rows.length ? rows[0] : null;
+}
+
+
+public async getHojaVidaByCC(cc: string): Promise<any> {
+  const [rows]: [RowDataPacket[], any] = await connection.query(`
+      SELECT HV.*, 
+             U.nombreUsuario, 
+             U.apellidoUsuario, 
+             U.cc, 
+             U.emailUsuario, 
+             U.idSede, 
+             U.idRol
+      FROM HOJAS_VIDA HV 
+      INNER JOIN USUARIOS U ON HV.idHoja_Vida = U.idHoja_Vida
+      WHERE U.cc = ?`, 
+      [cc]
+  );
+  return rows.length ? rows[0] : null;
+}
+
+    // Actualizar hoja de vida
+    public async updateHojaVida(id: number, data: HojaVida): Promise<ResultSetHeader> {
+        const [result] = await connection.query<ResultSetHeader>(`
+            UPDATE HOJAS_VIDA SET
+                direccion = ?, telefonoUsuario = ?, idEps = ?, tipo_documento = ?, sexo = ?,
+                nacionalidad = ?, pais = ?, fecha_nacimiento = ?, lugar_nacimiento = ?,
+                estadoUsuario = ? 
+            WHERE idHoja_Vida = ?`,
+            [
+                data.direccion, data.telefonoUsuario, data.idEps, data.tipo_documento, data.sexo,
+                data.nacionalidad, data.pais, data.fecha_nacimiento, data.lugar_nacimiento,
+                data.estadoUsuario, id
+            ]
+        );
+        return result;
+    }
+
+      // Generar el PDF de la hoja de vida
+  public async generatePDF(hojaVida: HojaVida): Promise<Buffer> {
+    const template = `
+    <html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,7 +158,7 @@
                     <th>Nombres</th><td colspan="3">${hojaVida.nombreUsuario}</td>
                 </tr>
                 <tr>
-                    <th>Número de Documento</th><td>${hojaVida.num_documento}</td>
+                    <th>Número de Documento</th><td>${hojaVida.cc}</td>
                     <th>Tipo de Documento</th><td>${hojaVida.tipo_documento}</td>
                 </tr>
                 <tr>
@@ -188,69 +258,9 @@
                 </div>
             </div>
         </div>
+    </body>
+    </html>`;
 
-    <script>
-        // Función para buscar hoja de vida por CC o ID
-        async function fetchHojaDeVida(ccOrId, type) {
-            const url = `/api/hoja-vida/${ccOrId}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            if (response.ok) {
-                loadHojaDeVida(data);
-            } else {
-                alert('No se encontraron resultados.');
-            }
-        }
-
-        function loadHojaDeVida(data) {
-            document.getElementById("primer_apellido").innerText = data.primer_apellido;
-            document.getElementById("segundo_apellido").innerText = data.segundo_apellido;
-            document.getElementById("nombres").innerText = data.nombres;
-            document.getElementById("num_documento").innerText = data.num_documento;
-            document.getElementById("tipo_documento").innerText = data.tipo_documento;
-            document.getElementById("sexo").innerText = data.sexo;
-            document.getElementById("fecha_nacimiento").innerText = data.fecha_nacimiento;
-            document.getElementById("departamento").innerText = data.departamento;
-            document.getElementById("municipio").innerText = data.municipio;
-            document.getElementById("lugar_nacimiento").innerText = data.lugar_nacimiento;
-            document.getElementById("nacionalidad").innerText = data.nacionalidad;
-            document.getElementById("estado_usuario").innerText = data.estado_usuario;
-            document.getElementById("telefono").innerText = data.telefono;
-            document.getElementById("email").innerText = data.email;
-            document.getElementById("direccion_departamento").innerText = data.direccion_departamento;
-            document.getElementById("direccion_ciudad").innerText = data.direccion_ciudad;
-            document.getElementById("direccion_barrio").innerText = data.direccion_barrio;
-            document.getElementById("direccion_telefono").innerText = data.direccion_telefono;
-            document.getElementById("emergencia_apellido1").innerText = data.emergencia_apellido1;
-            document.getElementById("emergencia_apellido2").innerText = data.emergencia_apellido2;
-            document.getElementById("emergencia_nombres").innerText = data.emergencia_nombres;
-            document.getElementById("emergencia_parentesco").innerText = data.emergencia_parentesco;
-            document.getElementById("emergencia_telefono").innerText = data.emergencia_telefono;
-            document.getElementById("emergencia_email").innerText = data.emergencia_email;
-            document.getElementById("id_empleado").innerText = data.id_empleado;
-            document.getElementById("nombre_completo").innerText = data.nombre_completo;
-            document.getElementById("cargo").innerText = data.cargo;
-            document.getElementById("fecha_ingreso").innerText = data.fecha_ingreso;
-            document.getElementById("tipo_contrato").innerText = data.tipo_contrato;
-            document.getElementById("salario_basico").innerText = data.salario_basico;
-            document.getElementById("bonificaciones").innerText = data.bonificaciones;
-            document.getElementById("deducciones").innerText = data.deducciones;
-            document.getElementById("salario_neto").innerText = data.salario_neto;
-            document.getElementById("fecha_pago").innerText = data.fecha_pago;
-            document.getElementById("metodo_pago").innerText = data.metodo_pago;
-            document.getElementById("vacaciones_pendientes").innerText = data.vacaciones_pendientes;
-            document.getElementById("dias_incapacidad").innerText = data.dias_incapacidad;
-            document.getElementById("historial_pagos").innerText = data.historial_pagos;
-            document.getElementById("autorizaciones_especiales").innerText = data.autorizaciones_especiales;
-            document.getElementById("fecha_terminacion").innerText = data.fecha_terminacion;
-            document.getElementById("motivo_terminacion").innerText = data.motivo_terminacion;
-            document.getElementById("observaciones").innerText = data.observaciones;
-        }
-
-        function generatePDF() {
-            const element = document.getElementById('content');
-            html2pdf().from(element).save('hoja-de-vida.pdf');
-        }
-    </script>
-</body>
-</html>
+    return await generatePDF(template, hojaVida);
+  }
+}
