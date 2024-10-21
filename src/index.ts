@@ -10,7 +10,7 @@ import authRoutes from "./routes/auth.routes";
 import citas from "./routes/citas.routes";
 import emergencia from "./routes/emergenciaAdmin.routes"; //
 import facturacion from "./routes/facturacion.routes";
-import hojaVida from "./routes/hojaVida.routes";
+import hojaVidaRoutes from './routes/hojaVida.routes';
 import ordenMedicaRoutes from "./routes/ordenMedica.routes";
 import usuarioRoutes from "./routes/usuario.routes";
 
@@ -61,7 +61,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Rutas
 app.use("/api/facturacion", facturacion);
 app.use("/api/citas", citas);
-app.use("/api/hoja-Vida", hojaVida);
+app.use("/api/hoja-Vida", hojaVidaRoutes);
 
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/usuariosE", usuarioRoutesEs);

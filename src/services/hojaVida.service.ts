@@ -1,3 +1,4 @@
+
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { HojaVida } from '../interface/hojaVida';
 import { generatePDF } from '../libs/HojaVida/GeneratePDF'; // Asegúrate de que la ruta es correcta

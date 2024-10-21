@@ -1,4 +1,3 @@
-
 import { Pool, RowDataPacket } from "mysql2/promise";
 import { ordenMedica } from "../interface/ordenMedica";
 import { DatabaseError, NotFoundError } from "../middlewares/customErrors";
