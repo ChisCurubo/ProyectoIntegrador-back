@@ -6,8 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="86e406b6-1f4f-4313-8681-0d0a87b59c07" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/usuario.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/usuario.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/usuario.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/usuario.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/citas.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/citas.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/doctor.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/doctor.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/moduloAdmin.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/moduloAdmin.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/interface/admin.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interface/admin.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/citas.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/citas.routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/doctor.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/doctor.routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/moduloadmin.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/moduloadmin.routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/citas.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/citas.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/doctor.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/doctor.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/moduloAdmin.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/moduloAdmin.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +78,7 @@
       <workItem from="1728917672571" duration="16684000" />
       <workItem from="1728995595671" duration="2000" />
       <workItem from="1729365275379" duration="1631000" />
+      <workItem from="1729481851554" duration="14152000" />
     </task>
     <servers />
   </component>

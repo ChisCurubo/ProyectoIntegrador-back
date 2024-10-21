@@ -18,3 +18,14 @@ export interface ResumenFinanciero {
     margenOperativo: number;
     presupuestoRestante: number;
   }
+export interface specialityType {
+  idEspecialidad: number;
+  nombreEspecialidad: string;
+  idSede: number;
+}
+export interface serviceType {
+    idServicio: number;
+    nombreServicio: string;
+    precioServicio: number;
+    idEspecialidad: number;
+}
