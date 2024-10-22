@@ -5,7 +5,7 @@ export class HojaVidaController {
     private service = new HojaVidaService();
 
     // Obtener hoja de vida por ID
-    getHojaVidaById = async (req: Request, res: Response) => {
+    public getHojaVidaById = async (req: Request, res: Response) => {
         const { id } = req.params;
         try {
             const hojaVida = await this.service.getHojaVidaById(parseInt(id));
@@ -20,7 +20,7 @@ export class HojaVidaController {
     };
 
     // Obtener hoja de vida por CC
-    getHojaVidaByCC = async (req: Request, res: Response) => {
+    public getHojaVidaByCC = async (req: Request, res: Response) => {
         const { cc } = req.params;
         try {
             const hojaVida = await this.service.getHojaVidaByCC(cc);
@@ -35,7 +35,7 @@ export class HojaVidaController {
     };
 
     // Actualizar hoja de vida
-    updateHojaVida = async (req: Request, res: Response) => {
+    public updateHojaVida = async (req: Request, res: Response) => {
         const { id } = req.params;
         try {
             const result = await this.service.updateHojaVida(parseInt(id), req.body);
@@ -50,7 +50,7 @@ export class HojaVidaController {
     };
 
     // Generar PDF de la hoja de vida por ID o CC
-    generateHojaVidaPDF = async (req: Request, res: Response) => {
+    public generateHojaVidaPDF = async (req: Request, res: Response) => {
       const { id, cc } = req.params;
       try {
           let hojaVida;
@@ -71,7 +71,7 @@ export class HojaVidaController {
       } catch (error) {
           res.status(500).json({ message: 'Error al generar el PDF.' });
       }
-  };  
+  };
 }
 
 export default new HojaVidaController();
