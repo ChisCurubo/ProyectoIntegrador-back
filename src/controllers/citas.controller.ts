@@ -230,9 +230,9 @@ export class CitasController {
     } catch (error: any) {
       console.error("Error in getCitasWithPatientsAndDoctors:", error);
       if (error instanceof NotFoundError) {
-        res.status(404).json({ message: error.message }); // Responder con 404 si no se encuentran citas
+        res.status(404).json({ message: error.message });
       } else {
-        res.status(500).json({ message: "Error interno del servidor" }); // Responder con 500 en caso de error inesperado
+        res.status(500).json({ message: "Error interno del servidor" });
       }
     }
   }
@@ -240,13 +240,13 @@ export class CitasController {
   public async metodoDetalladoParaAgendarCitas(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const citas = await CitasService.metodoDetalladoParaAgendarCitas();
-      res.status(200).json(citas); // Responder con el estado 200 y las citas
+      res.status(200).json(citas);
     } catch (error: any) {
       console.error("Error en metodoDetalladoParaAgendarCitas:", error);
       if (error instanceof NotFoundError) {
-        res.status(404).json({ message: error.message }); // Responder con 404 si no se encuentran citas
+        res.status(404).json({ message: error.message });
       } else {
-        res.status(500).json({ message: "Error interno del servidor" }); // Responder con 500 en caso de error inesperado
+        res.status(500).json({ message: "Error interno del servidor" });
       }
     }
   }
