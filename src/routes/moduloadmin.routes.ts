@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import ModuloAdminController from '../controllers/moduloAdmin.controller';
+import {sendEmail} from "../mailer/nodeMailer";
 
 const router = Router();
 
@@ -18,6 +19,9 @@ router.get('/services', ModuloAdminController.getServices);
 
 router.get('/resumen-crm', ModuloAdminController.obtenerResumenCRM);
 router.get('/citas-por-especialidad', ModuloAdminController.obtenerCitasPorEspecialidad);
+
+router.post('/send-email', sendEmail);
+
 
 
 export default router;

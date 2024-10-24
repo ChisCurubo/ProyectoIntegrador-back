@@ -43,8 +43,6 @@ router.delete("/citas/:idCita", CitasController.deleteCitaById);
 router.get("/obtenercitas/:idUsuarioCC", CitasController.obtenerCitasDetalladasPorId);
 router.post("/horario", citasController.viewSchedule);
 
-router.post("/horario", citasController.viewSchedule);
-
 router.put("/cita/:idCita", citasController.updateCita);
 
 export default router;

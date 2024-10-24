@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import MercadoPagoService from "../libs/MERCADOPAGO/Mercadopago.service";
 import { InternalServerError, NotFoundError } from "../middlewares/customErrors";
-import colillaPagoService from "../services/colillaPago.service"; // Asegúrate de importar la instancia
+import colillaPagoService from "../services/colillaPago.service";
 
 class CrudMercadoPagoController {
     private mercadoPagoService: MercadoPagoService;
