@@ -35,7 +35,7 @@ const port = process.env.PORT || 3002;
 
 // Configurar CORS
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+  origin:"http://www.saludvitamed.general.com",
   credentials: true,
 }));
 

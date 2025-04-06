@@ -6,6 +6,7 @@ const connection = mysql.createPool({
     password: process.env.MYSQL_ADDON_PASSWORD,
     database: process.env.MYSQL_ADDON_DB,
     port: 15720
+    
 })
 
 console.log({

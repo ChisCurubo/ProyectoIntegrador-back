@@ -406,3 +406,4 @@ yarn.lock
 
 # Ignorar la carpeta .idea
 .idea/
+.qodo
